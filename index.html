@@ -948,7 +948,9 @@ async function ai(kind,input,opts={}){
   try{ return kind==="json"? await sample.json(input,opts) : await sample(input,opts); }
   catch(e){ if(["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].includes(e&&e.code)){ aiState="off"; renderAIBanner(); } throw e; }
 }
-function aiErr(e){ if(!e||e.code==="cancelled") return; const base=AI_MSG[e.code]||"L'IA ne répond pas pour l'instant. Réessaie dans un instant.";
+function aiErr(e){ if(!e||e.code==="cancelled") return;
+  if(gem&&e.code==="rate_limited"){ toast(e.daily?"Quota gratuit de Google épuisé pour aujourd'hui sur tous tes modèles (il revient demain). En attendant, discute avec ta pen pal dans Tchatche sur claude.ai, inclus dans ton abonnement Claude.":"Google limite le nombre de messages par minute en gratuit. Attends une minute et réessaie.",10000); return; }
+  const base=AI_MSG[e.code]||"L'IA ne répond pas pour l'instant. Réessaie dans un instant.";
   toast(gem&&e.message&&e.code!=="rate_limited"?base+" Détail : "+String(e.message).slice(0,160):base, gem?9000:3200); }
 function aiReady(){ return (!OFFLINE||gem)&&netOK&&aiState==="on"&&!!sample; }
 function needAI(){ if(aiReady()) return true; toast(OFFLINE&&!gem?"Connecte ton cerveau IA gratuit (Moi → Cerveau IA) pour cette fonction.":!netOK?"Hors-ligne : cette fonction revient dès que tu es connecté.":aiState==="pending"?"Connexion à Claude en cours…":"Claude n'est pas disponible ici : ouvre Tchatche sur claude.ai pour cette fonction."); return false; }
@@ -1202,7 +1204,7 @@ async function sendChat(text){
     if(!meta&&/^(A1|A2|B1|B2|C1|C2)$/.test(r.level)){ S.main.levelHist.push(r.level); S.main.levelHist=S.main.levelHist.slice(-30); }
     if(!meta){ logAdd("msgs"); addXP(um.corr.length?12:16); }
     if(S.main.profile.autoSpeak||callOpen()) Voice.speak(am.text);
-    if((S.main.reserve||[]).length<6&&S.main.reserveDate!==dkey()){ S.main.reserveDate=dkey(); fillReserve(); }
+    if(!gem&&(S.main.reserve||[]).length<6&&S.main.reserveDate!==dkey()){ S.main.reserveDate=dkey(); fillReserve(); }
   }catch(e){
     const i=S.chat.msgs.indexOf(am); if(i>=0) S.chat.msgs.splice(i,1);
     if(navigator.onLine===false){ netOK=false; um.queued=true; renderAIBanner(); toast("Connexion perdue : ton message sera corrigé dès ton retour en ligne."); } else { um.failed=true; aiErr(e); }
@@ -1213,7 +1215,7 @@ async function sendChat(text){
 }
 let summarizing=false;
 async function maybeSummarize(){
-  if(summarizing||!sample) return; const msgs=S.chat.msgs.filter(m=>!m.pending&&m.text);
+  if(summarizing||!sample) return; if(gem&&S.chat.msgs.length%40) return; const msgs=S.chat.msgs.filter(m=>!m.pending&&m.text);
   const old=msgs.slice(0,-24).filter(m=>m.ts>(S.chat.sumTs||0)); if(old.length<16) return;
   summarizing=true;
   try{ const {text}=await ai("text",`Update this running summary of a French pen-pal conversation between a learner and ${pal().name}. Keep it under 180 words, in English, focused on facts about the learner, things ${pal().name} said about their own life (to stay consistent), running jokes and open threads to follow up.\n\nCurrent summary: ${S.chat.summary||"(none)"}\n\nNew messages:\n${old.map(m=>(m.role==="u"?"Learner: ":pal().name+": ")+m.text).join("\n")}\n\nReply with only the new summary.`,{modelTier:"quick",cache:false});
@@ -1886,7 +1888,7 @@ function bindOffline(){
   if(q("expProg")) q("expProg").onclick=()=>{ const t=exportProgress(); const show=()=>{ const o=q("expOut"); o.hidden=false; o.value=t; o.focus(); o.select(); toast("Sélectionne tout le texte et copie-le."); };
     try{ navigator.clipboard.writeText(t).then(()=>toast("Progression copiée. Colle-la dans l'autre version : Moi → Importer."),show); }catch(err){ show(); } };
   const connect=async(key,btn)=>{ btn.disabled=true; const old=btn.textContent; btn.textContent="Connexion…";
-    try{ const alts=await geminiPickModel(key), model=alts[0]; lsSet("tch_gemkey",{key,model,alts}); sample=geminiSample(key,model,alts); gem=true; aiState="on"; imgOK=true;
+    try{ const alts=await geminiPickModel(key), model=alts[0]; lsSet("tch_gemkey",{key,model,alts,v2:true}); sample=geminiSample(key,model,alts); gem=true; aiState="on"; imgOK=true;
       renderAIBanner(); toast(`Connecté ! ${pal().name} te répond en direct.`); renderMe(); flushQueue(); }
     catch(err){ toast(err&&err.message?err.message:"Connexion impossible. Vérifie ta clé et ta connexion."); btn.disabled=false; btn.textContent=old; } };
   if(q("gemGo")) q("gemGo").onclick=e=>{ const k=q("gemKey").value.trim(); if(!k){ toast("Colle d'abord ta clé."); return; } connect(k,e.currentTarget); };
@@ -1910,6 +1912,9 @@ async function geminiPickModel(key){
   if(names.includes("gemini-flash-lite-latest")) list.push("gemini-flash-lite-latest");
   names.filter(n=>/^gemini-\d+(\.\d+)?-flash-lite$/.test(n)).sort((x,y)=>ver(y)-ver(x)).forEach(n=>list.push(n));
   names.filter(n=>/flash/.test(n)&&!bad.test(n)).forEach(n=>list.push(n));
+  // Gemma models have a much larger free quota: keep the best two as a safety net
+  const sz=n=>parseFloat((n.match(/-(\d+)b-it$/)||[0,0])[1]);
+  names.filter(n=>/^gemma-[\d.]+(n)?-\d+b-it$/.test(n)).sort((x,y)=>ver(y.replace("gemma","gemini"))-ver(x.replace("gemma","gemini"))||sz(y)-sz(x)).slice(0,2).forEach(n=>list.push(n));
   const out=[...new Set(list)];
   if(!out.length) throw new Error("Aucun modèle Gemini Flash disponible avec cette clé.");
   return out;
@@ -1932,14 +1937,15 @@ function geminiSample(key,model,alts){
   async function call(m,input,opts,json,stream){
     const contents=toContents(input);
     if(opts.images){ const imgs=opts.images instanceof Blob?[opts.images]:[...opts.images]; for(const im of imgs) contents[contents.length-1].parts.push({inline_data:{mime_type:im.type||"image/png",data:await blobToB64(im)}}); }
-    const body={contents,generationConfig:json?{responseMimeType:"application/json"}:{}};
+    const body={contents,generationConfig:json&&!/^gemma/.test(m)?{responseMimeType:"application/json"}:{}};
     const url=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:${stream?"streamGenerateContent?alt=sse&":"generateContent?"}key=${encodeURIComponent(key)}`;
     let r; try{ r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:opts.signal}); }
     catch(e){ throw {code:opts.signal&&opts.signal.aborted?"cancelled":"upstream_error",message:"réseau : "+String(e&&e.message||e)}; }
-    if(!r.ok){ let raw="",gm=""; try{ raw=await r.text(); const j=JSON.parse(raw); gm=(j.error&&j.error.message)||""; }catch(e){ gm=raw.slice(0,200); }
+    if(!r.ok){ let raw="",gm="",wait=0; try{ raw=await r.text(); const j=JSON.parse(raw); gm=(j.error&&j.error.message)||"";
+        const ri=((j.error&&j.error.details)||[]).find(d=>d&&d.retryDelay); if(ri) wait=parseFloat(ri.retryDelay)||0; }catch(e){ gm=raw.slice(0,200); }
       const low=gm.toLowerCase();
       const code=r.status===429?"rate_limited":/api key|api_key|unauthenticated|permission_denied|permission denied/.test(low)?"bad_key":(r.status===404||r.status===400)?"bad_model":"upstream_error";
-      throw {code,message:`HTTP ${r.status} (${m}) : ${gm}`.slice(0,300)}; }
+      throw {code,message:`HTTP ${r.status} (${m}) : ${gm}`.slice(0,300),retryAfter:wait,daily:/perday|per_day|per day/i.test(raw)}; }
     let text="";
     if(stream){ const rd=r.body.getReader(), dec=new TextDecoder(); let buf="";
       try{ for(;;){ const {done,value}=await rd.read(); if(done) break; buf+=dec.decode(value,{stream:true}); let i;
@@ -1953,17 +1959,24 @@ function geminiSample(key,model,alts){
   }
   // free-tier models are often "overloaded": retry once without streaming, then fall back to the next free model
   async function run(input,opts,json){
-    const models=[model,...(alts||[]).filter(x=>x!==model)].slice(0,4); let last;
-    for(let k=0;k<models.length;k++){
-      for(let attempt=0;attempt<2;attempt++){
-        try{ const t=await call(models[k],input,opts,json,k===0&&attempt===0&&typeof opts.onText==="function");
-          if(k>0){ const g=lsGet("tch_gemkey"); if(g&&g.model!==models[k]){ g.model=models[k]; lsSet("tch_gemkey",g); } }
-          return t; }
-        catch(e){ last=e; if(["cancelled","bad_key","refused"].includes(e.code)) throw e;
-          if(e.code==="bad_model"||e.code==="rate_limited") break;
-          await sleep(1200+attempt*1500); }
+    const models=[model,...(alts||[]).filter(x=>x!==model)].slice(0,7); let last=null, minWait=Infinity, daily=true;
+    for(let pass=0;pass<2;pass++){
+      for(let k=0;k<models.length;k++){
+        for(let attempt=0;attempt<(pass?1:2);attempt++){
+          try{ const t=await call(models[k],input,opts,json,pass===0&&k===0&&attempt===0&&typeof opts.onText==="function");
+            const g=lsGet("tch_gemkey"); if(g&&g.model!==models[k]){ g.model=models[k]; lsSet("tch_gemkey",g); }
+            return t; }
+          catch(e){ last=e; if(["cancelled","bad_key","refused"].includes(e.code)) throw e;
+            if(e.code==="rate_limited"){ if(!e.daily){ daily=false; if(e.retryAfter) minWait=Math.min(minWait,e.retryAfter); } break; }
+            if(e.code==="bad_model") break;
+            await sleep(1200+attempt*1500); }
+        }
       }
+      if(!(last&&last.code==="rate_limited")||daily) break;
+      const w=Math.min(isFinite(minWait)?minWait:20,30); toast(`Google impose une pause de ${Math.ceil(w)} s en gratuit… je réessaie tout seul.`,(w+1)*1000);
+      await sleep(w*1000+400);
     }
+    if(last&&last.code==="rate_limited") last.daily=daily;
     throw last;
   }
   const f=async(input,opts)=>({text:await run(input,opts||{},false),truncated:false,modelTierApplied:"default"});
@@ -1979,7 +1992,8 @@ async function boot(){
   const h=(location.hash||"").slice(1); if(VIEWS.some(v=>v.id===h)) curView=h;
   $$("main .view").forEach(s=>s.hidden=s.dataset.view!==curView);
   Voice.init(); renderAll();
-  use("sample").then(async s=>{ if(!s&&OFFLINE){ const k=lsGet("tch_gemkey"); if(k&&k.key&&k.model){ s=geminiSample(k.key,k.model,k.alts||[]); gem=true; } } sample=s; aiState=s?"on":"off"; if(s){ try{ const l=await s.limits(); imgOK=!!(l&&l.images); }catch(e){} } renderAIBanner(); if(curView==="images") renderImages(); if(loaded) flushQueue(); });
+  use("sample").then(async s=>{ if(!s&&OFFLINE){ const k=lsGet("tch_gemkey"); if(k&&k.key&&k.model){ s=geminiSample(k.key,k.model,k.alts||[]); gem=true;
+      if(!k.v2) geminiPickModel(k.key).then(alts=>{ const g={key:k.key,model:alts.includes(k.model)?k.model:alts[0],alts,v2:true}; lsSet("tch_gemkey",g); sample=geminiSample(g.key,g.model,g.alts); }).catch(()=>{}); } } sample=s; aiState=s?"on":"off"; if(s){ try{ const l=await s.limits(); imgOK=!!(l&&l.images); }catch(e){} } renderAIBanner(); if(curView==="images") renderImages(); if(loaded) flushQueue(); });
   use("downloads").then(d=>{ dlOK=!!d; if(curView==="moi") renderMe(); });
   await Store.init();
   let [m,c,cards]=await Promise.all([Store.get("main"),Store.get("chat"),Store.cards()]);
