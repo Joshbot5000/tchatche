@@ -516,6 +516,228 @@ const SEED = [
 ["Ça passe.","That's fine / It'll do.","familier","Un peu juste, mais ça passe.","« Ça passe crème » = it goes perfectly smoothly."]
 ];
 
+/* offline library: more everyday French by theme, appended to SEED (ids stay stable) */
+const SEED_MORE = [
+{t:"Café & resto", items:[
+["Je vais prendre un café, s'il vous plaît.","I'll have a coffee, please.","courant","Pour moi, je vais prendre un café, s'il vous plaît.","« Je vais prendre » is the natural way to order."],
+["Un café allongé","a long coffee (americano-style)","courant","Un café allongé et un croissant, s'il vous plaît.","« Un café » on its own is an espresso."],
+["Une carafe d'eau","a jug of tap water","courant","On pourrait avoir une carafe d'eau, s'il vous plaît ?","Tap water is free in French restaurants."],
+["Vous avez choisi ?","Are you ready to order?","courant","— Vous avez choisi ? — Oui, je vais prendre le plat du jour.",""],
+["Le plat du jour","the dish of the day","courant","Le plat du jour, c'est un bœuf bourguignon.",""],
+["Saignant, à point, bien cuit","rare, medium, well done","courant","Je voudrais mon steak à point, s'il vous plaît.","French « à point » is closer to medium-rare."],
+["C'était délicieux.","It was delicious.","courant","Merci, c'était délicieux !",""],
+["On peut payer séparément ?","Can we pay separately?","courant","Excusez-moi, on peut payer séparément ?",""],
+["C'est moi qui invite.","It's on me.","courant","Laisse, c'est moi qui invite ce soir.","For a round of drinks: « c'est ma tournée »."],
+["Sur place ou à emporter ?","Eat in or take away?","courant","— Sur place ou à emporter ? — À emporter, merci.",""],
+["Une pression","a draught beer","familier","Deux pressions, s'il vous plaît !","Short for « une bière pression »."],
+["Je n'ai plus faim.","I'm full.","courant","Non merci, je n'ai plus faim.","Avoid « je suis plein », which sounds odd."],
+["Ça se mange sans faim.","It's moreish.","familier","Ces chips, ça se mange sans faim.",""],
+["Bon appétit !","Enjoy your meal!","courant","Bon appétit, tout le monde !",""]]},
+{t:"Transports", items:[
+["Mon train a du retard.","My train is delayed.","courant","Désolé, mon train a vingt minutes de retard.",""],
+["Il y a une grève.","There's a strike.","courant","Pas de métro demain, il y a une grève.",""],
+["J'ai raté mon train.","I missed my train.","courant","J'ai raté mon train de deux minutes !",""],
+["Un aller-retour pour Lyon","a return ticket to Lyon","courant","Un aller-retour pour Lyon, s'il vous plaît.","« Un aller simple » = a one-way ticket."],
+["C'est quelle ligne pour aller à… ?","Which line goes to…?","courant","C'est quelle ligne pour aller à la gare de Lyon ?",""],
+["Je descends au prochain arrêt.","I'm getting off at the next stop.","courant","Pardon, je descends au prochain arrêt.",""],
+["Être coincé dans les bouchons","to be stuck in traffic","courant","On est coincés dans les bouchons depuis une heure.",""],
+["Faire du covoiturage","to carpool","courant","Pour aller à Bordeaux, on a fait du covoiturage.",""],
+["Il n'y a plus de réseau.","There's no signal.","courant","Je te rappelle, il n'y a plus de réseau.",""],
+["Je suis en route.","I'm on my way.","courant","Je suis en route, j'arrive dans dix minutes.",""],
+["Tu peux me déposer ?","Can you drop me off?","courant","Tu peux me déposer à la gare ?",""],
+["Prendre un VTC","to take an Uber-style car","familier","Il était tard, on a pris un VTC.","VTC = private hire car."]]},
+{t:"Boulot", items:[
+["Je suis en télétravail.","I'm working from home.","courant","Le vendredi, je suis en télétravail.",""],
+["J'ai une réunion.","I have a meeting.","courant","Je te rappelle, j'ai une réunion à 14 h.",""],
+["Faire des heures sup'","to do overtime","familier","Cette semaine, j'ai fait plein d'heures sup'.","Short for heures supplémentaires."],
+["Être débordé(e)","to be swamped","courant","Je suis complètement débordé en ce moment.",""],
+["Poser un jour de congé","to take a day off","courant","J'ai posé un jour de congé vendredi.",""],
+["La pause déj'","the lunch break","familier","On se voit à la pause déj' ?",""],
+["Faire le point","to take stock / catch up","courant","On fait le point demain matin ?",""],
+["Un CDI / un CDD","a permanent / fixed-term contract","courant","Elle vient de décrocher un CDI.",""],
+["Décrocher un stage","to land an internship","courant","J'ai décroché un stage dans un cabinet d'avocats.",""],
+["Être en arrêt maladie","to be off sick","courant","Il est en arrêt maladie cette semaine.",""],
+["Ça avance ?","How's it coming along?","courant","Alors, ton dossier, ça avance ?",""],
+["Je m'en occupe.","I'll take care of it.","courant","Pas de souci, je m'en occupe.",""],
+["Mon chef","my boss","courant","Mon chef m'a demandé de finir ça avant ce soir.","Casual: « mon boss »."]]},
+{t:"Sorties", items:[
+["On sort ce soir ?","Shall we go out tonight?","courant","On sort ce soir ? Il y a un concert au bar d'à côté.",""],
+["Faire la fête","to party","courant","On a fait la fête jusqu'à 4 h du matin.",""],
+["Ramène quelque chose à boire.","Bring something to drink.","courant","Si tu viens, ramène quelque chose à boire !",""],
+["Trinquer","to clink glasses","courant","On trinque ? Santé !","Look people in the eye when you do!"],
+["Santé !","Cheers!","courant","Allez, santé !","Also « tchin-tchin »."],
+["Avoir la gueule de bois","to have a hangover","familier","Ce matin, j'ai une de ces gueules de bois…",""],
+["Être pompette","to be tipsy","familier","Après deux verres, elle était déjà pompette.",""],
+["Rentrer à pied","to walk home","courant","Il n'y avait plus de métro, on est rentrés à pied.",""],
+["C'était trop bien !","It was so good!","familier","La soirée d'hier, c'était trop bien !",""],
+["On se fait un ciné ?","Shall we catch a film?","familier","On se fait un ciné ce week-end ?",""],
+["Un after","an afterparty","familier","Il y a un after chez Thomas.",""],
+["Je suis crevé, je rentre.","I'm shattered, I'm heading home.","familier","Bon, je suis crevé, je rentre. Bonne soirée !",""]]},
+{t:"Relations", items:[
+["Sortir avec quelqu'un","to date someone","courant","Ça fait deux ans qu'il sort avec elle.",""],
+["Avoir un crush sur quelqu'un","to have a crush on someone","familier","J'ai un crush sur un mec de mon cours.",""],
+["Draguer","to flirt with / chat up","familier","Il essayait de la draguer toute la soirée.",""],
+["Se mettre ensemble","to get together (as a couple)","familier","Ils se sont mis ensemble l'été dernier.",""],
+["Rompre","to break up","courant","Ils ont rompu après cinq ans.","Casual: « larguer quelqu'un » = to dump someone."],
+["Je tiens à toi.","I care about you.","courant","Tu sais que je tiens à toi.","Between « je t'aime bien » and « je t'aime »."],
+["Je t'aime bien.","I like you (as a friend).","courant","Je t'aime bien, mais pas plus.","Adding « bien » weakens « aimer » for people."],
+["Être jaloux / jalouse","to be jealous","courant","Il est un peu jaloux de son ex.",""],
+["Se disputer","to argue","courant","On s'est disputés pour une histoire de vaisselle.",""],
+["Se réconcilier","to make up","courant","Finalement, ils se sont réconciliés.",""],
+["Avoir le cœur brisé","to be heartbroken","courant","Elle a le cœur brisé depuis leur rupture.",""],
+["Être amoureux / amoureuse de","to be in love with","courant","Il est fou amoureux d'elle.","« de », never « avec »."],
+["Faire confiance à quelqu'un","to trust someone","courant","Je lui fais entièrement confiance.",""]]},
+{t:"Émotions", items:[
+["Je suis content(e) pour toi.","I'm happy for you.","courant","Tu as eu le poste ? Je suis trop content pour toi !",""],
+["Ça m'énerve.","It annoys me.","courant","Ça m'énerve quand il est en retard.",""],
+["Ça me stresse.","It stresses me out.","courant","Cet exam, ça me stresse à mort.",""],
+["J'ai hâte !","I can't wait!","courant","On part en vacances demain, j'ai hâte !","« Avoir hâte de » + infinitive."],
+["Je suis déçu(e).","I'm disappointed.","courant","Je suis un peu déçu par la fin du film.","False friend: « déçu » doesn't mean deceived."],
+["Quelle horreur !","How awful!","courant","Il a plu pendant tout le mariage ? Quelle horreur !",""],
+["Sans blague ?","No way? / Seriously?","familier","— Il a démissionné. — Sans blague ?",""],
+["C'est pas vrai !","No way!","familier","Tu as gagné ? C'est pas vrai !",""],
+["Ça me fait peur.","It scares me.","courant","Parler en public, ça me fait peur.",""],
+["J'en peux plus.","I can't take it anymore.","familier","Il fait 38 degrés, j'en peux plus.",""],
+["Ouf !","Phew!","familier","Ouf, j'ai eu mon train de justesse !",""],
+["Tant mieux !","Good! / So much the better!","courant","Tu te sens mieux ? Tant mieux !",""],
+["Ça me rend fou / folle.","It drives me mad.","courant","Ce bruit me rend fou.",""],
+["J'étais mort(e) de rire.","I was dying of laughter.","familier","Ta vidéo, j'étais mort de rire.","In texts: « mdr » = lol."]]},
+{t:"Textos", items:[
+["mdr","lol","familier","Trop drôle mdr","= mort de rire. Also « ptdr »."],
+["cc / slt","hi","familier","cc ça va ?","cc = coucou, slt = salut."],
+["stp","please","familier","Tu peux m'appeler stp ?","= s'il te plaît (svp = s'il vous plaît)."],
+["jsp","idk","familier","jsp si je viens ce soir","= je sais pas."],
+["tkt","don't worry","familier","tkt je gère","= t'inquiète."],
+["bcp","a lot","familier","Merci bcp !","= beaucoup."],
+["dsl","sorry","familier","dsl je suis en retard","= désolé(e)."],
+["pk","why","familier","pk tu réponds pas ?","= pourquoi."],
+["Je t'ai envoyé un vocal.","I sent you a voice note.","familier","Écoute, je t'ai envoyé un vocal.",""],
+["Il m'a ghosté.","He ghosted me.","familier","On a parlé une semaine et il m'a ghosté.",""],
+["Je te laisse.","I'll let you go (ending a chat).","courant","Bon, je te laisse, à demain !",""],
+["On s'appelle ?","Shall we talk on the phone?","courant","C'est plus simple, on s'appelle ?",""]]},
+{t:"Logement", items:[
+["Un appart","a flat","familier","J'ai trouvé un appart à la Croix-Rousse.","Short for appartement."],
+["Un ou une coloc","a flatmate","familier","Ma coloc est super sympa.","« Une colocation » = a flatshare."],
+["Le loyer","the rent","courant","Le loyer est de 800 euros par mois.",""],
+["Charges comprises","bills included","courant","C'est 700 euros, charges comprises.",""],
+["Faire le ménage","to do the cleaning","courant","Ce week-end, je fais le ménage à fond.",""],
+["Faire les courses","to do the food shopping","courant","Je vais faire les courses, tu as besoin de quelque chose ?",""],
+["Sortir les poubelles","to take the bins out","courant","C'est ton tour de sortir les poubelles.",""],
+["Lancer une machine","to put a wash on","courant","Je lance une machine, tu as du linge sale ?",""],
+["Le proprio","the landlord","familier","Le proprio ne veut pas réparer le chauffage.","Short for propriétaire."],
+["Déménager","to move house","courant","On déménage le mois prochain.",""],
+["Il y a une fuite.","There's a leak.","courant","Il y a une fuite sous l'évier.",""],
+["Faire la vaisselle","to do the washing-up","courant","Ce soir, c'est toi qui fais la vaisselle.",""]]},
+{t:"Santé & sport", items:[
+["Je ne me sens pas bien.","I don't feel well.","courant","Je rentre, je ne me sens pas bien.",""],
+["J'ai mal à la tête.","I have a headache.","courant","J'ai mal à la tête depuis ce matin.","« Avoir mal à » + body part."],
+["J'ai de la fièvre.","I have a temperature.","courant","Il a de la fièvre, il reste au lit.",""],
+["J'ai attrapé un rhume.","I caught a cold.","courant","J'ai attrapé un rhume avec ce froid.",""],
+["Prendre rendez-vous chez le médecin","to book a doctor's appointment","courant","Il faut que je prenne rendez-vous chez le médecin.",""],
+["Une ordonnance","a prescription","courant","Le médecin m'a fait une ordonnance.",""],
+["La pharmacie de garde","the on-call pharmacy","courant","Le dimanche, il faut trouver la pharmacie de garde.",""],
+["Je suis allergique à…","I'm allergic to…","courant","Je suis allergique aux noix.",""],
+["Aller à la salle","to go to the gym","familier","Je vais à la salle après le boulot.",""],
+["J'ai des courbatures.","I'm aching (after exercise).","courant","Après la séance d'hier, j'ai des courbatures partout.",""],
+["Se faire mal","to hurt yourself","courant","Je me suis fait mal au genou en courant.",""],
+["Être en forme","to be in good shape","courant","Tu as l'air en forme aujourd'hui !",""]]},
+{t:"Argent & shopping", items:[
+["Ça coûte combien ?","How much is it?","courant","Ce pull, ça coûte combien ?",""],
+["C'est trop cher.","It's too expensive.","courant","Non, c'est trop cher pour moi.",""],
+["C'est donné !","It's a steal!","familier","Dix euros pour ce manteau ? C'est donné !",""],
+["Les soldes","the sales","courant","J'attends les soldes pour acheter des chaussures.",""],
+["Je regarde, merci.","I'm just looking, thanks.","courant","— Je peux vous aider ? — Je regarde, merci.",""],
+["Je peux payer par carte ?","Can I pay by card?","courant","Je peux payer par carte ou seulement en espèces ?",""],
+["Être fauché(e)","to be broke","familier","Je ne peux pas sortir, je suis fauché ce mois-ci.",""],
+["Faire des économies","to save money","courant","Je fais des économies pour partir au Japon.",""],
+["La thune","money","argot","J'ai plus de thune.","Also « le fric », « le blé ». Neutral: « l'argent »."],
+["Rembourser quelqu'un","to pay someone back","courant","Je te rembourse demain, promis.",""],
+["Faire un virement","to make a bank transfer","courant","Je t'ai fait un virement ce matin.",""],
+["Je peux l'essayer ?","Can I try it on?","courant","Elle est jolie, cette veste. Je peux l'essayer ?",""]]},
+{t:"Donner son avis", items:[
+["À mon avis…","In my opinion…","courant","À mon avis, c'est une mauvaise idée.",""],
+["Je trouve que…","I think that…","courant","Je trouve que ce film est surcoté.","The most natural way to give an opinion."],
+["Je ne suis pas d'accord.","I disagree.","courant","Là, je ne suis pas d'accord avec toi.",""],
+["Tu as raison.","You're right.","courant","Tu as raison, je me suis trompé.","« Avoir raison / avoir tort »."],
+["D'un côté… de l'autre…","On the one hand… on the other…","courant","D'un côté c'est pratique, de l'autre c'est cher.",""],
+["Ça n'a rien à voir.","That's got nothing to do with it.","courant","Ça n'a rien à voir avec ce que je disais.",""],
+["Je vois ce que tu veux dire.","I see what you mean.","courant","Je vois ce que tu veux dire, mais je ne suis pas sûr.",""],
+["Pas forcément.","Not necessarily.","courant","— C'est plus cher, donc c'est mieux. — Pas forcément.",""],
+["Quand même","still / all the same / really","courant","C'est quand même un peu cher.","A hugely common softener and intensifier."],
+["Par contre","however","courant","Le resto est bon. Par contre, le service est lent.",""],
+["Je suis mitigé(e).","I'm in two minds.","courant","Pour ce film, je suis mitigé.",""],
+["Il faut voir.","It remains to be seen.","courant","Ça peut marcher, mais il faut voir.",""]]},
+{t:"Expressions imagées", items:[
+["Ce n'est pas la mer à boire.","It's not that hard.","courant","Allez, ce n'est pas la mer à boire !",""],
+["Avoir un poil dans la main","to be bone idle","familier","Lui, il a un poil dans la main.",""],
+["Tomber dans les pommes","to faint","familier","Avec la chaleur, elle est tombée dans les pommes.",""],
+["Raconter des salades","to tell fibs","familier","Arrête de me raconter des salades.",""],
+["Avoir le cafard","to feel down","familier","Le dimanche soir, j'ai souvent le cafard.",""],
+["Mettre les pieds dans le plat","to put your foot in it","courant","J'ai mis les pieds dans le plat en parlant de son ex.",""],
+["Ça ne mange pas de pain.","It doesn't hurt to try.","courant","Demande-lui, ça ne mange pas de pain.",""],
+["Avoir d'autres chats à fouetter","to have bigger fish to fry","courant","Désolé, j'ai d'autres chats à fouetter.",""],
+["Les doigts dans le nez","with no effort at all","familier","Il a eu son exam les doigts dans le nez.",""],
+["Revenons à nos moutons.","Let's get back to the point.","courant","Bon, revenons à nos moutons.",""],
+["C'est la goutte d'eau qui fait déborder le vase.","It's the last straw.","courant","Son retard, c'était la goutte d'eau qui fait déborder le vase.",""],
+["Appeler un chat un chat","to call a spade a spade","courant","Il faut appeler un chat un chat : c'est un échec.",""],
+["Faut pas pousser mémé dans les orties.","Don't push it.","familier","Trois heures de retard ? Faut pas pousser mémé dans les orties !",""]]},
+{t:"Verlan & argot", items:[
+["Une meuf","a woman / girlfriend","argot","Il est venu avec sa meuf.","Verlan of « femme »."],
+["Un mec","a guy / boyfriend","familier","C'est qui, ce mec ?",""],
+["Un keum","a guy","argot","Le keum là-bas, tu le connais ?","Verlan of « mec »."],
+["Chanmé","awesome","argot","Ton nouveau son, il est chanmé !","Verlan of « méchant »."],
+["Zarbi","weird","argot","C'est zarbi, cette histoire.","Verlan of « bizarre »."],
+["Teubé","stupid","argot","Arrête de faire le teubé.","Verlan of « bête »."],
+["Laisse béton.","Forget it.","argot","Laisse béton, c'est pas grave.","Verlan of « laisse tomber » (a bit dated, still known)."],
+["Bouffer","to eat","familier","On va bouffer où ?",""],
+["Pioncer","to sleep","argot","Je vais pioncer, je suis mort.",""],
+["Se casser","to leave / clear off","familier","Bon, on se casse ?","« Casse-toi ! » is rude."],
+["Un truc de ouf","something crazy","argot","Il m'est arrivé un truc de ouf hier.",""],
+["Mon poto","my mate","argot","Salut mon poto, ça va ?",""]]},
+{t:"Voyages", items:[
+["Partir en vacances","to go on holiday","courant","On part en vacances dans le sud.",""],
+["Faire sa valise","to pack your suitcase","courant","Je n'ai pas encore fait ma valise !",""],
+["Faire le pont","to take a long weekend (bridge day)","courant","Jeudi est férié, je fais le pont.","A very French institution in May."],
+["Réserver une chambre","to book a room","courant","J'ai réservé une chambre pour deux nuits.",""],
+["Il fait un temps de rêve.","The weather is gorgeous.","courant","On est à Nice, il fait un temps de rêve.",""],
+["Prendre un coup de soleil","to get sunburnt","courant","J'ai pris un coup de soleil sur le nez.",""],
+["Visiter / rendre visite à","to visit (a place / a person)","courant","On a visité Lyon, puis on a rendu visite à ma tante.","Places: visiter. People: rendre visite à."],
+["Où se trouve… ?","Where is…?","courant","Excusez-moi, où se trouve la gare ?",""],
+["Je me suis perdu(e).","I'm lost.","courant","Je me suis perdu, vous pouvez m'aider ?",""],
+["Ça valait le détour.","It was worth the trip.","courant","Ce petit village, ça valait le détour !",""],
+["Avoir le mal du pays","to be homesick","courant","Les premières semaines, j'avais le mal du pays.",""],
+["Les grandes vacances","the summer holidays","courant","Pendant les grandes vacances, on va en Bretagne.",""]]},
+{t:"Études & droit", items:[
+["Je suis étudiant(e) en droit.","I'm a law student.","courant","Je suis étudiant en droit à Birmingham.",""],
+["Réviser pour ses partiels","to revise for exams","courant","Je révise pour mes partiels.","« Un partiel » = a university exam."],
+["Avoir une bonne note","to get a good mark","courant","J'ai eu une bonne note en droit des contrats.",""],
+["Louper un examen","to fail an exam","familier","J'ai loupé mon examen de pénal.","Also « rater »."],
+["Un cours magistral / un TD","a lecture / a seminar","courant","J'ai un TD de droit constitutionnel à 10 h.","TD = travaux dirigés."],
+["Une avocate / un avocat","a lawyer","courant","Elle veut devenir avocate.","Also means avocado!"],
+["Un cabinet d'avocats","a law firm","courant","Il fait un stage dans un cabinet d'avocats.",""],
+["Le droit des contrats","contract law","courant","Le droit des contrats, c'est ma matière préférée.",""],
+["Le droit pénal","criminal law","courant","En droit pénal, on étudie la responsabilité pénale.",""],
+["La jurisprudence","case law","soutenu","Selon une jurisprudence constante, le juge doit motiver sa décision.",""],
+["Plaider","to plead (in court)","courant","Elle a plaidé devant la cour d'appel.",""],
+["Un procès","a trial","courant","Le procès commence lundi.","False friend: not « process »."],
+["La date de rendu","the submission deadline","courant","La date de rendu du mémoire, c'est vendredi.",""]]},
+{t:"Mots de l'oral", items:[
+["Ben…","Well…","familier","Ben, je sais pas trop.",""],
+["Bah oui !","Well, obviously!","familier","— Tu viens ? — Bah oui !",""],
+["En gros","basically","familier","En gros, il veut qu'on parte plus tôt.",""],
+["Enfin bref","anyway","familier","Enfin bref, c'était une longue journée.",""],
+["Voilà.","That's it / There you go.","courant","Et voilà, c'est tout ce que je voulais dire.","Endlessly used to wrap up."],
+["Disons que…","Let's say that…","courant","Disons que ce n'était pas une réussite.",""],
+["Comment dire…","How can I put it…","courant","Comment dire… c'était spécial.",""],
+["Du genre","like / something like","familier","Il m'a dit un truc du genre « on verra ».",""],
+["N'empêche","still / even so","familier","N'empêche, il aurait pu prévenir.",""],
+["Tu vois ?","You know?","familier","C'est compliqué, tu vois ?",""],
+["Hein ?","Huh? / right?","familier","C'est sympa, hein ?",""],
+["Ouais","yeah","familier","Ouais, carrément.",""]]}
+];
+SEED.forEach(x=>{ x[5]="Essentiels"; });
+SEED_MORE.forEach(g=>g.items.forEach(x=>{ x[5]=g.t; SEED.push(x); }));
+
 const TOPICS = ["Soirées & apéro","Textos & réseaux","Boulot & collègues","Râler (l'art français)","Drague & relations","Bouffe & resto","Émotions & réactions","Verlan","Transports & galères","Argent & shopping","Sport & foot","Logement & colocs","Santé & médecin","Emails pro (soutenu)","Donner son avis & débattre","Expressions imagées","Mots de remplissage à l'oral","Voyages & vacances"];
 const SCENARIOS = [
   {t:"Au bar", d:"Tu commandes pour tes potes, le serveur est débordé et se trompe de commande."},
@@ -1335,7 +1557,7 @@ function renderPhrases(){
     <div class="row"><button class="btn primary" id="go">Commencer la session</button>${weakN?`<button class="btn rose" id="goWeak">Points faibles (${weakN})</button>`:""}</div></div>
     <div class="statline"><div class="stat"><b class="num">${all.length}</b><span>dans ta banque</span></div><div class="stat"><b class="num">${learning}</b><span>en cours</span></div><div class="stat"><b class="num">${mast}</b><span>maîtrisées (21 j+)</span></div><div class="stat"><b class="num">${weakN}</b><span>points faibles</span></div></div>
     <p class="muted" style="font-size:13.5px">Tu produis la phrase toi-même (à l'écrit ou à l'oral) avant de voir la réponse : c'est le rappel actif qui te la rend disponible en conversation. Tes erreurs du chat deviennent des cartes « Corrige ».</p></div>`}
-  ${packHTML()}${importHTML()}
+  ${libraryHTML()}${conjHTML()}${packHTML()}${importHTML()}
   <div class="card stack"><div class="row" style="justify-content:space-between"><div><div class="eyebrow">Banque infinie</div><h2>Générer de nouvelles expressions</h2></div>
     <select id="genReg" style="width:auto"><option value="mix">Registre mélangé</option><option value="familier">Familier</option><option value="argot">Argot / verlan</option><option value="courant">Courant</option><option value="soutenu">Soutenu</option></select></div>
     <div class="chips" id="topics">${TOPICS.map(t=>`<button class="chip" aria-pressed="${t===genTopic}">${esc(t)}</button>`).join("")}<button class="chip" aria-pressed="${genTopic==="__me"}" data-me="1">Selon ma vie</button></div>
@@ -1350,7 +1572,7 @@ function renderPhrases(){
   $("#genReg").value=genReg; $("#genReg").onchange=e=>genReg=e.target.value;
   $("#topics").onclick=e=>{ const b=e.target.closest("button"); if(!b) return; genTopic=b.dataset.me?"__me":b.textContent; $$("#topics .chip").forEach(x=>x.setAttribute("aria-pressed",x===b)); };
   $("#genGo").onclick=generate;
-  bindPackImport();
+  bindPackImport(); bindLibrary(); bindConj();
   $("#bankF").onclick=e=>{ const b=e.target.closest("[data-f]"); if(b){ bankFilter=b.dataset.f; renderPhrases(); } };
   $("#bankQ").oninput=e=>{ bankQ=e.target.value; clearTimeout(renderPhrases._t); renderPhrases._t=setTimeout(()=>{ const pos=e.target.selectionStart; renderPhrases(); const n=$("#bankQ"); n.focus(); n.setSelectionRange(pos,pos); },250); };
   $(".bank-list").onclick=e=>{ const b=e.target.closest("[data-b]"); if(!b) return; const id=b.closest(".bank-item").dataset.id; const c=S.cards[id];
@@ -1614,6 +1836,8 @@ async function translateFR(t){ const {text}=await ai("text",`Translate this Fren
 function toggleEN(m,el){
   if(!el) return; if(!el.hidden){ el.hidden=true; return; }
   if(m.en){ el.textContent=m.en; el.hidden=false; return; }
+  if(!aiReady()&&Local.ready()){ el.hidden=false; el.textContent="Traduction hors-ligne…";
+    Local.chat([{role:"user",content:"Traduis ce message français en anglais naturel. Réponds seulement avec la traduction anglaise.\n\n"+m.text}],{maxTokens:220}).then(t=>{ m.en=t; el.textContent=t; saveChat(); }).catch(()=>{ el.hidden=true; toast("Traduction hors-ligne impossible pour l'instant."); }); return; }
   if(!needAI()) return; el.hidden=false; el.textContent="Traduction…";
   translateFR(m.text).then(t=>{ m.en=t; el.textContent=t; saveChat(); }).catch(e=>{ el.hidden=true; aiErr(e); });
 }
@@ -1631,7 +1855,7 @@ function closePop(){ $("#pop").hidden=true; popData=null; }
 function popButtons(){ return `<div class="row" style="gap:8px"><button class="btn sm" data-p="say">${I.play} Écouter</button><button class="btn sm primary" data-p="add">${I.plus} Ajouter</button><button class="btn sm ghost" data-p="x">Fermer</button></div>`; }
 async function wordPop(word,ctx,rect){
   word=String(word).replace(/^[«»"“”(\[—–\-…]+|[«»"“”)\].,;:!?…]+$/g,"").trim(); if(!word) return;
-  if(!aiReady()) return localPop(word,rect);
+  if(!aiReady()) return localPop(word,rect,ctx);
   showPop(`<div class="pfr">${esc(word)}</div><div class="muted">Je regarde…</div>`,rect);
   try{ const r=await ai("json",`French sentence: "${String(ctx||word).slice(0,600)}"\nExplain "${word}" as used in that sentence, for an English speaker. If it is part of a fixed expression, give the whole expression. Reply with ONLY JSON: {"fr":"dictionary form, or the full expression","en":"meaning in this context","pos":"part of speech, in English","reg":"familier|argot|courant|soutenu","note":"one short note (nuance, slang or verlan origin, which verb it is a form of), or empty"}`,{modelTier:"quick"});
     popData={fr:String(r.fr||word),en:String(r.en||""),reg:r.reg||"courant",note:String(r.note||""),ex:String(ctx||"").slice(0,300)};
@@ -1639,6 +1863,7 @@ async function wordPop(word,ctx,rect){
   }catch(e){ closePop(); aiErr(e); }
 }
 async function phrasePop(text,rect){
+  if(!aiReady()&&Local.ready()) return localPhrasePop(text,rect);
   if(!needAI()) return;
   showPop(`<div class="pfr" style="font-size:15px">${esc(text)}</div><div class="muted">Traduction…</div>`,rect);
   try{ const en=await translateFR(text); popData={fr:text,en,reg:"courant",note:"",ex:""};
@@ -1648,7 +1873,10 @@ async function phrasePop(text,rect){
 $("#pop").addEventListener("click",e=>{ const b=e.target.closest("[data-p]"); if(!b||!popData) return;
   if(b.dataset.p==="say") Voice.speak(popData.fr);
   if(b.dataset.p==="add"){ const c=addCard({...popData,src:"chat"}); toast(c?"Ajouté à tes phrases.":"Déjà dans ta banque."); closePop(); }
-  if(b.dataset.p==="x") closePop(); });
+  if(b.dataset.p==="x") closePop();
+  if(b.dataset.p==="lmx"){ b.disabled=true; b.textContent="…";
+    Local.chat([{role:"user",content:`Explique en anglais, en une ou deux phrases, ce que veut dire « ${popData.fr} »${popData.ex?` dans cette phrase : « ${popData.ex} »`:""}. Réponds seulement avec l'explication.`}],{maxTokens:120})
+      .then(t=>{ const d=document.createElement("div"); d.className="pen"; d.textContent=t; b.replaceWith(d); }).catch(()=>{ b.textContent="Échec"; }); } });
 document.addEventListener("pointerdown",e=>{ if(!$("#pop").hidden&&!e.target.closest("#pop,.w,#selchip,[data-trans]")) closePop(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closePop(); $("#selchip").hidden=true; } });
 const selchip=$("#selchip"); let selTimer=null, hideTimer=null;
@@ -1789,6 +2017,7 @@ function offlineSend(text){
   logAdd("msgs"); addXP(10);
   const res=S.main.reserve||(S.main.reserve=[]);
   saveChat(); saveMain(); renderChat(); if(callOpen()) renderCall();
+  if(Local.ready()) return localReply();
   if(!res.length){ toast(`${pal().name} n'a plus de messages en réserve. Ton message est gardé et sera corrigé une fois en ligne.`); return; }
   chatBusy=true; setThinking(true);
   setTimeout(()=>{ const r=res.shift();
@@ -1826,11 +2055,11 @@ function offlinePic(text){
   stopTimer(); S.main.picQueue=(S.main.picQueue||[]).concat({scene:pic.idx,text,question:pic.question,ts:Date.now()}).slice(-20);
   logAdd("pics"); addXP(25); saveMain(); pic.res={offline:true,key:sc.key,hint:sc.hint}; renderImages();
 }
-function localPop(word,rect){
+function localPop(word,rect,ctx){
   const n=norm(word,false); const pool=Object.values(S.cards).concat(SEED.map(x=>({fr:x[0],en:x[1]})));
   const hits=pool.filter(c=>c.en&&!String(c.en).startsWith("Corrige")&&(" "+norm(c.fr,false)+" ").includes(" "+n+" ")).slice(0,4);
-  popData={fr:word,en:"",reg:"courant",note:"",ex:""};
-  showPop(`<div class="pfr">${esc(word)}</div>${hits.length?`<div class="muted" style="font-size:12.5px">Hors-ligne · dans ta banque :</div>${hits.map(h=>`<div><b>${esc(h.fr)}</b> <span class="muted">${esc(h.en)}</span></div>`).join("")}`:`<div class="muted">Hors-ligne : ce mot n'est pas encore dans ta banque. Touche-le à nouveau une fois connecté pour la traduction.</div>`}<div class="row" style="gap:8px"><button class="btn sm" data-p="say">${I.play} Écouter</button><button class="btn sm ghost" data-p="x">Fermer</button></div>`,rect);
+  popData={fr:word,en:"",reg:"courant",note:"",ex:String(ctx||"").slice(0,300)};
+  showPop(`<div class="pfr">${esc(word)}</div>${hits.length?`<div class="muted" style="font-size:12.5px">Hors-ligne · dans ta banque :</div>${hits.map(h=>`<div><b>${esc(h.fr)}</b> <span class="muted">${esc(h.en)}</span></div>`).join("")}`:`<div class="muted">Hors-ligne : ce mot n'est pas encore dans ta banque. Touche-le à nouveau une fois connecté pour la traduction.</div>`}<div class="row" style="gap:8px"><button class="btn sm" data-p="say">${I.play} Écouter</button>${Local.ready()?`<button class="btn sm primary" data-p="lmx">Expliquer (hors-ligne)</button>`:""}<button class="btn sm ghost" data-p="x">Fermer</button></div>`,rect);
 }
 function buildOfflineHTML(){
   const seed=JSON.stringify({savedAt:Date.now(),main:S.main,chat:S.chat,cards:S.cards}).replace(/</g,"\\u003c");
@@ -1857,7 +2086,7 @@ function offlineCardHTML(){
   const intro=HOSTED?`Cette app marche sans internet. Pour passer ta progression entre cette app et Tchatche sur claude.ai : touche « Copier ma progression » d'un côté, puis colle-la dans « Importer » de l'autre. Cartes, série, mémoire et messages sont fusionnés.`
     :OFFLINE?`Tu utilises la version téléchargée. Quand tu retrouves internet, copie ta progression ici, puis colle-la dans l'app en ligne (Moi → Hors-ligne → Importer) : tout est fusionné, et ${esc(pn)} corrige ce que tu as écrit.`
     :`Si le réseau coupe pendant que Tchatche est ouvert, tout continue : ${esc(pn)} répond avec des messages préparés à l'avance, et tes messages sont corrigés à ton retour. Pour l'app avec micro sur ton écran d'accueil : touche « Copier ma progression » ici, puis colle-la dans l'app (Moi → Importer).`;
-  return `${OFFLINE?brainCardHTML():""}<div class="card stack"><div class="eyebrow">Hors-ligne & synchro</div><h2>${esc(pn)}, même sans réseau</h2>
+  return `${OFFLINE?brainCardHTML()+localCardHTML():""}<div class="card stack"><div class="eyebrow">Hors-ligne & synchro</div><h2>${esc(pn)}, même sans réseau</h2>
   <p class="muted" style="font-size:13.5px">${intro}</p>
   <div class="statline"><div class="stat"><b class="num">${res}</b><span>messages de ${esc(pn)} en réserve</span></div><div class="stat"><b class="num">${q}</b><span>messages à corriger</span></div><div class="stat"><b class="num">${pq}</b><span>descriptions à noter</span></div></div>
   <div class="row">${aiReady()?`<button class="btn" id="fillRes">Recharger la réserve (+12)</button>`:""}${dlOK?`<button class="btn" id="dlOff">Télécharger la version hors-ligne</button>`:""}<button class="btn primary" id="expProg">Copier ma progression</button></div>
@@ -1893,6 +2122,7 @@ function bindOffline(){
     catch(err){ toast(err&&err.message?err.message:"Connexion impossible. Vérifie ta clé et ta connexion."); btn.disabled=false; btn.textContent=old; } };
   if(q("gemGo")) q("gemGo").onclick=e=>{ const k=q("gemKey").value.trim(); if(!k){ toast("Colle d'abord ta clé."); return; } connect(k,e.currentTarget); };
   if(q("gemRe")) q("gemRe").onclick=e=>{ const k=lsGet("tch_gemkey"); if(k) connect(k.key,e.currentTarget); };
+  bindLocal();
   if(q("gemTest")) q("gemTest").onclick=async e=>{ const b=e.currentTarget; b.disabled=true; b.textContent="Test…";
     try{ const {text}=await sample("Réponds uniquement : « Ça marche ! »"); toast("Réponse de l'IA : "+text.trim().slice(0,80)); }
     catch(err){ toast("Échec : "+(err&&(err.message||err.code)||"inconnu"),9000); }
@@ -1985,6 +2215,217 @@ function geminiSample(key,model,alts){
   return f;
 }
 
+
+/* ---------------- offline library ---------------- */
+let libTheme="Café & resto", libQ="";
+function seedThemes(){ const m=new Map(); SEED.forEach((x,i)=>{ const t=x[5]||"Essentiels"; if(!m.has(t)) m.set(t,[]); m.get(t).push(i); }); return m; }
+function libraryHTML(){
+  const th=seedThemes(); const nq=norm(libQ,false);
+  const ids=libQ?SEED.map((x,i)=>i).filter(i=>norm(SEED[i][0]+" "+SEED[i][1],false).includes(nq)):(th.get(libTheme)||[]);
+  const rows=ids.slice(0,80).map(i=>{ const x=SEED[i], inBank=hasFr(x[0]);
+    return `<div class="bank-item"><button class="iconbtn" data-say="${esc(x[0])}" title="Écouter" style="width:34px;height:34px">${I.play}</button><div style="min-width:0"><div class="fr">${esc(x[0])} <span class="reg reg-${esc(x[2])}">${esc(x[2])}</span></div><div class="en">${esc(x[1])}</div>${x[3]?`<div class="en"><i>${esc(x[3])}</i></div>`:""}${x[4]?`<div class="en">${esc(x[4])}</div>`:""}</div><span></span>${inBank?`<span class="muted mono" style="font-size:11px" title="Déjà dans tes phrases">✓</span>`:`<button class="iconbtn" data-lib="${i}" title="Ajouter à mes révisions" style="width:34px;height:34px">${I.plus}</button>`}</div>`; }).join("");
+  return `<div class="card stack"><div class="row" style="justify-content:space-between"><div><div class="eyebrow">Bibliothèque · marche hors-ligne</div><h2>${SEED.length} expressions de la vraie vie</h2></div><input type="search" id="libQ" placeholder="Chercher en français ou en anglais…" value="${esc(libQ)}" style="max-width:260px"></div>
+  <div class="chips" id="libT">${[...th.keys()].map(t=>`<button class="chip" data-t="${esc(t)}" aria-pressed="${!libQ&&t===libTheme}">${esc(t)} <span class="muted mono" style="font-size:11px">${th.get(t).length}</span></button>`).join("")}</div>
+  ${libQ?"":`<div class="row"><button class="btn sm" id="libAll">${I.plus} Ajouter tout ce thème à mes révisions</button></div>`}
+  <div class="bank-list" id="libList">${rows||`<p class="muted">Aucune expression trouvée.</p>`}</div></div>`;
+}
+function addSeed(i){ const c=seedCard(i); if(S.cards[c.id]||hasFr(c.fr)) return false; S.cards[c.id]=c; Store.saveCard(c); return true; }
+function bindLibrary(){
+  const t=$("#libT"); if(!t) return;
+  t.onclick=e=>{ const b=e.target.closest("[data-t]"); if(!b) return; libTheme=b.dataset.t; libQ=""; renderPhrases(); };
+  $("#libQ").oninput=e=>{ libQ=e.target.value; clearTimeout(bindLibrary._t); bindLibrary._t=setTimeout(()=>{ const pos=e.target.selectionStart; renderPhrases(); const n=$("#libQ"); n.focus(); try{ n.setSelectionRange(pos,pos); }catch(err){} },250); };
+  const all=$("#libAll"); if(all) all.onclick=()=>{ let k=0; (seedThemes().get(libTheme)||[]).forEach(i=>{ if(addSeed(i)) k++; }); toast(k?`${k} expressions ajoutées : elles arrivent dans tes sessions.`:"Tout ce thème est déjà dans tes phrases."); renderPhrases(); };
+  $("#libList").onclick=e=>{ const b=e.target.closest("[data-lib]"); if(!b) return; addSeed(+b.dataset.lib); toast("Ajoutée à tes révisions."); renderPhrases(); };
+}
+
+/* ---------------- offline conjugator ---------------- */
+const IRR={
+ "être":{p:"suis es est sommes êtes sont",pp:"été",f:"ser",i:"ét",s:"sois sois soit soyons soyez soient"},
+ "avoir":{p:"ai as a avons avez ont",pp:"eu",f:"aur",i:"av",s:"aie aies ait ayons ayez aient"},
+ "aller":{p:"vais vas va allons allez vont",pp:"allé",f:"ir",i:"all",s2:"aill all"},
+ "faire":{p:"fais fais fait faisons faites font",pp:"fait",f:"fer",i:"fais",s2:"fass fass"},
+ "pouvoir":{p:"peux peux peut pouvons pouvez peuvent",pp:"pu",f:"pourr",i:"pouv",s2:"puiss puiss"},
+ "vouloir":{p:"veux veux veut voulons voulez veulent",pp:"voulu",f:"voudr",i:"voul",s2:"veuill voul"},
+ "devoir":{p:"dois dois doit devons devez doivent",pp:"dû",f:"devr",i:"dev",s2:"doiv dev"},
+ "savoir":{p:"sais sais sait savons savez savent",pp:"su",f:"saur",i:"sav",s2:"sach sach"},
+ "venir":{p:"viens viens vient venons venez viennent",pp:"venu",f:"viendr",i:"ven",s2:"vienn ven"},
+ "tenir":{p:"tiens tiens tient tenons tenez tiennent",pp:"tenu",f:"tiendr",i:"ten",s2:"tienn ten"},
+ "prendre":{p:"prends prends prend prenons prenez prennent",pp:"pris",f:"prendr",i:"pren",s2:"prenn pren"},
+ "mettre":{p:"mets mets met mettons mettez mettent",pp:"mis",f:"mettr",i:"mett",s2:"mett mett"},
+ "dire":{p:"dis dis dit disons dites disent",pp:"dit",f:"dir",i:"dis",s2:"dis dis"},
+ "voir":{p:"vois vois voit voyons voyez voient",pp:"vu",f:"verr",i:"voy",s2:"voi voy"},
+ "partir":{p:"pars pars part partons partez partent",pp:"parti",f:"partir",i:"part",s2:"part part"},
+ "sortir":{p:"sors sors sort sortons sortez sortent",pp:"sorti",f:"sortir",i:"sort",s2:"sort sort"},
+ "dormir":{p:"dors dors dort dormons dormez dorment",pp:"dormi",f:"dormir",i:"dorm",s2:"dorm dorm"},
+ "sentir":{p:"sens sens sent sentons sentez sentent",pp:"senti",f:"sentir",i:"sent",s2:"sent sent"},
+ "servir":{p:"sers sers sert servons servez servent",pp:"servi",f:"servir",i:"serv",s2:"serv serv"},
+ "connaître":{p:"connais connais connaît connaissons connaissez connaissent",pp:"connu",f:"connaîtr",i:"connaiss",s2:"connaiss connaiss"},
+ "croire":{p:"crois crois croit croyons croyez croient",pp:"cru",f:"croir",i:"croy",s2:"croi croy"},
+ "boire":{p:"bois bois boit buvons buvez boivent",pp:"bu",f:"boir",i:"buv",s2:"boiv buv"},
+ "écrire":{p:"écris écris écrit écrivons écrivez écrivent",pp:"écrit",f:"écrir",i:"écriv",s2:"écriv écriv"},
+ "lire":{p:"lis lis lit lisons lisez lisent",pp:"lu",f:"lir",i:"lis",s2:"lis lis"},
+ "vivre":{p:"vis vis vit vivons vivez vivent",pp:"vécu",f:"vivr",i:"viv",s2:"viv viv"},
+ "recevoir":{p:"reçois reçois reçoit recevons recevez reçoivent",pp:"reçu",f:"recevr",i:"recev",s2:"reçoiv recev"},
+ "ouvrir":{p:"ouvre ouvres ouvre ouvrons ouvrez ouvrent",pp:"ouvert",f:"ouvrir",i:"ouvr",s2:"ouvr ouvr"},
+ "offrir":{p:"offre offres offre offrons offrez offrent",pp:"offert",f:"offrir",i:"offr",s2:"offr offr"},
+ "courir":{p:"cours cours court courons courez courent",pp:"couru",f:"courr",i:"cour",s2:"cour cour"},
+ "mourir":{p:"meurs meurs meurt mourons mourez meurent",pp:"mort",f:"mourr",i:"mour",s2:"meur mour"},
+ "naître":{p:"nais nais naît naissons naissez naissent",pp:"né",f:"naîtr",i:"naiss",s2:"naiss naiss"},
+ "plaire":{p:"plais plais plaît plaisons plaisez plaisent",pp:"plu",f:"plair",i:"plais",s2:"plais plais"},
+ "suivre":{p:"suis suis suit suivons suivez suivent",pp:"suivi",f:"suivr",i:"suiv",s2:"suiv suiv"},
+ "envoyer":{p:"envoie envoies envoie envoyons envoyez envoient",pp:"envoyé",f:"enverr",i:"envoy",s2:"envoi envoy"},
+ "rire":{p:"ris ris rit rions riez rient",pp:"ri",f:"rir",i:"ri",s2:"ri ri"},
+ "craindre":{p:"crains crains craint craignons craignez craignent",pp:"craint",f:"craindr",i:"craign",s2:"craign craign"},
+ "peindre":{p:"peins peins peint peignons peignez peignent",pp:"peint",f:"peindr",i:"peign",s2:"peign peign"},
+ "conduire":{p:"conduis conduis conduit conduisons conduisez conduisent",pp:"conduit",f:"conduir",i:"conduis",s2:"conduis conduis"},
+ "s'asseoir":{p:"assieds assieds assied asseyons asseyez asseyent",pp:"assis",f:"assiér",i:"assey",s2:"assey assey",refl:1}
+};
+const IRR_BASES=["prendre","venir","tenir","mettre","écrire","faire","voir","partir","sortir","ouvrir","courir","conduire","suivre","plaire"];
+const ETRE=new Set(["aller","venir","devenir","revenir","parvenir","arriver","partir","repartir","sortir","ressortir","entrer","rentrer","monter","remonter","descendre","redescendre","naître","renaître","mourir","rester","tomber","retomber","retourner","passer","décéder","intervenir"]);
+const VOW=/^[aeiouyhéèêâîôûœ]/i;
+const PRON=["je","tu","il/elle/on","nous","vous","ils/elles"];
+const ACH=new Set(["acheter","racheter","geler","dégeler","congeler","peler","modeler","haleter","crocheter","fureter","ciseler","démanteler","marteler"]);
+function conjugate(input){
+  let inf=String(input).trim().toLowerCase().replace(/\s+/g," ").replace(/’/g,"'"); let refl=false;
+  if(/^se /.test(inf)){ refl=true; inf=inf.slice(3); } else if(/^s'/.test(inf)){ refl=true; inf=inf.slice(2); }
+  if(inf==="asseoir"){ inf="s'asseoir"; refl=true; }
+  if(inf==="falloir") return {special:[["Présent","il faut"],["Passé composé","il a fallu"],["Imparfait","il fallait"],["Futur","il faudra"],["Conditionnel","il faudrait"],["Subjonctif","qu'il faille"]],note:"Verbe impersonnel : seulement avec « il »."};
+  if(inf==="pleuvoir") return {special:[["Présent","il pleut"],["Passé composé","il a plu"],["Imparfait","il pleuvait"],["Futur","il pleuvra"],["Conditionnel","il pleuvrait"],["Subjonctif","qu'il pleuve"]],note:"Verbe impersonnel : seulement avec « il »."};
+  let d=IRR[inf], note="";
+  if(!d&&/cevoir$/.test(inf)&&inf!=="recevoir"){ const pre=inf.slice(0,-6), b=IRR.recevoir, tr=x=>x.split(" ").map(w=>pre+w.slice(2)).join(" ");
+    d={p:tr(b.p),pp:pre+b.pp.slice(2),f:pre+b.f.slice(2),i:pre+b.i.slice(2),s2:tr(b.s2)}; note="Se conjugue comme « recevoir »."; }
+  if(!d&&/[aeo]indre$/.test(inf)){ const X=inf.slice(0,-4); d={p:[X+"ns",X+"ns",X+"nt",X+"gnons",X+"gnez",X+"gnent"].join(" "),pp:X+"nt",f:X+"ndr",i:X+"gn",s2:X+"gn "+X+"gn"}; note="Verbe en -indre (comme craindre)."; }
+  if(!d&&/aître$/.test(inf)&&inf!=="naître"){ const X=inf.slice(0,-5); d={p:[X+"ais",X+"ais",X+"aît",X+"aissons",X+"aissez",X+"aissent"].join(" "),pp:X+"u",f:X+"aîtr",i:X+"aiss",s2:X+"aiss "+X+"aiss"}; note="Se conjugue comme « connaître »."; }
+  if(!d&&/uire$/.test(inf)&&!["nuire","luire"].includes(inf)){ const X=inf.slice(0,-3); d={p:[X+"is",X+"is",X+"it",X+"isons",X+"isez",X+"isent"].join(" "),pp:X+"it",f:X+"ir",i:X+"is",s2:X+"is "+X+"is"}; note="Se conjugue comme « conduire »."; }
+  if(!d){ for(const b of IRR_BASES){ if(inf.endsWith(b)&&inf!==b&&!["prévoir","pourvoir"].includes(inf)){ const pre=inf.slice(0,-b.length), base=IRR[b];
+      d={p:base.p.split(" ").map(x=>pre+x).join(" "),pp:pre+base.pp,f:pre+base.f,i:pre+base.i,s2:base.s2.split(" ").map(x=>pre+x).join(" ")}; note=`Se conjugue comme « ${b} ».`; break; } } }
+  const etre=refl||ETRE.has(inf)||(d&&d.refl);
+  let P,IMP,FUT,SUB,pp;
+  if(d){ P=d.p.split(" "); pp=d.pp; IMP=["ais","ais","ait","ions","iez","aient"].map(e=>d.i+e); FUT=d.f;
+    SUB=d.s?d.s.split(" "):(()=>{ const [a,b]=d.s2.split(" "); return [a+"e",a+"es",a+"e",b+"ions",b+"iez",a+"ent"]; })(); }
+  else if(/er$/.test(inf)){ const st=inf.slice(0,-2); let boot=st, fut=inf;
+    if(/é[^aeiouyé]+$/.test(st)){ boot=st.replace(/é([^aeiouyé]+)$/,"è$1"); note="Accent grave aux formes je, tu, il, ils (au futur, on écrit aussi « è » depuis 1990)."; }
+    else if(/e[lt]$/.test(st)&&!ACH.has(inf)){ boot=st+st.slice(-1); fut=boot+"er"; note="Consonne doublée devant un e muet (j'appelle, je jette)."; }
+    else if(/e[^aeiouyé]$/.test(st)){ boot=st.replace(/e([^aeiouyé])$/,"è$1"); fut=boot+"er"; note="e → è devant une syllabe muette (j'achète, je lève)."; }
+    else if(/[ou]y$/.test(st)){ boot=st.slice(0,-1)+"i"; fut=boot+"er"; note="y → i devant un e muet (je nettoie)."; }
+    else if(/ay$/.test(st)){ boot=st.slice(0,-1)+"i"; fut=boot+"er"; note="On peut écrire « je paie » ou « je paye »."; }
+    const soft=st.endsWith("g")?st+"e":st.endsWith("c")?st.slice(0,-1)+"ç":st;
+    P=[boot+"e",boot+"es",boot+"e",soft+"ons",st+"ez",boot+"ent"];
+    IMP=[soft+"ais",soft+"ais",soft+"ait",st+"ions",st+"iez",soft+"aient"];
+    FUT=fut; SUB=[boot+"e",boot+"es",boot+"e",st+"ions",st+"iez",boot+"ent"]; pp=st+"é"; }
+  else if(/ir$/.test(inf)){ const st=inf.slice(0,-2); P=[st+"is",st+"is",st+"it",st+"issons",st+"issez",st+"issent"];
+    IMP=["ais","ais","ait","ions","iez","aient"].map(e=>st+"iss"+e); FUT=inf; SUB=["e","es","e","ions","iez","ent"].map(e=>st+"iss"+e); pp=st+"i";
+    note="Conjugué sur le modèle de « finir ». Si ce verbe est irrégulier, vérifie (ex. partir, dormir, ouvrir sont dans la liste)."; }
+  else if(/re$/.test(inf)){ const st=inf.slice(0,-2); P=[st+"s",st+"s",st,st+"ons",st+"ez",st+"ent"];
+    IMP=["ais","ais","ait","ions","iez","aient"].map(e=>st+e); FUT=inf.slice(0,-1); SUB=["e","es","e","ions","iez","ent"].map(e=>st+e); pp=st+"u";
+    note="Conjugué sur le modèle de « vendre ». Si ce verbe est irrégulier, vérifie."; }
+  else return null;
+  const futStem=FUT; // future/conditional stem always ends in r
+  const F=["ai","as","a","ons","ez","ont"].map(e=>futStem+e), C=["ais","ais","ait","ions","iez","aient"].map(e=>futStem+e);
+  const rp=["me","te","se","nous","vous","se"];
+  const subj=k=>(k===2||k===5)?"qu'":"que ";
+  const withPron=(k,form,isSub)=>{ let r=refl?(k<3||k===5?(VOW.test(form)?rp[k][0]+"'":rp[k]+" "):rp[k]+" "):""; const body=r+form;
+    let pr=PRON[k]; if(k===0&&VOW.test(body)) pr="j'"; else pr+=" ";
+    return (isSub?subj(k):"")+pr+body; };
+  const auxE=["suis","es","est","sommes","êtes","sont"], auxA=["ai","as","a","avons","avez","ont"], agr=["(e)","(e)","(e)","(e)s","(e)(s)","(e)s"];
+  const PC=[0,1,2,3,4,5].map(k=>etre?withPron(k,auxE[k]+" "+pp+agr[k]):withPron(k,auxA[k]+" "+pp));
+  const tense=(name,arr,isSub)=>[name,arr.map((f,k)=>withPron(k,f,isSub))];
+  const tenses=[tense("Présent",P),["Passé composé",PC],tense("Imparfait",IMP),tense("Futur",F),tense("Conditionnel",C),tense("Subjonctif",SUB,true)];
+  return {inf:(refl&&!inf.startsWith("s'")?(VOW.test(inf)?"s'":"se ")+inf:inf),tenses,note:[note,etre&&!refl?"Auxiliaire « être » au passé composé : accord avec le sujet.":"",inf==="passer"?"« passer » prend « avoir » avec un complément (j'ai passé un exam).":""].filter(Boolean).join(" "),regular:!d};
+}
+let conjQ="";
+function conjHTML(){
+  const r=conjQ?conjugate(conjQ):null;
+  let body="";
+  if(conjQ&&!r) body=`<p class="muted">Je ne reconnais pas ce verbe. Écris l'infinitif (ex. « manger », « se lever », « prendre »).</p>`;
+  else if(r&&r.special) body=`<div class="stack">${r.special.map(([t,f])=>`<div><b>${t}</b> · <button class="chip" data-say="${esc(f)}">${esc(f)}</button></div>`).join("")}</div><p class="muted" style="font-size:13px">${esc(r.note)}</p>`;
+  else if(r) body=`<div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))">${r.tenses.map(([t,fs])=>`<div class="stat" style="padding:12px"><div class="eyebrow" style="margin-bottom:6px">${t}</div>${fs.map(f=>`<div><button style="all:unset;cursor:pointer;line-height:1.7" data-say="${esc(f.replace(/\(e\)|\(s\)/g,"").replace("il/elle/on","il").replace("ils/elles","ils"))}">${esc(f)}</button></div>`).join("")}</div>`).join("")}</div>${r.note?`<p class="muted" style="font-size:13px">${esc(r.note)}</p>`:""}`;
+  return `<div class="card stack"><div><div class="eyebrow">Conjugueur · marche hors-ligne</div><h2>Conjugue n'importe quel verbe</h2></div>
+  <div class="row" style="flex-wrap:nowrap"><input type="text" id="conjIn" placeholder="Infinitif : manger, se lever, prendre, aller…" value="${esc(conjQ)}" autocapitalize="off"><button class="btn primary" id="conjGo">Conjuguer</button></div>
+  ${body}${r&&!r.special?`<p class="muted" style="font-size:12.5px">Touche une forme pour l'écouter.</p>`:""}</div>`;
+}
+function bindConj(){ const go=$("#conjGo"); if(!go) return; const run=()=>{ conjQ=$("#conjIn").value.trim(); renderPhrases(); }; go.onclick=run; $("#conjIn").onkeydown=e=>{ if(e.key==="Enter") run(); }; }
+
+/* ---------------- on-device pen pal (WebLLM, hosted app only) ---------------- */
+const LOCAL_MODELS=[
+ {id:"gemma-2-2b-it",label:"Équilibré · Gemma 2 (2B)",size:"≈ 1,4 Go",note:"Le meilleur compromis en français. Pour iPhone 15 Pro, 16 ou plus récent, ou un ordinateur."},
+ {id:"Llama-3.2-1B-Instruct",label:"Léger · Llama 3.2 (1B)",size:"≈ 0,7 Go",note:"Pour les téléphones plus anciens. Français plus simple, plus d'erreurs."},
+ {id:"Qwen3.5-4B",label:"Puissant · Qwen 3.5 (4B)",size:"≈ 2,4 Go",note:"Le meilleur français hors-ligne, pour un ordinateur ou un téléphone très récent."}
+];
+// hosted app ships WebLLM 0.2.84 next to index.html so it is cached for offline use; the downloaded file falls back to the CDN
+const WEBLLM_URL=HOSTED?new URL("webllm.js",location.href).href:"https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.84/+esm";
+const cleanThink=t=>String(t).replace(/<think>[\s\S]*?(<\/think>|$)/g,"").trim();
+const Local={ L:null, engine:null, loading:null,
+  supported(){ return (HOSTED||OFFLINE)&&!!navigator.gpu; },
+  saved(){ return lsGet("tch_local"); },
+  ready(){ const s=this.saved(); return this.supported()&&!!(s&&s.ready); },
+  async lib(){ if(!this.L) this.L=await import(WEBLLM_URL); return this.L; },
+  async f16(){ try{ const ad=await navigator.gpu.requestAdapter(); return !!(ad&&ad.features.has("shader-f16")); }catch(e){ return false; } },
+  async load(onProgress){ if(this.engine) return this.engine; if(this.loading) return this.loading;
+    const s=this.saved(); if(!s) throw new Error("aucun modèle installé");
+    this.loading=(async()=>{ const L=await this.lib(); const e=await L.CreateMLCEngine(s.id,{initProgressCallback:p=>{ if(onProgress) try{ onProgress(p); }catch(err){} }}); this.engine=e; return e; })();
+    try{ return await this.loading; } finally{ this.loading=null; } },
+  async install(base,onProgress){ const id=base+((await this.f16())?"-q4f16_1-MLC":"-q4f32_1-MLC");
+    lsSet("tch_local",{id,base,ready:false}); try{ if(navigator.storage&&navigator.storage.persist) await navigator.storage.persist(); }catch(e){}
+    if(this.engine){ try{ await this.engine.unload(); }catch(e){} this.engine=null; }
+    await this.load(onProgress); lsSet("tch_local",{id,base,ready:true}); },
+  async remove(){ const s=this.saved(); if(!s) return; try{ if(this.engine) await this.engine.unload(); }catch(e){} this.engine=null;
+    try{ const L=await this.lib(); await L.deleteModelAllInfoInCache(s.id); }catch(e){} lsSet("tch_local",null); },
+  async chat(messages,{onText,onProgress,maxTokens=200}={}){ const e=await this.load(onProgress); const s=this.saved();
+    const req={messages,stream:true,temperature:0.8,max_tokens:maxTokens}; if(/qwen/i.test(s.id)) req.extra_body={enable_thinking:false};
+    const chunks=await e.chat.completions.create(req); let text="";
+    for await(const c of chunks){ const d=(c.choices&&c.choices[0]&&c.choices[0].delta&&c.choices[0].delta.content)||""; if(d){ text+=d; if(onText) onText(cleanThink(text)); } }
+    return cleanThink(text); }
+};
+function offlineSys(){ const pp=pal(), p=S.main.profile;
+  return `Tu es ${pp.name}, ${pp.age} ans, tu vis à ${pp.city} et tu es ${pp.job}. Tu es le correspondant français de ${p.name||"ton ami"}, qui apprend le français (niveau ${levelEst()}). Ce que tu sais de cette personne : ${S.main.memory.slice(-8).map(m=>m.t).join(" ; ")||"pas grand-chose encore"}.
+Règles : réponds UNIQUEMENT en français naturel, comme un ami qui envoie un message : 1 à 3 phrases courtes, ${pp.tu===false?"vouvoiement":"tutoiement"}, ton chaleureux, puis une question pour continuer la conversation. Ne corrige pas ses fautes, ne traduis pas, n'écris jamais en anglais.`; }
+function localTurns(){ const hist=S.chat.msgs.filter(m=>!m.pending&&m.text&&!/^\[(Jeu de rôle|Consigne)\]/.test(m.text)).slice(-8); const out=[];
+  hist.forEach(m=>{ const role=m.role==="u"?"user":"assistant"; const last=out[out.length-1]; if(last&&last.role===role) last.content+="\n"+m.text; else out.push({role,content:m.text}); });
+  while(out.length&&out[0].role!=="user") out.shift(); if(!out.length) out.push({role:"user",content:"Salut !"});
+  out[0].content=offlineSys()+"\n\n---\n\n"+out[0].content; if(out[out.length-1].role!=="user") out.push({role:"user",content:"(continue)"}); return out; }
+async function localReply(){
+  const am={id:uid(),role:"a",text:"",ts:Date.now(),pending:true,local:true}; S.chat.msgs.push(am); chatBusy=true; renderChat(); if(callOpen()) renderCall(); setThinking(true);
+  const set=t=>{ const b=$(`#msgs .msg[data-i="${S.chat.msgs.indexOf(am)}"] .bubble`); if(b) b.textContent=t; const ct=$("#callText"); if(ct&&callOpen()) ct.textContent=t; };
+  try{ const reply=await Local.chat(localTurns(),{onProgress:p=>set(`${pal().name} se réveille… ${Math.round((p.progress||0)*100)} %`),onText:t=>{ setThinking(false); set(t); }});
+    am.text=reply||"…"; am.pending=false; }
+  catch(e){ const i=S.chat.msgs.indexOf(am); if(i>=0) S.chat.msgs.splice(i,1); toast("L'IA hors-ligne n'a pas pu répondre ("+String(e&&e.message||e).slice(0,90)+"). Réessaie, ou installe le modèle Léger dans Moi.",8000); }
+  chatBusy=false; setThinking(false); saveChat(); renderChat(); if(callOpen()) renderCall();
+  if(am.text&&!am.pending&&(S.main.profile.autoSpeak||callOpen())) Voice.speak(am.text);
+}
+async function localPhrasePop(text,rect){
+  showPop(`<div class="pfr" style="font-size:15px">${esc(text)}</div><div class="muted">Traduction hors-ligne…</div>`,rect);
+  try{ const en=await Local.chat([{role:"user",content:"Traduis ce texte français en anglais naturel. Réponds seulement avec la traduction anglaise.\n\n"+text}],{maxTokens:220});
+    popData={fr:text,en,reg:"courant",note:"",ex:""};
+    showPop(`<div class="pfr" style="font-size:15px">${esc(text)}</div><div class="pen">${esc(en)}</div><div class="muted" style="font-size:12px">Traduction par l'IA hors-ligne : peut contenir des erreurs.</div>${popButtons()}`,rect); }
+  catch(e){ closePop(); toast("Traduction hors-ligne impossible pour l'instant."); }
+}
+let lmBusy=false, lmPct=0, lmMsg="";
+function localCardHTML(){
+  const s=lsGet("tch_local"), pn=pal().name;
+  if(!navigator.gpu) return `<div class="card stack"><div class="eyebrow">Pen pal 100 % hors-ligne</div><h2>Pas encore possible sur ce navigateur</h2><p class="muted" style="font-size:13.5px">Pour faire tourner une IA directement dans ton appareil, il faut WebGPU : un iPhone avec iOS 26 ou plus récent (dans Safari ou l'app sur l'écran d'accueil), ou Chrome récent sur Android et ordinateur. En attendant, ${esc(pn)} te répond hors-ligne avec ses messages en réserve.</p></div>`;
+  const m=s&&LOCAL_MODELS.find(x=>x.id===s.base);
+  return `<div class="card stack"><div class="eyebrow">Pen pal 100 % hors-ligne</div><h2>${s&&s.ready?`Installé · ${esc(m?m.label:s.id)}`:`Parle avec ${esc(pn)} sans internet`}</h2>
+  <p class="muted" style="font-size:13.5px">Télécharge une petite IA directement dans ton appareil, une seule fois, en Wi-Fi. Ensuite ${esc(pn)} te répond même en mode avion, et peut traduire et expliquer des mots hors-ligne. Elle est moins fine que l'IA en ligne : elle discute mais ne corrige pas tes fautes (tes messages seront corrigés à ton retour en ligne) et peut faire des erreurs.</p>
+  ${s&&s.ready?`<div class="row"><button class="btn primary" id="lmTest">Tester</button><button class="btn ghost sm" id="lmDel">Supprimer (libère l'espace)</button></div>`
+  :`<div class="stack" id="lmPick">${LOCAL_MODELS.map((x,i)=>`<label class="row" style="flex-wrap:nowrap;align-items:flex-start;gap:10px;cursor:pointer"><input type="radio" name="lm" value="${x.id}" ${i===0?"checked":""} style="margin-top:4px"><span><b>${esc(x.label)}</b> <span class="muted mono" style="font-size:12px">${x.size}</span><br><span class="muted" style="font-size:13px">${esc(x.note)}</span></span></label>`).join("")}</div>
+  <button class="btn primary" id="lmGo" ${lmBusy?"disabled":""} style="align-self:flex-start">${lmBusy?"Téléchargement…":"Télécharger dans mon appareil"}</button>`}
+  <div id="lmProg" ${lmBusy?"":"hidden"}><div class="bar"><i id="lmBar" style="width:${lmPct}%"></i></div><p class="muted mono" id="lmTxt" style="font-size:12px;margin-top:6px">${esc(lmMsg)}</p></div></div>`;
+}
+function bindLocal(){
+  const go=$("#lmGo");
+  if(go) go.onclick=async()=>{ const base=(document.querySelector('input[name="lm"]:checked')||{}).value||LOCAL_MODELS[0].id;
+    lmBusy=true; lmPct=0; lmMsg="Préparation…"; renderMe();
+    try{ await Local.install(base,p=>{ lmPct=Math.round((p.progress||0)*100); lmMsg=`${lmPct} % · ${String(p.text||"").slice(0,120)}`; const b=$("#lmBar"), t=$("#lmTxt"); if(b) b.style.width=lmPct+"%"; if(t) t.textContent=lmMsg; });
+      lmBusy=false; toast(`Installé ! ${pal().name} peut maintenant te répondre sans internet.`,6000); }
+    catch(e){ lmBusy=false; lsSet("tch_local",null); toast("Installation impossible : "+String(e&&e.message||e).slice(0,120)+" Essaie le modèle Léger, en Wi-Fi.",9000); }
+    renderMe(); };
+  const t=$("#lmTest"); if(t) t.onclick=async e=>{ const b=e.currentTarget; b.disabled=true; b.textContent=`${pal().name} se réveille…`;
+    try{ const r=await Local.chat([{role:"user",content:offlineSys()+"\n\n---\n\nSalut ! Ça va ?"}],{maxTokens:80,onProgress:p=>{ b.textContent=`Chargement ${Math.round((p.progress||0)*100)} %`; }}); toast(`${pal().name} (hors-ligne) : ${r.slice(0,140)}`,9000); }
+    catch(err){ toast("Échec : "+String(err&&err.message||err).slice(0,120),9000); }
+    b.disabled=false; b.textContent="Tester"; };
+  const dl=$("#lmDel"); if(dl) dl.onclick=async()=>{ await Local.remove(); toast("IA hors-ligne supprimée de l'appareil."); renderMe(); };
+}
 
 /* ---------------- boot ---------------- */
 function renderAll(){ renderNav(); render(curView); }

@@ -4,3 +4,5 @@ Ton pen pal français, en app sur l'écran d'accueil : conversation, prononciati
 
 Ouvre le site GitHub Pages de ce dépôt sur ton téléphone, puis ajoute-le à l'écran d'accueil.
 Tes données restent sur ton appareil : rien n'est stocké dans ce dépôt.
+
+`webllm.js` is [WebLLM](https://github.com/mlc-ai/web-llm) 0.2.84 (Apache-2.0), bundled so the on-device pen pal works offline.
