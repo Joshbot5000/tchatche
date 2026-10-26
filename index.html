@@ -871,11 +871,20 @@ function newPool(n){
 }
 
 /* ---------------- voice ---------------- */
+const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const SILENT_WAV="data:audio/wav;base64,UklGRmQGAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YUAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const Voice={ voices:[], ok:"speechSynthesis" in window,
   init(){ if(!this.ok) return; const load=()=>{ try{ this.voices=speechSynthesis.getVoices().filter(v=>/^fr/i.test(v.lang)); }catch(e){} if(curView==="moi") renderMe(); }; load(); try{ speechSynthesis.onvoiceschanged=load; }catch(e){} },
-  pick(){ const p=S.main.profile; return this.voices.find(v=>v.name===p.voice)||this.voices.find(v=>v.lang==="fr-FR"&&/google|amélie|audrey|thomas|marie|denise|henri/i.test(v.name))||this.voices.find(v=>v.lang==="fr-FR")||this.voices[0]; },
+  pick(){ const p=S.main.profile; if(p.voice){ const v=this.voices.find(x=>x.name===p.voice); if(v) return v; }
+    // iPhones list French voices that aren't downloaded and play them silently: let iOS pick its installed default
+    if(IOS) return null;
+    const ok=this.voices.filter(v=>!/enhanced|premium|amélioré|eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley|jacques/i.test(v.name));
+    return ok.find(v=>v.lang==="fr-FR"&&/google|amélie|thomas|marie|denise|henri/i.test(v.name))||ok.find(v=>v.lang==="fr-FR")||ok[0]||null; },
+  session(){ try{ if(navigator.audioSession) navigator.audioSession.type="playback"; }catch(e){} },
   unlocked:false, heard:false, hinted:false,
-  unlock(){ if(this.unlocked||!this.ok) return; try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; u.lang="fr-FR"; speechSynthesis.speak(u); speechSynthesis.resume(); this.unlocked=true; }catch(e){} },
+  unlock(){ if(this.unlocked||!this.ok) return; this.unlocked=true; this.session();
+    try{ const a=new Audio(SILENT_WAV); a.setAttribute("playsinline",""); const pr=a.play(); if(pr&&pr.catch) pr.catch(()=>{}); }catch(e){}
+    try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; u.lang="fr-FR"; speechSynthesis.speak(u); speechSynthesis.resume(); }catch(e){} },
   chunks(t){ const parts=String(t).match(/[^.!?…]+[.!?…]*\s*/g)||[t]; const out=[]; let cur=""; for(const x of parts){ if((cur+x).length>180&&cur){ out.push(cur); cur=""; } cur+=x; } if(cur.trim()) out.push(cur); return out; },
   speak(text,rate){ if(!this.ok){ toast("La synthèse vocale n'est pas disponible dans ce navigateur."); return; }
     const t=String(text).replace(/[«»*_#]/g,"").replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,"").trim(); if(!t) return;
@@ -891,7 +900,9 @@ const Voice={ voices:[], ok:"speechSynthesis" in window,
     }catch(e){ setTalking(false); } };
     // speak synchronously when idle (iPhone only allows sound inside the tap); Chrome drops a speak() right after cancel(), so wait a beat then
     let busy=false; try{ busy=speechSynthesis.speaking||speechSynthesis.pending; }catch(e){}
-    if(busy){ try{ speechSynthesis.cancel(); }catch(e){} setTimeout(go,80); } else go();
+    this.session();
+    if(busy&&!IOS){ try{ speechSynthesis.cancel(); }catch(e){} setTimeout(go,80); }
+    else { if(busy){ try{ speechSynthesis.cancel(); }catch(e){} } go(); }
   },
   hint(blocked){ if(this.hinted) return; this.hinted=true;
     toast(blocked?"Ton navigateur bloque le son automatique : touche une fois ▶ Écouter pour l'activer.":"Pas de son ? Sur iPhone, désactive le mode silencieux (bouton sur le côté) et monte le volume, puis touche ▶ Écouter. Tu peux tester dans Moi → Voix.",9000); },
@@ -1544,9 +1555,9 @@ function renderMe(){
       <label class="row" style="font-weight:600;font-size:14px;flex-wrap:nowrap"><input type="checkbox" id="pShowEN" ${p.showEN?"checked":""}> Afficher la traduction anglaise sous chaque message</label>
       <button class="btn primary" id="saveProf">Enregistrer</button></div>
     <div class="card stack"><h2>Voix</h2>
-      ${Voice.ok?`<label class="f">Voix française<select id="vSel">${Voice.voices.length?Voice.voices.map(v=>`<option value="${esc(v.name)}" ${Voice.pick()&&Voice.pick().name===v.name?"selected":""}>${esc(v.name)} (${esc(v.lang)})</option>`).join(""):`<option>Voix par défaut du système</option>`}</select></label>
+      ${Voice.ok?`<label class="f">Voix française<select id="vSel"><option value="" ${S.main.profile.voice?"":"selected"}>Automatique (recommandé)</option>${Voice.voices.map(v=>`<option value="${esc(v.name)}" ${S.main.profile.voice===v.name?"selected":""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("")}</select></label>
       <label class="f">Vitesse : <b id="rateV">${p.rate}</b><input type="range" id="vRate" min="0.6" max="1.2" step="0.05" value="${p.rate}"></label>
-      <button class="btn" id="vTest">${I.play} Tester la voix</button><p class="muted mono" id="vDiag" style="font-size:12px">${Voice.voices.length} voix française${Voice.voices.length>1?"s":""} détectée${Voice.voices.length>1?"s":""} · ${esc((Voice.pick()||{}).name||"voix du système")}</p>`:`<p class="muted">Ton navigateur ne propose pas de synthèse vocale.</p>`}
+      <button class="btn" id="vTest">${I.play} Tester la voix</button><p class="muted mono" id="vDiag" style="font-size:12px">${Voice.voices.length} voix française${Voice.voices.length>1?"s":""} détectée${Voice.voices.length>1?"s":""} · ${esc(S.main.profile.voice||"voix automatique du système")}</p>`:`<p class="muted">Ton navigateur ne propose pas de synthèse vocale.</p>`}
       <p class="muted" style="font-size:13.5px">Pas de son ? Désactive le mode silencieux de ton téléphone, monte le volume, vérifie qu'aucun casque Bluetooth n'est connecté par erreur, puis touche « Tester la voix ».</p>
       <button class="btn" id="micHelp">${I.mic} Comment parler à voix haute</button></div>
   </div>
@@ -1564,7 +1575,7 @@ function renderMe(){
   if($("#vSel")){ $("#vSel").onchange=e=>{ S.main.profile.voice=e.target.value; saveMain(); Voice.speak("Salut ! C'est ma nouvelle voix."); };
     $("#vRate").oninput=e=>{ S.main.profile.rate=+e.target.value; $("#rateV").textContent=e.target.value; }; $("#vRate").onchange=()=>saveMain();
     $("#vTest").onclick=()=>{ Voice.heard=false; Voice.hinted=true; Voice.speak("Salut ! Ça te dit de tchatcher un peu ? On va bosser ton français, mais tranquille.");
-      setTimeout(()=>{ const d=$("#vDiag"); if(d&&!Voice.heard){ d.style.color="var(--bad)"; d.textContent="Aucun son n'a démarré. Mode silencieux ? Volume à zéro ? Sur iPhone, essaie aussi dans Safari. Ou choisis une autre voix ci-dessus."; } else if(d){ d.style.color="var(--good)"; d.textContent="La voix fonctionne. Si tu n'entends rien, c'est le volume ou le mode silencieux de ton appareil."; } },2600); }; }
+      setTimeout(()=>{ const d=$("#vDiag"); if(d&&!Voice.heard){ d.style.color="var(--bad)"; d.textContent=IOS?"Aucun son n'a démarré. Sur iPhone : 1) Réglages → Accessibilité → Contenu énoncé → Voix → Français : télécharge une voix (ex. Thomas ou Amélie). 2) Mets « Voix » sur Automatique ci-dessus. 3) Monte le volume avec les boutons pendant que tu testes, mode silencieux coupé.":"Aucun son n'a démarré. Vérifie le volume, puis choisis une autre voix ci-dessus."; } else if(d){ d.style.color="var(--good)"; d.textContent="La voix fonctionne. Si tu n'entends rien, c'est le volume ou le mode silencieux de ton appareil."; } },2600); }; }
   if($("#micHelp")) $("#micHelp").onclick=micGuide;
   const addMem=()=>{ const v=$("#memIn").value.trim(); if(!v) return; S.main.memory.push({id:uid(),t:v,ts:Date.now()}); saveMain(); renderMe(); };
   $("#memAdd").onclick=addMem; $("#memIn").onkeydown=e=>{ if(e.key==="Enter") addMem(); };
@@ -1951,6 +1962,7 @@ async function boot(){
   S.cards=cards||{}; loaded=true;
   if(resM) saveMain(); if(resC) saveChat(); dirty.forEach(k=>Store.saveCard(k));
   flushQueue();
+  if(!S.main.voiceFix1){ S.main.profile.voice=""; S.main.voiceFix1=true; saveMain(); }
   if(!S.main.profile.onboarded) openOnboarding();
   $("#v-chat").dataset.built=""; renderAll();
 }
