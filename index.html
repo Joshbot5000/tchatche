@@ -942,13 +942,14 @@ function listen(target,btn,onDone){
 /* ---------------- Claude ---------------- */
 let sample=null, aiState="pending"; // pending | on | off
 let imgOK=false;
-const AI_MSG={not_granted:"Tu n'as pas autorisé Tchatche à utiliser Claude. Recharge la page pour réessayer.",sampling_disabled:"Claude n'est pas disponible pour ce compte.",rate_limited:"Trop de demandes d'un coup. Attends un peu et réessaie.",session_expired:"Reconnecte-toi à Claude puis réessaie.",refused:"Claude n'a pas voulu répondre à ça. Reformule ?",invalid_json:"Réponse illisible. Réessaie.",image_rejected:"Cette image n'est pas acceptée. Essaie une autre photo.",prompt_too_large:"Trop de texte d'un coup. Raccourcis ton message.",bad_key:"Google refuse la clé Gemini : reconnecte-la dans Moi → Cerveau IA.",bad_model:"Modèle Gemini introuvable : touche « Choisir le modèle le plus récent » dans Moi → Cerveau IA."};
+const AI_MSG={not_granted:"Tu n'as pas autorisé Tchatche à utiliser Claude. Recharge la page pour réessayer.",sampling_disabled:"Claude n'est pas disponible pour ce compte.",rate_limited:"Limite gratuite atteinte pour le moment (trop de messages d'un coup ou quota du jour). Attends une minute et réessaie.",session_expired:"Reconnecte-toi à Claude puis réessaie.",refused:"Claude n'a pas voulu répondre à ça. Reformule ?",invalid_json:"Réponse illisible. Réessaie.",image_rejected:"Cette image n'est pas acceptée. Essaie une autre photo.",prompt_too_large:"Trop de texte d'un coup. Raccourcis ton message.",empty_completion:"L'IA n'a rien répondu. Réessaie ou reformule.",bad_key:"Google refuse la clé Gemini : reconnecte-la dans Moi → Cerveau IA.",bad_model:"Modèle Gemini introuvable : touche « Choisir le modèle le plus récent » dans Moi → Cerveau IA."};
 async function ai(kind,input,opts={}){
   if(!sample) throw {code:"unavailable",message:"no sample"};
   try{ return kind==="json"? await sample.json(input,opts) : await sample(input,opts); }
   catch(e){ if(["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].includes(e&&e.code)){ aiState="off"; renderAIBanner(); } throw e; }
 }
-function aiErr(e){ if(!e||e.code==="cancelled") return; toast(AI_MSG[e.code]||"Problème de connexion avec Claude. Réessaie dans un instant."); }
+function aiErr(e){ if(!e||e.code==="cancelled") return; const base=AI_MSG[e.code]||"L'IA ne répond pas pour l'instant. Réessaie dans un instant.";
+  toast(gem&&e.message&&e.code!=="rate_limited"?base+" Détail : "+String(e.message).slice(0,160):base, gem?9000:3200); }
 function aiReady(){ return (!OFFLINE||gem)&&netOK&&aiState==="on"&&!!sample; }
 function needAI(){ if(aiReady()) return true; toast(OFFLINE&&!gem?"Connecte ton cerveau IA gratuit (Moi → Cerveau IA) pour cette fonction.":!netOK?"Hors-ligne : cette fonction revient dès que tu es connecté.":aiState==="pending"?"Connexion à Claude en cours…":"Claude n'est pas disponible ici : ouvre Tchatche sur claude.ai pour cette fonction."); return false; }
 function showBanner(){ return (OFFLINE&&!gem)||!netOK||aiState==="off"; }
@@ -1867,7 +1868,7 @@ function brainCardHTML(){
   <p class="muted" style="font-size:13.5px">Ici, hors de claude.ai, ${esc(pal().name)} peut discuter, corriger et traduire en direct grâce à une clé Gemini gratuite de Google : pas de carte bancaire, deux minutes. Sans clé, tout le reste marche et ${esc(pal().name)} répond avec ses messages en réserve.</p>
   ${gem?"":`<ol class="muted" style="font-size:14px;margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px"><li>Ouvre <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--cyan)">aistudio.google.com/apikey</a> et connecte-toi avec un compte Google.</li><li>Touche « Create API key », puis copie la clé.</li><li>Colle-la ici et touche Connecter.</li></ol>
   <div class="row" style="flex-wrap:nowrap"><input type="text" id="gemKey" placeholder="Colle ta clé (AIza…)" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="btn primary" id="gemGo">Connecter</button></div>`}
-  ${gem?`<div class="row"><button class="btn sm" id="gemRe">Choisir le modèle le plus récent</button><button class="btn ghost sm" id="gemOff">Déconnecter</button></div>`:""}
+  ${gem?`<div class="row"><button class="btn sm primary" id="gemTest">Tester la connexion</button><button class="btn sm" id="gemRe">Rechoisir le modèle</button><button class="btn ghost sm" id="gemOff">Déconnecter</button></div>`:""}
   <p class="muted" style="font-size:12.5px">La clé reste sur cet appareil. Avec l'offre gratuite, Google limite le nombre de messages par minute et par jour, et peut utiliser tes échanges pour améliorer ses produits : n'écris rien de confidentiel.</p></div>`;
 }
 function bindOffline(){
@@ -1885,11 +1886,15 @@ function bindOffline(){
   if(q("expProg")) q("expProg").onclick=()=>{ const t=exportProgress(); const show=()=>{ const o=q("expOut"); o.hidden=false; o.value=t; o.focus(); o.select(); toast("Sélectionne tout le texte et copie-le."); };
     try{ navigator.clipboard.writeText(t).then(()=>toast("Progression copiée. Colle-la dans l'autre version : Moi → Importer."),show); }catch(err){ show(); } };
   const connect=async(key,btn)=>{ btn.disabled=true; const old=btn.textContent; btn.textContent="Connexion…";
-    try{ const model=await geminiPickModel(key); lsSet("tch_gemkey",{key,model}); sample=geminiSample(key,model); gem=true; aiState="on"; imgOK=true;
+    try{ const alts=await geminiPickModel(key), model=alts[0]; lsSet("tch_gemkey",{key,model,alts}); sample=geminiSample(key,model,alts); gem=true; aiState="on"; imgOK=true;
       renderAIBanner(); toast(`Connecté ! ${pal().name} te répond en direct.`); renderMe(); flushQueue(); }
     catch(err){ toast(err&&err.message?err.message:"Connexion impossible. Vérifie ta clé et ta connexion."); btn.disabled=false; btn.textContent=old; } };
   if(q("gemGo")) q("gemGo").onclick=e=>{ const k=q("gemKey").value.trim(); if(!k){ toast("Colle d'abord ta clé."); return; } connect(k,e.currentTarget); };
   if(q("gemRe")) q("gemRe").onclick=e=>{ const k=lsGet("tch_gemkey"); if(k) connect(k.key,e.currentTarget); };
+  if(q("gemTest")) q("gemTest").onclick=async e=>{ const b=e.currentTarget; b.disabled=true; b.textContent="Test…";
+    try{ const {text}=await sample("Réponds uniquement : « Ça marche ! »"); toast("Réponse de l'IA : "+text.trim().slice(0,80)); }
+    catch(err){ toast("Échec : "+(err&&(err.message||err.code)||"inconnu"),9000); }
+    b.disabled=false; b.textContent="Tester la connexion"; };
   if(q("gemOff")) q("gemOff").onclick=()=>{ lsSet("tch_gemkey",null); gem=false; sample=null; aiState="off"; renderAIBanner(); renderMe(); toast("Clé retirée de cet appareil."); };
 }
 /* free brain outside claude.ai: Google Gemini with the learner's own free key, same interface as claude.use("sample") */
@@ -1897,11 +1902,17 @@ async function geminiPickModel(key){
   let r; try{ r=await fetch("https://generativelanguage.googleapis.com/v1beta/models?pageSize=200&key="+encodeURIComponent(key)); }catch(e){ throw new Error("Pas de connexion à Google. Vérifie internet."); }
   if(!r.ok) throw new Error(r.status===400||r.status===403?"Clé refusée par Google : vérifie que tu l'as copiée en entier.":"Google ne répond pas ("+r.status+"). Réessaie.");
   const d=await r.json(); const names=(d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes("generateContent")).map(m=>m.name.replace(/^models\//,""));
-  if(names.includes("gemini-flash-latest")) return "gemini-flash-latest";
-  const fl=names.filter(n=>/^gemini-\d+(\.\d+)?-flash$/.test(n)).sort((a,b)=>parseFloat(b.split("-")[1])-parseFloat(a.split("-")[1]));
-  if(fl[0]) return fl[0];
-  const any=names.find(n=>/flash/.test(n)&&!/lite|image|tts|live|audio|embed|exp/.test(n)); if(any) return any;
-  throw new Error("Aucun modèle Gemini Flash disponible avec cette clé.");
+  const ver=n=>parseFloat((n.match(/gemini-(\d+(?:\.\d+)?)/)||[0,0])[1]);
+  const bad=/image|tts|live|audio|embed|exp|preview|thinking|vision/;
+  const list=[];
+  if(names.includes("gemini-flash-latest")) list.push("gemini-flash-latest");
+  names.filter(n=>/^gemini-\d+(\.\d+)?-flash$/.test(n)).sort((x,y)=>ver(y)-ver(x)).forEach(n=>list.push(n));
+  if(names.includes("gemini-flash-lite-latest")) list.push("gemini-flash-lite-latest");
+  names.filter(n=>/^gemini-\d+(\.\d+)?-flash-lite$/.test(n)).sort((x,y)=>ver(y)-ver(x)).forEach(n=>list.push(n));
+  names.filter(n=>/flash/.test(n)&&!bad.test(n)).forEach(n=>list.push(n));
+  const out=[...new Set(list)];
+  if(!out.length) throw new Error("Aucun modèle Gemini Flash disponible avec cette clé.");
+  return out;
 }
 function parseLoose(t){
   try{ return JSON.parse(t); }catch(e){}
@@ -1911,35 +1922,56 @@ function parseLoose(t){
   throw {code:"invalid_json",message:"bad json",text:t};
 }
 function blobToB64(b){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(String(r.result).split(",")[1]); r.onerror=rej; r.readAsDataURL(b); }); }
-function geminiSample(key,model){
+function geminiSample(key,model,alts){
   const toContents=input=>{ const turns=typeof input==="string"?[{role:"user",content:input}]:input; const out=[];
     for(const t of turns){ const role=t.role==="assistant"?"model":"user"; const last=out[out.length-1];
-      if(last&&last.role===role) last.parts[0].text+="\n\n"+t.content; else out.push({role,parts:[{text:String(t.content)}]}); } return out; };
+      if(last&&last.role===role) last.parts[0].text+="\n\n"+t.content; else out.push({role,parts:[{text:String(t.content)}]}); }
+    if(out.length&&out[0].role!=="user") out.unshift({role:"user",parts:[{text:"(début de la conversation)"}]}); return out; };
   const partsText=d=>((d&&d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts)||[]).filter(p=>!p.thought).map(p=>p.text||"").join("");
-  async function call(input,opts={},json=false){
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  async function call(m,input,opts,json,stream){
     const contents=toContents(input);
     if(opts.images){ const imgs=opts.images instanceof Blob?[opts.images]:[...opts.images]; for(const im of imgs) contents[contents.length-1].parts.push({inline_data:{mime_type:im.type||"image/png",data:await blobToB64(im)}}); }
     const body={contents,generationConfig:json?{responseMimeType:"application/json"}:{}};
-    const stream=typeof opts.onText==="function";
-    const url=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:${stream?"streamGenerateContent?alt=sse&":"generateContent?"}key=${encodeURIComponent(key)}`;
+    const url=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:${stream?"streamGenerateContent?alt=sse&":"generateContent?"}key=${encodeURIComponent(key)}`;
     let r; try{ r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:opts.signal}); }
-    catch(e){ throw {code:opts.signal&&opts.signal.aborted?"cancelled":"upstream_error",message:String(e)}; }
-    if(!r.ok){ let msg=""; try{ msg=await r.text(); }catch(e){} throw {code:r.status===429?"rate_limited":r.status===404?"bad_model":[400,401,403].includes(r.status)?"bad_key":"upstream_error",message:msg}; }
+    catch(e){ throw {code:opts.signal&&opts.signal.aborted?"cancelled":"upstream_error",message:"réseau : "+String(e&&e.message||e)}; }
+    if(!r.ok){ let raw="",gm=""; try{ raw=await r.text(); const j=JSON.parse(raw); gm=(j.error&&j.error.message)||""; }catch(e){ gm=raw.slice(0,200); }
+      const low=gm.toLowerCase();
+      const code=r.status===429?"rate_limited":/api key|api_key|unauthenticated|permission_denied|permission denied/.test(low)?"bad_key":(r.status===404||r.status===400)?"bad_model":"upstream_error";
+      throw {code,message:`HTTP ${r.status} (${m}) : ${gm}`.slice(0,300)}; }
     let text="";
     if(stream){ const rd=r.body.getReader(), dec=new TextDecoder(); let buf="";
       try{ for(;;){ const {done,value}=await rd.read(); if(done) break; buf+=dec.decode(value,{stream:true}); let i;
         while((i=buf.indexOf("\n"))>=0){ const line=buf.slice(0,i).trim(); buf=buf.slice(i+1); if(!line.startsWith("data:")) continue;
           try{ const delta=partsText(JSON.parse(line.slice(5))); if(delta){ text+=delta; try{ opts.onText({text,delta}); }catch(e){} } }catch(e){} } } }
-      catch(e){ throw {code:opts.signal&&opts.signal.aborted?"cancelled":"upstream_error",message:String(e),text}; } }
-    else { const d=await r.json(); if(d.promptFeedback&&d.promptFeedback.blockReason) throw {code:"refused",message:"blocked"}; text=partsText(d); }
-    if(!text.trim()) throw {code:"empty_completion",message:"empty"};
+      catch(e){ throw {code:opts.signal&&opts.signal.aborted?"cancelled":"upstream_error",message:"flux interrompu",text}; } }
+    else { const d=await r.json(); if(d.promptFeedback&&d.promptFeedback.blockReason) throw {code:"refused",message:"blocked: "+d.promptFeedback.blockReason}; text=partsText(d);
+      if(text&&typeof opts.onText==="function"){ try{ opts.onText({text,delta:text}); }catch(e){} } }
+    if(!text.trim()) throw {code:"empty_completion",message:`réponse vide (${m})`};
     return text;
   }
-  const f=async(input,opts)=>({text:await call(input,opts||{},false),truncated:false,modelTierApplied:"default"});
-  f.json=async(input,opts)=>parseLoose(await call(input,opts||{},true));
+  // free-tier models are often "overloaded": retry once without streaming, then fall back to the next free model
+  async function run(input,opts,json){
+    const models=[model,...(alts||[]).filter(x=>x!==model)].slice(0,4); let last;
+    for(let k=0;k<models.length;k++){
+      for(let attempt=0;attempt<2;attempt++){
+        try{ const t=await call(models[k],input,opts,json,k===0&&attempt===0&&typeof opts.onText==="function");
+          if(k>0){ const g=lsGet("tch_gemkey"); if(g&&g.model!==models[k]){ g.model=models[k]; lsSet("tch_gemkey",g); } }
+          return t; }
+        catch(e){ last=e; if(["cancelled","bad_key","refused"].includes(e.code)) throw e;
+          if(e.code==="bad_model"||e.code==="rate_limited") break;
+          await sleep(1200+attempt*1500); }
+      }
+    }
+    throw last;
+  }
+  const f=async(input,opts)=>({text:await run(input,opts||{},false),truncated:false,modelTierApplied:"default"});
+  f.json=async(input,opts)=>parseLoose(await run(input,opts||{},true));
   f.limits=async()=>({maxPromptBytes:262144,images:{maxCount:4,maxInputBytes:20e6,mediaTypes:["image/png","image/jpeg","image/webp"]}});
   return f;
 }
+
 
 /* ---------------- boot ---------------- */
 function renderAll(){ renderNav(); render(curView); }
@@ -1947,7 +1979,7 @@ async function boot(){
   const h=(location.hash||"").slice(1); if(VIEWS.some(v=>v.id===h)) curView=h;
   $$("main .view").forEach(s=>s.hidden=s.dataset.view!==curView);
   Voice.init(); renderAll();
-  use("sample").then(async s=>{ if(!s&&OFFLINE){ const k=lsGet("tch_gemkey"); if(k&&k.key&&k.model){ s=geminiSample(k.key,k.model); gem=true; } } sample=s; aiState=s?"on":"off"; if(s){ try{ const l=await s.limits(); imgOK=!!(l&&l.images); }catch(e){} } renderAIBanner(); if(curView==="images") renderImages(); if(loaded) flushQueue(); });
+  use("sample").then(async s=>{ if(!s&&OFFLINE){ const k=lsGet("tch_gemkey"); if(k&&k.key&&k.model){ s=geminiSample(k.key,k.model,k.alts||[]); gem=true; } } sample=s; aiState=s?"on":"off"; if(s){ try{ const l=await s.limits(); imgOK=!!(l&&l.images); }catch(e){} } renderAIBanner(); if(curView==="images") renderImages(); if(loaded) flushQueue(); });
   use("downloads").then(d=>{ dlOK=!!d; if(curView==="moi") renderMe(); });
   await Store.init();
   let [m,c,cards]=await Promise.all([Store.get("main"),Store.get("chat"),Store.cards()]);
