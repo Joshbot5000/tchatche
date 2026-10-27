@@ -2389,11 +2389,21 @@ function conjHTML(){
 function bindConj(){ const go=$("#conjGo"); if(!go) return; const run=()=>{ conjQ=$("#conjIn").value.trim(); renderPhrases(); }; go.onclick=run; $("#conjIn").onkeydown=e=>{ if(e.key==="Enter") run(); }; }
 
 /* ---------------- on-device pen pal (WebLLM, hosted app only) ---------------- */
+// only models WebLLM marks as able to run within a phone's GPU limits; each entry lists fallbacks in order
 const LOCAL_MODELS=[
- {id:"gemma-2-2b-it",label:"Balanced · Gemma 2 (2B)",size:"≈ 1.4 GB",note:"Best all-round French. For iPhone 15 Pro, 16 or newer, or a computer."},
- {id:"Llama-3.2-1B-Instruct",label:"Light · Llama 3.2 (1B)",size:"≈ 0.7 GB",note:"For older phones. Simpler French, more mistakes."},
- {id:"Qwen3.5-4B",label:"Powerful · Qwen 3.5 (4B)",size:"≈ 2.4 GB",note:"The best offline French, for a computer or a very recent phone."}
+ {id:"balanced",bases:["Qwen3-1.7B"],label:"Balanced · Qwen 3 (1.7B)",size:"≈ 1 GB",note:"Recommended for iPhone: natural French and quick replies."},
+ {id:"light",bases:["gemma3-1b-it","Llama-3.2-1B-Instruct"],label:"Light · Gemma 3 (1B)",size:"≈ 0.7 GB",note:"Fastest and smallest, for older phones. Simpler French."},
+ {id:"quality",bases:["Llama-3.2-3B-Instruct"],label:"Quality · Llama 3.2 (3B)",size:"≈ 1.8 GB",note:"Richer French but slower and uses more memory. iPhone 15 Pro / 16 Pro or newer."}
 ];
+function explainLocalErr(raw){ const m=String(raw||"");
+  if(/maxStorageBufferBindingSize|maxBufferSize|Cannot initialize runtime|limit=/i.test(m)) return "Your phone's graphics memory limit is too small for this model. Choose Light.";
+  if(/quota|QuotaExceeded|storage|disk/i.test(m)) return "Not enough free storage. Free up some space on your phone, or choose Light.";
+  if(/fetch|network|NetworkError|load failed|aborted/i.test(m)) return "The download was interrupted. Stay on Wi-Fi with the app open (screen on) and try again.";
+  if(/shader-f16|feature/i.test(m)) return "Your phone doesn't support this model's graphics features. Choose another model.";
+  if(/device.*lost|out of memory|OOM|memory/i.test(m)) return "Your phone ran out of memory running this model. Choose Light, and close other apps first.";
+  if(/webgpu/i.test(m)) return "WebGPU isn't available. You need iOS 26 or newer, opened from the home-screen app or Safari.";
+  if(/can't run on this device/i.test(m)) return m;
+  return "The offline AI couldn't be installed."; }
 // hosted app ships WebLLM 0.2.84 next to index.html so it is cached for offline use; the downloaded file falls back to the CDN
 const WEBLLM_URL=HOSTED?new URL("webllm.js",location.href).href:"https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.84/+esm";
 const cleanThink=t=>String(t).replace(/<think>[\s\S]*?(<\/think>|$)/g,"").trim();
@@ -2402,15 +2412,25 @@ const Local={ L:null, engine:null, loading:null,
   saved(){ return lsGet("tch_local"); },
   ready(){ const s=this.saved(); return this.supported()&&!!(s&&s.ready); },
   async lib(){ if(!this.L) this.L=await import(WEBLLM_URL); return this.L; },
-  async f16(){ try{ const ad=await navigator.gpu.requestAdapter(); return !!(ad&&ad.features.has("shader-f16")); }catch(e){ return false; } },
+  dev:null,
+  async device(){ if(this.dev) return this.dev; try{ const ad=await navigator.gpu.requestAdapter(); this.dev=ad?{ok:true,f16:ad.features.has("shader-f16"),maxSB:ad.limits.maxStorageBufferBindingSize}:{ok:false}; }catch(e){ this.dev={ok:false}; } return this.dev; },
+  // pick the first build of the chosen model that this GPU can actually run
+  async resolve(choice){ const L=await this.lib(), d=await this.device(); if(!d.ok) throw new Error("WebGPU not available");
+    const list=L.prebuiltAppConfig.model_list, small=d.maxSB<(1<<30), m=LOCAL_MODELS.find(x=>x.id===choice)||LOCAL_MODELS[0];
+    for(const base of m.bases) for(const v of ["-q4f16_1-MLC","-q4f32_1-MLC"]){ const r=list.find(x=>x.model_id===base+v); if(!r) continue;
+      if(v.includes("f16")&&!d.f16) continue; if((r.required_features||[]).includes("shader-f16")&&!d.f16) continue; if(small&&!r.low_resource_required) continue;
+      return r.model_id; }
+    throw new Error("This model can't run on this device. Choose another one."); },
   async load(onProgress){ if(this.engine) return this.engine; if(this.loading) return this.loading;
     const s=this.saved(); if(!s) throw new Error("no model installed");
     this.loading=(async()=>{ const L=await this.lib(); const e=await L.CreateMLCEngine(s.id,{initProgressCallback:p=>{ if(onProgress) try{ onProgress(p); }catch(err){} }}); this.engine=e; return e; })();
     try{ return await this.loading; } finally{ this.loading=null; } },
-  async install(base,onProgress){ const id=base+((await this.f16())?"-q4f16_1-MLC":"-q4f32_1-MLC");
+  async install(choice,onProgress){ const id=await this.resolve(choice), base=choice;
     lsSet("tch_local",{id,base,ready:false}); try{ if(navigator.storage&&navigator.storage.persist) await navigator.storage.persist(); }catch(e){}
     if(this.engine){ try{ await this.engine.unload(); }catch(e){} this.engine=null; }
-    await this.load(onProgress); lsSet("tch_local",{id,base,ready:true}); },
+    try{ await this.load(onProgress); }
+    catch(e){ try{ const L=await this.lib(); await L.deleteModelAllInfoInCache(id); }catch(err){} lsSet("tch_local",null); throw e; }
+    lsSet("tch_local",{id,base,ready:true}); },
   async remove(){ const s=this.saved(); if(!s) return; try{ if(this.engine) await this.engine.unload(); }catch(e){} this.engine=null;
     try{ const L=await this.lib(); await L.deleteModelAllInfoInCache(s.id); }catch(e){} lsSet("tch_local",null); },
   q:Promise.resolve(),
@@ -2468,21 +2488,25 @@ let lmBusy=false, lmPct=0, lmMsg="";
 function localCardHTML(){
   const s=lsGet("tch_local"), pn=pal().name;
   if(!navigator.gpu) return `<div class="card stack"><div class="eyebrow">Fully offline pen pal</div><h2>Not possible on this browser yet</h2><p class="muted" style="font-size:13.5px">Running an AI on your device needs WebGPU: an iPhone on iOS 26 or newer (Safari or the home-screen app), or recent Chrome on Android or a computer. Meanwhile, ${esc(pn)} replies offline with saved messages.</p></div>`;
-  const m=s&&LOCAL_MODELS.find(x=>x.id===s.base);
+  const m=s&&LOCAL_MODELS.find(x=>x.id===s.base), d=Local.dev, err=lsGet("tch_local_err");
+  const devLine=d?(d.ok?`Device check: WebGPU ✓ · 16-bit maths ${d.f16?"✓":"✗"} · GPU memory block ${Math.round((d.maxSB||0)/1048576)} MB${(d.maxSB||0)<(1<<30)?" (phone-size models only)":""}`:"Device check: WebGPU not available"):"Checking your device…";
   return `<div class="card stack"><div class="eyebrow">Fully offline pen pal</div><h2>${s&&s.ready?`Installed · ${esc(m?m.label:s.id)}`:`Chat with ${esc(pn)} with no internet`}</h2>
   <p class="muted" style="font-size:13.5px">Download a small AI onto your device, once, on Wi-Fi. Then ${esc(pn)} replies even in airplane mode, and can translate and explain words offline. It's less precise than the online AI: it chats and can give provisional corrections (marked "to be confirmed" and re-checked online), and it can make mistakes.</p>
   ${s&&s.ready?`<label class="row" style="font-weight:600;font-size:14px;flex-wrap:nowrap;align-items:flex-start"><input type="checkbox" id="lmProv" ${S.main.profile.provisional!==false?"checked":""} style="margin-top:3px"> <span>Provisional corrections offline<br><span class="muted" style="font-weight:400;font-size:13px">The offline AI suggests corrections marked "to be confirmed". The full AI re-checks them online; only confirmed ones become flashcards.</span></span></label><div class="row"><button class="btn primary" id="lmTest">Test</button><button class="btn ghost sm" id="lmDel">Delete (frees up space)</button></div>`
-  :`<div class="stack" id="lmPick">${LOCAL_MODELS.map((x,i)=>`<label class="row" style="flex-wrap:nowrap;align-items:flex-start;gap:10px;cursor:pointer"><input type="radio" name="lm" value="${x.id}" ${i===0?"checked":""} style="margin-top:4px"><span><b>${esc(x.label)}</b> <span class="muted mono" style="font-size:12px">${x.size}</span><br><span class="muted" style="font-size:13px">${esc(x.note)}</span></span></label>`).join("")}</div>
+  :`${err&&!lmBusy?`<div class="banner" style="background:rgba(255,90,131,.08);border-color:rgba(255,90,131,.35)"><b>Last attempt failed:</b> ${esc(err.msg)}<div class="mono muted" style="font-size:11px;margin-top:6px;word-break:break-word">${esc(String(err.raw).slice(0,220))}</div></div>`:""}
+  <p class="muted mono" style="font-size:12px">${esc(devLine)}</p>
+  <div class="stack" id="lmPick">${LOCAL_MODELS.map((x,i)=>`<label class="row" style="flex-wrap:nowrap;align-items:flex-start;gap:10px;cursor:pointer"><input type="radio" name="lm" value="${x.id}" ${i===0?"checked":""} style="margin-top:4px"><span><b>${esc(x.label)}</b> <span class="muted mono" style="font-size:12px">${x.size}</span><br><span class="muted" style="font-size:13px">${esc(x.note)}</span></span></label>`).join("")}</div>
   <button class="btn primary" id="lmGo" ${lmBusy?"disabled":""} style="align-self:flex-start">${lmBusy?"Downloading…":"Download to my device"}</button>`}
   <div id="lmProg" ${lmBusy?"":"hidden"}><div class="bar"><i id="lmBar" style="width:${lmPct}%"></i></div><p class="muted mono" id="lmTxt" style="font-size:12px;margin-top:6px">${esc(lmMsg)}</p></div></div>`;
 }
 function bindLocal(){
+  if(navigator.gpu&&!Local.dev) Local.device().then(()=>{ if(curView==="moi"&&!lmBusy) renderMe(); });
   const go=$("#lmGo");
   if(go) go.onclick=async()=>{ const base=(document.querySelector('input[name="lm"]:checked')||{}).value||LOCAL_MODELS[0].id;
     lmBusy=true; lmPct=0; lmMsg="Preparing…"; renderMe();
     try{ await Local.install(base,p=>{ lmPct=Math.round((p.progress||0)*100); lmMsg=`${lmPct} % · ${String(p.text||"").slice(0,120)}`; const b=$("#lmBar"), t=$("#lmTxt"); if(b) b.style.width=lmPct+"%"; if(t) t.textContent=lmMsg; });
-      lmBusy=false; toast(`Installed! ${pal().name} can now reply with no internet.`,6000); }
-    catch(e){ lmBusy=false; lsSet("tch_local",null); toast("Install failed: "+String(e&&e.message||e).slice(0,120)+" Try the Light model, on Wi-Fi.",9000); }
+      lmBusy=false; lsSet("tch_local_err",null); toast(`Installed! ${pal().name} can now reply with no internet.`,6000); }
+    catch(e){ lmBusy=false; const raw=String(e&&e.message||e); lsSet("tch_local_err",{msg:explainLocalErr(raw),raw,ts:Date.now()}); toast("Install failed: "+explainLocalErr(raw),9000); }
     renderMe(); };
   const t=$("#lmTest"); if(t) t.onclick=async e=>{ const b=e.currentTarget; b.disabled=true; b.textContent=`${pal().name} is waking up…`;
     try{ const r=await Local.chat([{role:"user",content:offlineSys()+"\n\n---\n\nSalut ! Ça va ?"}],{maxTokens:80,onProgress:p=>{ b.textContent=`Loading ${Math.round((p.progress||0)*100)}%`; }}); toast(`${pal().name} (offline): ${r.slice(0,140)}`,9000); }
