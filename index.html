@@ -1428,7 +1428,7 @@ function levelEst(){ const h=S.main.levelHist.slice(-12); if(!h.length) return S
 function userLevel(){ return Math.floor(Math.sqrt(totalXP()/120))+1; }
 
 /* ---------------- cards ---------------- */
-function seedCard(i){ const [fr,en,reg,ex,note]=SEED[i]; return {id:"s"+i,fr,en,reg,ex,note,src:"seed",added:Date.now(),due:0,ivl:0,ease:2.5,reps:0,lapses:0,last:0}; }
+function seedCard(i){ const [fr,en,reg,ex,note,,pid]=SEED[i]; return {id:pid||"s"+i,fr,en,reg,ex,note,src:"seed",added:Date.now(),due:0,ivl:0,ease:2.5,reps:0,lapses:0,last:0}; }
 function hasFr(fr){ const n=norm(fr); return Object.values(S.cards).some(c=>norm(c.fr)===n); }
 function addCard(o){ if(!o||!o.fr||hasFr(o.fr)) return null; const c={id:"c"+uid(),fr:String(o.fr).slice(0,240),en:String(o.en||"").slice(0,240),reg:o.reg||"courant",ex:String(o.ex||"").slice(0,300),note:String(o.note||"").slice(0,300),src:o.src||"gen",added:Date.now(),due:0,ivl:0,ease:2.5,reps:0,lapses:0,last:0}; S.cards[c.id]=c; Store.saveCard(c); return c; }
 const isNew=c=>!c.last;
@@ -1530,7 +1530,7 @@ function aiReady(){ return (!OFFLINE||gem)&&netOK&&aiState==="on"&&!!sample; }
 function needAI(){ if(aiReady()) return true; toast(OFFLINE&&!gem?"Connect your free AI brain (Me → Free AI brain) to use this.":!netOK?"You're offline: this comes back as soon as you're connected.":aiState==="pending"?"Connecting to Claude…":"Claude isn't available here: open Tchatche on claude.ai to use this."); return false; }
 function showBanner(){ return (OFFLINE&&!gem)||!netOK||aiState==="off"; }
 function bannerText(){ const n=(S.main.reserve||[]).length, pn=pal().name, mm=`${n} saved message${n===1?"":"s"}`, lr=Local.ready();
-  const how=lr?`${pn} replies using the AI on your phone`:`${pn} replies with ${mm}`;
+  const how=lr?`${pn} replies using the AI on your phone`:`${pn} replies in offline mode (simpler replies)`;
   if(HOSTED&&!gem) return `${how}. For live chat with corrections and translations, connect a free AI brain: Me → Free AI brain.`;
   if(OFFLINE&&!gem) return `Offline version. Flashcards, voice, speaking practice and pictures all work. ${how}. Your messages get corrected when you import your progress into the online app (Me → Offline & sync).`;
   if(!netOK) return `You're offline. Everything keeps working: ${how}, and your messages will be corrected properly when you're back online.`;
@@ -1681,7 +1681,7 @@ let chatBusy=false, chatCtl=null;
 function msgHTML(m,i){
   if(m.role==="a"){
     return `<div class="msg a" data-i="${i}"><div class="bubble">${m.pending&&!m.text?'<span class="typing"><i></i><i></i><i></i></span>':m.pending?esc(m.text):wordify(m.text)}</div>
-    ${m.pending?"":`<div class="tools"><button data-act="say">${I.play} Listen</button><button data-act="slow">${I.play} Slowly</button><button data-act="en">${I.globe} Translate</button></div>
+    ${m.pending?"":`<div class="tools"><button data-act="say">${I.play} Listen</button><button data-act="slow">${I.play} Slowly</button><button data-act="en">${I.globe} Translate</button></div>${m.brain?`<div class="muted" style="font-size:11px;opacity:.75">Offline mode · simple replies</div>`:""}
     <div class="en" ${S.main.profile.showEN&&m.en?"":"hidden"}>${esc(m.en||"")}</div>
     ${(m.phrases||[]).length?`<div class="chips">${m.phrases.map((p,j)=>`<button class="addchip ${hasFr(p.fr)?"added":""}" data-act="addp" data-j="${j}">${hasFr(p.fr)?"✓":"+"} <b>${esc(p.fr)}</b> <span>${esc(p.en)}</span></button>`).join("")}</div>`:""}`}</div>`;
   }
@@ -2253,7 +2253,7 @@ document.addEventListener("selectionchange",()=>{ clearTimeout(selTimer); selTim
 function callOpen(){ const c=$("#call"); return !!c&&!c.hidden; }
 function callHello(){ const pp=pal(), n=S.main.profile.name||""; return pp.tu===false?`Allô, bonjour ${n} ! C'est ${pp.name}. Je vous écoute.`:`Allô ${n} ? C'est ${pp.name} ! Alors, quoi de neuf ?`; }
 function lastReply(){ return [...S.chat.msgs].reverse().find(m=>m.role==="a"&&m.text&&!m.pending); }
-function openCall(){ if(!aiReady()&&!(S.main.reserve||[]).length&&!needAI()) return; $("#call").hidden=false; renderCall(); const l=lastReply(); Voice.speak(l?l.text:callHello()); }
+function openCall(){ if(!aiReady()&&netOK&&!Local.ready()&&!needAI()) return; $("#call").hidden=false; renderCall(); const l=lastReply(); Voice.speak(l?l.text:callHello()); }
 function renderCall(){
   const pp=pal(), p=S.main.profile; const pend=S.chat.msgs.find(m=>m.pending); const l=lastReply();
   const txt=pend?(pend.text||"…"):(l?l.text:callHello());
@@ -2370,15 +2370,12 @@ function offlineSend(text){
   const ta=$("#chatIn"); if(ta){ ta.value=""; ta.style.height="auto"; } const ci=$("#callIn"); if(ci) ci.value="";
   S.chat.msgs.push({id:uid(),role:"u",text,ts:Date.now(),queued:!/^\[(Jeu de rôle|Consigne)\]/.test(text)});
   logAdd("msgs"); addXP(10);
-  const res=S.main.reserve||(S.main.reserve=[]);
   saveChat(); saveMain(); renderChat(); if(callOpen()) renderCall();
   if(Local.ready()) return localReply();
-  if(!res.length){ toast(`${pal().name} has no saved messages left. Your message is kept and will be corrected once you're online.`); return; }
   chatBusy=true; setThinking(true);
-  setTimeout(()=>{ const r=res.shift();
-    S.chat.msgs.push({id:uid(),role:"a",text:r.fr,en:r.en,phrases:r.phrases||[],ts:Date.now(),reserve:true});
+  setTimeout(()=>{ brainReply(); const r=S.chat.msgs[S.chat.msgs.length-1];
     chatBusy=false; setThinking(false); saveChat(); saveMain(); renderChat(); if(callOpen()) renderCall(); renderAIBanner();
-    if(S.main.profile.autoSpeak||callOpen()) Voice.speak(r.fr); },1300+Math.random()*900);
+    if(S.main.profile.autoSpeak||callOpen()) Voice.speak(r.text); },900+Math.random()*900);
 }
 async function fillReserve(){
   if(!aiReady()) return 0;
@@ -2572,6 +2569,16 @@ function geminiSample(key,model,alts){
   return f;
 }
 
+
+/* ---------------- expression packs: new expressions arrive automatically (phrases.json next to the app) ---------------- */
+function packId(fr){ let h=0; for(const ch of String(fr).toLowerCase()) h=(h*31+ch.charCodeAt(0))|0; return "p"+(h>>>0).toString(36); }
+function applyPack(p){ if(!p||!Array.isArray(p.batches)) return 0; const have=new Set(SEED.map(x=>String(x[0]).toLowerCase())); let n=0;
+  p.batches.forEach(b=>(b&&Array.isArray(b.items)?b.items:[]).forEach(x=>{ if(!Array.isArray(x)||!x[0]||!x[1]) return; const k=String(x[0]).toLowerCase(); if(have.has(k)) return; have.add(k);
+    SEED.push([String(x[0]),String(x[1]),String(x[2]||"courant"),String(x[3]||""),String(x[4]||""),String(b.t||"Nouveautés"),packId(x[0])]); n++; }));
+  return n; }
+async function fetchPack(){ if(!HOSTED||navigator.onLine===false) return;
+  try{ const r=await fetch("./phrases.json",{cache:"no-store"}); if(!r.ok) return; const p=await r.json(); lsSet("tch_pack",p); const n=applyPack(p);
+    if(n){ toast(`${n} new expression${n>1?"s":""} just arrived in your Library.`,6000); if(curView==="phrases") render("phrases"); } }catch(e){} }
 
 /* ---------------- offline library ---------------- */
 let libTheme="Café & resto", libQ="";
@@ -2772,9 +2779,223 @@ function checkLocalCrash(){ const lf=lsGet("tch_local_loading"); if(!lf) return;
   const c=(lsGet("tch_local_crashes")||0)+1; lsSet("tch_local_crashes",c); lsSet("tch_local_nowarm",true);
   const s=lsGet("tch_local"); if(s){ s.ready=false; lsSet("tch_local",s); }
   lsSet("tch_local_err",{msg:"Your phone closed the app while loading the AI into memory (it ran out of memory). Close your other apps and try again"+(/gemma3|1B/.test(lf.id)?". If it keeps happening, this iPhone can't run an offline AI; your pen pal will use saved messages instead.":", or choose Light, which needs much less memory."),raw:"App was closed during model load: "+lf.id,ts:Date.now()}); }
-// a saved message stands in whenever the on-device AI can't answer, so offline chat never just hangs
-function reserveReply(note){ const r=(S.main.reserve||[]).shift(); if(!r){ toast(note+" No saved messages left either: your message is kept and will be answered when you're online.",9000); return false; }
-  S.chat.msgs.push({id:uid(),role:"a",text:r.fr,en:r.en,phrases:r.phrases||[],ts:Date.now(),reserve:true}); toast(note+" Here's a saved message from "+pal().name+" instead.",8000); return true; }
+/* ---------------- offline conversation mode: always works, no AI needed ----------------
+   Lines are [fr, en]. In fr, {a|b} picks a for tu pen pals and b for vous pen pals (more formal);
+   <m|f> follows the pen pal's gender; {name} and {city} are filled in. */
+const BRAIN={
+  greet:{re:/^(salut|coucou|bonjour|bonsoir|hello|hey|yo|wesh|hi|re)\b/, r:[
+    ["{Coucou|Bonjour} {name} !","Hi {name}!"],
+    ["{Salut {name} ! Ça fait plaisir de te lire.|Bonjour {name} ! Cela me fait plaisir de vous lire.}","Hi {name}! Nice to hear from you."],
+    ["{Hey {name} ! Je pensais justement à toi.|Bonjour {name} ! Je pensais justement à vous.}","Hey {name}! I was just thinking about you."]]},
+  bye:{re:/(bonne nuit|a plus|a\+|a demain|bisous|bises|ciao|au revoir|a bientot|a tout a l.heure|je (dois|vais) (y aller|filer|dormir|me coucher)|^bonne (soiree|journee|nuit)|\bbye\b)/, end:true, r:[
+    ["{Bonne nuit {name}, fais de beaux rêves ! On se reparle demain ?|Bonne nuit {name}, faites de beaux rêves ! À demain ?}","Good night {name}, sweet dreams! Talk tomorrow?"],
+    ["{Ça marche, à plus tard ! Bisous !|Très bien, à bientôt ! Belle soirée à vous.}","Sure, talk later! Take care!"],
+    ["{Allez, file ! On se reparle vite. Bises !|Je vous laisse ! On se reparle bientôt.}","Off you go! Talk soon."]]},
+  thanks:{re:/\b(merci|thanks|thank you)\b/, r:[
+    ["Avec plaisir !","My pleasure!"],["{De rien, c'est normal !|Je vous en prie, c'est normal.}","You're welcome, of course!"],["{Pas de souci !|Je vous en prie !}","No problem!"]]},
+  laugh:{re:/(haha|hihi|mdr|ptdr|lol|xd|\bmort de rire)/, r:[
+    ["{Haha, je savais que ça te ferait rire !|Ha ha, je savais que cela vous amuserait !}","Haha, I knew that would make you laugh!"],
+    ["{Mdr, t'es bête !|Ha ha, vous êtes drôle !}","Lol, you're silly!"],
+    ["{Je suis <mort|morte> de rire !|Cela m'a bien fait rire !}","I'm dying of laughter!"]]},
+  bad:{re:/(fatigu|creve|epuise|naze|stress|triste|deprim|pas (top|terrible|bien|ouf|genial|fou)|bof|le seum|malade|galere|marre|degoute|enerve|vener|relou|\bnul\b|horrible|\bdure?\b|difficile|angoiss|inquiet|seul|ennui|m.ennuie)/, mood:1, r:[
+    ["{Oh non… Qu'est-ce qui se passe ?|Oh non… Que se passe-t-il ?}","Oh no… What's going on?"],
+    ["{Ah mince, ça craint. Raconte-moi, qu'est-ce qui t'arrive ?|Oh, je suis <désolé|désolée>. Racontez-moi : que vous arrive-t-il ?}","Oh no, that sucks. Tell me, what's happening?"],
+    ["{Courage ! Les journées pourries, ça arrive à tout le monde.|Courage ! Les journées difficiles arrivent à tout le monde.}","Hang in there! Rubbish days happen to everyone."],
+    ["{Ah, je connais ce sentiment. Moi, dans ces cas-là, je me fais un thé et je mets une série. C'est quoi ton remède, toi ?|Je connais ce sentiment. Dans ces cas-là, je me prépare un thé et je lis un peu. Quel est votre remède ?}","I know that feeling. In those moments I make a tea and put on a series. What's your remedy?"]]},
+  good:{re:/(\bsuper\b|genial|trop bien|content|heureu|\btop\b|nickel|(ca )?va (bien|super|tres bien)|tres bien|en forme|cool|kiffe|de ouf|parfait|excellent|incroyable|j.adore|trop content|ravi)/, mood:1, r:[
+    ["{Trop bien ! Ça fait plaisir à entendre.|Formidable ! Cela fait plaisir à entendre.}","So good! Lovely to hear."],
+    ["{Génial ! T'as l'air en pleine forme.|Excellent ! Vous avez l'air en pleine forme.}","Great! You sound on top form."],
+    ["Ah, j'adore {cette énergie|cet enthousiasme} !","Ah, I love this energy!"],
+    ["{Nickel ! Qu'est-ce qui te met de si bonne humeur ?|Parfait ! Qu'est-ce qui vous met de si bonne humeur ?}","Perfect! What's put you in such a good mood?"]]},
+  food:{re:/(mang|bouff|cuisin|resto|restaurant|diner|dejeuner|petit dej|pizza|pates|croissant|boulangerie|cafe|\bthe\b|boire|un verre|apero|biere|\bvin\b|faim|recette|fromage|dessert|gateau)/, kw:/manger|bouffe|faim|resto|cuisine|plat|eat|food|hungry|café|verre|apéro|boire/i, r:[
+    ["{Ah, tu me parles de bouffe, tu me prends par les sentiments !|Ah, vous me parlez de cuisine, vous me prenez par les sentiments !}","Ah, talking about food, you know how to win me over!"],
+    ["{Miam ! Moi, hier soir, je me suis fait des pâtes au pesto maison. Rien de fou, mais trop bon.|Moi, hier soir, je me suis préparé des pâtes au pesto maison. Simple, mais délicieux.}","Yum! Last night I made homemade pesto pasta. Nothing fancy, but so good."],
+    ["{Arrête, ça me donne faim !|Vous me donnez faim !}","Stop, you're making me hungry!"]],
+    q:[["{C'est quoi ton plat préféré ?|Quel est votre plat préféré ?}","What's your favourite dish?"],
+       ["{Tu sais cuisiner, toi ?|Vous cuisinez souvent ?}","Can you cook?"],
+       ["{T'as déjà goûté la raclette ou la tartiflette ?|Avez-vous déjà goûté la raclette ou la tartiflette ?}","Have you ever tried raclette or tartiflette?"],
+       ["{Tu manges quoi ce soir ?|Que mangez-vous ce soir ?}","What are you eating tonight?"]]},
+  study:{re:/(\bcours\b|\bfac\b|universite|\bfac\b|etudi|etudes|exam|partiel|devoirs?\b|revis|\bdroit\b|\bloi\b|dissert|\bprof\b|lecture notes|bibliotheque|\bbu\b|master|licence|diplome)/, kw:/étud|exam|cours|fac|droit|réviser|bosser/i, r:[
+    ["{Bon courage pour les révisions !|Bon courage pour vos révisions !}","Good luck with the revision!"],
+    ["{Les études, c'est intense, hein !|Les études demandent beaucoup d'énergie !}","Studying is intense, eh!"],
+    ["{Respect, moi à la fac je bossais toujours à la dernière minute, haha.|Bravo. Moi, à l'université, je travaillais toujours à la dernière minute !}","Respect, at uni I always worked at the last minute, haha."]],
+    q:[["{Tu révises comment, toi ?|Comment révisez-vous ?}","How do you revise?"],
+       ["{C'est quoi ta matière préférée ?|Quelle est votre matière préférée ?}","What's your favourite subject?"],
+       ["{T'as quand, tes prochains examens ?|Quand avez-vous vos prochains examens ?}","When are your next exams?"],
+       ["{Qu'est-ce qui te plaît le plus dans tes études ?|Qu'est-ce qui vous plaît le plus dans vos études ?}","What do you like most about your studies?"]]},
+  work:{re:/(travail|boulot|taf|bosse|bureau|reunion|collegue|patron|stage|\bjob\b)/, kw:/travail|boulot|bosser|taf|réunion|collègue/i, r:[
+    ["{Ah, le boulot, toujours le boulot !|Ah, le travail, toujours le travail !}","Ah, work, always work!"],
+    ["Moi aussi, j'ai une semaine chargée, je suis sous l'eau.","Me too, busy week, I'm swamped."],
+    ["Bon courage, ça va payer, j'en suis <sûr|sûre> !","Good luck, it'll pay off, I'm sure!"]],
+    q:[["{C'est quoi le plus dur pour toi en ce moment ?|Qu'est-ce qui est le plus difficile pour vous en ce moment ?}","What's the hardest thing for you right now?"],
+       ["{Tu t'entends bien avec les gens autour de toi ?|Vous vous entendez bien avec les gens autour de vous ?}","Do you get on with the people around you?"],
+       ["{Tu te vois faire ça toute ta vie ?|Vous vous voyez faire cela toute votre vie ?}","Can you see yourself doing that all your life?"],
+       ["{Qu'est-ce qui te plaît le plus là-dedans ?|Qu'est-ce qui vous plaît le plus là-dedans ?}","What do you like most about it?"]]},
+  plans:{re:/(week.?end|samedi|dimanche|ce soir|demain|vacances|projet|prevu|\bplan\b|sortir|soiree|fete|anniv|concert|rendez.vous|\brdv\b)/, kw:/week-end|soir|sortir|prévu|plan|fête|soirée/i, r:[
+    ["Oh, ça a l'air sympa !","Oh, sounds nice!"],
+    ["{Trop cool, j'ai hâte que tu me racontes !|Formidable, j'ai hâte que vous me racontiez !}","So cool, can't wait for you to tell me about it!"],
+    ["{Moi, ce week-end, je crois que je vais me poser et ne rien faire. Ça me fera du bien.|Moi, ce week-end, je crois que je vais me reposer. Cela me fera du bien.}","This weekend I think I'll chill and do nothing. It'll do me good."]],
+    q:[["{T'as prévu quoi exactement ?|Qu'avez-vous prévu exactement ?}","What exactly have you got planned?"],
+       ["{Tu y vas avec qui ?|Avec qui y allez-vous ?}","Who are you going with?"],
+       ["{Vous allez où ?|Où allez-vous ?}","Where are you going?"]]},
+  sport:{re:/(sport|foot|match|salle|muscu|courir|running|velo|natation|nager|tennis|\bgym\b|rugby|basket|yoga|footing)/, kw:/sport|salle|courir|match|foot|vélo|muscu/i, r:[
+    ["{Respect, moi j'ai du mal à me motiver en ce moment !|Bravo ! J'ai du mal à me motiver en ce moment.}","Respect, I'm struggling to get motivated at the moment!"],
+    ["Ah, le sport, ça vide la tête.","Ah, sport clears your head."],
+    ["Moi, je fais du vélo presque tous les jours, c'est mon petit plaisir.","I cycle almost every day, it's my little pleasure."]],
+    q:[["{T'en fais souvent ?|Vous en faites souvent ?}","Do you do it often?"],
+       ["{Tu supportes quelle équipe ?|Quelle équipe supportez-vous ?}","Which team do you support?"],
+       ["{C'est quoi ton sport préféré à regarder ?|Quel sport préférez-vous regarder ?}","What's your favourite sport to watch?"]]},
+  media:{re:/(film|serie|netflix|cine|musique|chanson|concert|livre|\blire\b|lecture|podcast|jeu video|album|\brap\b|youtube|tiktok|insta)/, kw:/film|série|musique|chanson|livre|regarder|écouter/i, r:[
+    ["Oh, je note !","Oh, I'll make a note of that!"],
+    ["{J'adore parler de ça ! En ce moment, je regarde une série policière française, je suis à fond dedans.|J'adore parler de cela ! En ce moment, je regarde une série policière française, elle est passionnante.}","I love talking about this! I'm watching a French crime series right now, I'm totally hooked."],
+    ["{Ah ouais ? Faut que je regarde ça.|Ah oui ? Il faut que je regarde cela.}","Oh yeah? I need to check that out."]],
+    q:[["{Tu me conseilles quoi en ce moment ?|Que me conseillez-vous en ce moment ?}","What do you recommend at the moment?"],
+       ["{T'as déjà regardé des films français ? « Intouchables », par exemple ?|Avez-vous déjà regardé des films français ? « Intouchables », par exemple ?}","Have you watched any French films? « Intouchables », for example?"],
+       ["{Tu écoutes quoi comme musique en ce moment ?|Qu'écoutez-vous comme musique en ce moment ?}","What music are you listening to at the moment?"]]},
+  travel:{re:/(voyage|avion|\btrain\b|france|paris|lyon|marseille|bordeaux|visiter|\bville\b|pays|etranger|plage|montagne)/, kw:/voyage|partir|vacances|visiter|avion|train/i, r:[
+    ["Ah, voyager, c'est ma passion !","Ah, travelling is my passion!"],
+    ["Ça fait rêver !","That sounds like a dream!"],
+    ["{Tu sais que t'as toujours un canapé à {city} si tu passes !|Si vous passez par {city}, faites-moi signe !}","You know there's always a sofa for you in {city} if you come by!"]],
+    q:[["{C'est quoi le plus bel endroit que t'aies jamais vu ?|Quel est le plus bel endroit que vous ayez jamais vu ?}","What's the most beautiful place you've ever seen?"],
+       ["{Tu reviens quand en France ?|Quand revenez-vous en France ?}","When are you next coming to France?"],
+       ["{Plutôt mer ou montagne, toi ?|Plutôt mer ou montagne, vous ?}","Sea or mountains, you?"]]},
+  weather:{re:/(meteo|pluie|pleut|soleil|froid|chaud|neige|temps qu.il fait|caille|canicule|orage)/, kw:/temps|pleuvoir|soleil|froid|chaud|météo/i, r:[
+    ["Ici à {city}, il fait un temps de chien aujourd'hui.","Here in {city}, the weather's awful today."],
+    ["Ici, grand soleil ! Ça remonte le moral.","Here, bright sunshine! It lifts your mood."]],
+    q:[["{Il fait quel temps chez toi ?|Quel temps fait-il chez vous ?}","What's the weather like where you are?"],
+       ["{T'es plutôt été ou hiver ?|Êtes-vous plutôt été ou hiver ?}","Are you more a summer or a winter person?"]]},
+  family:{re:/(famille|mere|pere|maman|papa|frere|soeur|copain|copine|\bami|pote|\bmec\b|meuf|chien|chat\b|parents|cousin|coloc)/, kw:/famille|ami|pote|copain|copine|frère|sœur|parents/i, r:[
+    ["Ah, c'est mignon !","Aw, that's sweet!"],
+    ["{Les potes, c'est sacré.|Les amis, c'est sacré.}","Friends are sacred."],
+    ["{Moi, je vois ma sœur ce week-end, ça fait trop longtemps !|Je vois ma sœur ce week-end, cela faisait longtemps !}","I'm seeing my sister this weekend, it's been too long!"]],
+    q:[["{T'es proche de ta famille ?|Êtes-vous proche de votre famille ?}","Are you close to your family?"],
+       ["{Vous faites quoi, d'habitude, quand vous vous retrouvez entre potes ?|Que faites-vous, d'habitude, avec vos amis ?}","What do you usually do when you get together with your mates?"],
+       ["{T'as des frères et sœurs ?|Avez-vous des frères et sœurs ?}","Do you have brothers and sisters?"]]},
+  french:{re:/(francais|apprendre|langue|accent|\bmots?\b|expression|grammaire|comprends pas|comprend pas|conjug|vocabulaire|parler)/, kw:/parler|comprendre|mot|dire|expression/i, r:[
+    ["{Franchement, tu progresses vite, je le vois.|Sincèrement, vous progressez vite, je le vois.}","Honestly, you're progressing fast, I can see it."],
+    ["{Le français, c'est pas facile, mais tu te débrouilles super bien !|Le français n'est pas facile, mais vous vous débrouillez très bien !}","French isn't easy, but you're doing really well!"],
+    ["{T'inquiète, même nous, on galère avec l'orthographe !|Ne vous inquiétez pas : même les Français peinent avec l'orthographe !}","Don't worry, even we struggle with spelling!"]],
+    q:[["{C'est quoi le truc le plus dur pour toi en français ?|Qu'est-ce qui vous semble le plus difficile en français ?}","What's the hardest thing for you in French?"],
+       ["{T'as un mot français préféré ?|Avez-vous un mot français préféré ?}","Do you have a favourite French word?"],
+       ["{Tu voudrais qu'on parle de quoi pour pratiquer ?|De quoi aimeriez-vous parler pour pratiquer ?}","What would you like to talk about to practise?"]]},
+  how:{re:/((ca va|comment (tu vas|vas.tu|allez.vous|ca va))\s*\?|et toi|et vous|quoi de neuf|la forme\s*\?|ta journee\s*\?|votre journee\s*\?)/, r:[
+    ["{Ça va super, merci ! Petite journée tranquille ici à {city}.|Je vais très bien, merci ! Petite journée tranquille ici à {city}.}","I'm doing great, thanks! Quiet little day here in {city}."],
+    ["{Franchement, ça va grave bien. J'ai bien dormi pour une fois, ça change tout !|Très bien, merci. J'ai bien dormi pour une fois, cela change tout !}","Honestly, really good. I slept well for once, it changes everything!"],
+    ["{Bof, un peu <crevé|crevée>… mais ça va, je tiens le coup !|Un peu <fatigué|fatiguée>, je l'avoue… mais je tiens le coup !}","Meh, a bit knackered… but I'm hanging in there!"],
+    ["{Ça roule ! J'ai eu une journée chargée mais productive.|Très bien ! J'ai eu une journée chargée mais productive.}","All good! Busy but productive day."]],
+    q:[["Et {toi|vous}, ça va ?","And you, how are you?"],["Et {toi, ta journée ?|vous, votre journée ?}","And you, how was your day?"]]},
+  yes:{re:/^(oui|ouais|ouai|yes|yep|carrement|grave|exact|exactement|d.accord|dac|ok|okay|bien sur|evidemment|trop)\W*$/, r:[
+    ["Ah, je savais !","Ha, I knew it!"],["{Grave ! On est d'accord.|Nous sommes bien d'accord.}","Totally! We agree."],["{Ah, trop bien.|Ah, très bien.}","Ah, great."]]},
+  no:{re:/^(non|nan|pas vraiment|pas du tout|jamais|bof|pas trop)\W*$/, r:[
+    ["Ah bon ? Pourquoi ?","Really? Why?"],["Ah, d'accord, je vois.","Ah, OK, I see."]]},
+  ask:{re:/\b(tu|toi|vous|ton|ta|tes|votre|vos)\b.*\?\s*$/, r:[
+    ["{Moi ? Bah, aujourd'hui j'ai surtout bossé, puis je suis <allé|allée> boire un café avec une copine.|Moi ? Eh bien, aujourd'hui j'ai surtout travaillé, puis je suis <allé|allée> prendre un café avec une amie.}","Me? Well, today I mostly worked, then went for a coffee with a friend."],
+    ["{Bonne question ! Honnêtement, je sais pas trop… J'y réfléchis et je te dis.|Bonne question ! Honnêtement, je ne sais pas trop… Je vais y réfléchir.}","Good question! Honestly, I'm not too sure… I'll think about it and tell you."],
+    ["{Haha, tu poses de ces questions ! Je te réponds plus tard, promis.|Quelle question ! Je vous réponds plus tard, promis.}","Haha, the questions you ask! I'll answer later, promise."]]},
+  any:{r:[
+    ["{Ah ouais ? Intéressant !|Ah oui ? Intéressant !}","Oh yeah? Interesting!"],
+    ["Je vois ce que {tu veux|vous voulez} dire.","I see what you mean."],
+    ["{Ah, c'est marrant que tu dises ça.|C'est amusant que vous disiez cela.}","Ah, funny you should say that."],
+    ["Ah, je note !","Ah, noted!"],
+    ["{Ah ouais, je comprends.|Ah oui, je comprends.}","Ah yeah, I get it."]]}
+};
+const BRAIN_SELF=[
+  ["{Moi, aujourd'hui, j'ai eu une journée de dingue.|Moi, aujourd'hui, j'ai eu une journée bien remplie.}","Me, I had a crazy day today."],
+  ["{Au fait, j'ai découvert un petit café trop mignon près de chez moi.|Au fait, j'ai découvert un petit café charmant près de chez moi.}","By the way, I found a lovely little café near my place."],
+  ["{Il s'est passé un truc drôle ce matin : j'ai croisé mon voisin en pyjama à la boulangerie !|Il s'est passé une chose amusante ce matin : j'ai croisé mon voisin en pyjama à la boulangerie !}","Something funny happened this morning: I bumped into my neighbour in his pyjamas at the bakery!"],
+  ["{J'ai enfin fini un projet sur lequel je bossais depuis des semaines, je suis trop <content|contente> !|J'ai enfin terminé un projet sur lequel je travaillais depuis des semaines, je suis tellement <content|contente> !}","I've finally finished a project I'd been working on for weeks, I'm so happy!"],
+  ["{J'ai testé une nouvelle recette hier soir… disons que c'était pas une réussite, haha.|J'ai essayé une nouvelle recette hier soir… disons que ce n'était pas une franche réussite.}","I tried a new recipe last night… let's say it wasn't a success, haha."],
+  ["{En ce moment, j'essaie de moins traîner sur mon téléphone. C'est pas gagné !|En ce moment, j'essaie de passer moins de temps sur mon téléphone. Ce n'est pas gagné !}","I'm trying to spend less time on my phone at the moment. Not easy!"]
+];
+const BRAIN_Q=[
+  ["{Au fait, t'as fait quoi de beau aujourd'hui ?|Au fait, qu'avez-vous fait de beau aujourd'hui ?}","By the way, what did you get up to today?"],
+  ["{C'est quoi le meilleur moment de ta semaine pour l'instant ?|Quel a été le meilleur moment de votre semaine jusqu'ici ?}","What's been the best moment of your week so far?"],
+  ["{Si tu pouvais vivre n'importe où en France, tu choisirais où ?|Si vous pouviez vivre n'importe où en France, où iriez-vous ?}","If you could live anywhere in France, where would you pick?"],
+  ["{T'as un projet qui te tient à cœur en ce moment ?|Avez-vous un projet qui vous tient à cœur en ce moment ?}","Have you got a project close to your heart at the moment?"],
+  ["{Raconte-moi un truc qui t'a fait rire récemment !|Racontez-moi quelque chose qui vous a fait rire récemment !}","Tell me something that made you laugh recently!"],
+  ["{Tu préfères les soirées tranquilles ou les grosses fêtes ?|Préférez-vous les soirées tranquilles ou les grandes fêtes ?}","Do you prefer quiet evenings or big parties?"],
+  ["{C'est quoi ton petit plaisir du dimanche ?|Quel est votre petit plaisir du dimanche ?}","What's your little Sunday treat?"],
+  ["{T'es plutôt du matin ou du soir ?|Êtes-vous plutôt du matin ou du soir ?}","Are you more of a morning or an evening person?"],
+  ["{Si t'avais une journée entière rien que pour toi, tu ferais quoi ?|Si vous aviez une journée entière rien que pour vous, que feriez-vous ?}","If you had a whole day just for yourself, what would you do?"],
+  ["{Qu'est-ce qui t'a donné envie d'apprendre le français, au départ ?|Qu'est-ce qui vous a donné envie d'apprendre le français, au départ ?}","What made you want to learn French in the first place?"],
+  ["{T'as un rêve un peu fou que tu voudrais réaliser ?|Avez-vous un rêve un peu fou que vous aimeriez réaliser ?}","Have you got a slightly crazy dream you'd like to achieve?"],
+  ["{C'est quoi la dernière chose que t'as achetée et que tu regrettes ?|Quelle est la dernière chose que vous avez achetée et que vous regrettez ?}","What's the last thing you bought and regretted?"],
+  ["{Tu fais quoi ce soir ?|Que faites-vous ce soir ?}","What are you doing tonight?"],
+  ["{T'as appris quoi de nouveau cette semaine ?|Qu'avez-vous appris de nouveau cette semaine ?}","What have you learnt that's new this week?"],
+  ["{Tu te souviens de ton premier voyage à l'étranger ?|Vous souvenez-vous de votre premier voyage à l'étranger ?}","Do you remember your first trip abroad?"],
+  ["{T'as un talent caché ?|Avez-vous un talent caché ?}","Have you got a hidden talent?"],
+  ["{C'est quoi le meilleur conseil qu'on t'ait jamais donné ?|Quel est le meilleur conseil qu'on vous ait jamais donné ?}","What's the best advice anyone's ever given you?"],
+  ["{Tu te vois où dans cinq ans ?|Où vous voyez-vous dans cinq ans ?}","Where do you see yourself in five years?"],
+  ["{T'as déjà vécu un moment gênant en parlant français ?|Avez-vous déjà vécu un moment gênant en parlant français ?}","Have you ever had an awkward moment speaking French?"],
+  ["{T'as des projets pour les prochaines vacances ?|Avez-vous des projets pour les prochaines vacances ?}","Any plans for the next holidays?"],
+  ["{Tu lis quelque chose en ce moment ?|Lisez-vous quelque chose en ce moment ?}","Are you reading anything at the moment?"],
+  ["{Si tu devais décrire ta journée en trois mots, ce serait lesquels ?|Si vous deviez décrire votre journée en trois mots, lesquels choisiriez-vous ?}","If you had to describe your day in three words, which would they be?"]
+];
+function brainFill(s){ const pp=pal(), tu=pp.tu!==false, name=String(S.main.profile.name||"").replace(/[{}|<>]/g,""), city=String(pp.city).split(" (")[0];
+  return s.replace(/\{name\}/g,name).replace(/\{city\}/g,city).replace(/<([^|>]*)\|([^>]*)>/g,(_,m,f)=>pp.fem?f:m).replace(/\{([^{}|]*)\|([^{}]*)\}/g,(_,a,b)=>tu?a:b)
+    .replace(/ ([,.])/g,"$1").replace(/\s{2,}/g," ").trim(); }
+const bnorm=s=>String(s).toLowerCase().replace(/[’`]/g,"'").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
+function brainIntents(text){ const t=bnorm(text); let out=Object.keys(BRAIN).filter(k=>BRAIN[k].re&&BRAIN[k].re.test(t));
+  if(out.includes("how")) out=out.filter(k=>k!=="ask");
+  if(out.includes("bad")) out=out.filter(k=>k!=="good");
+  return out; }
+function brainCompose(text){
+  const used=S.main.brainRecent||(S.main.brainRecent=[]);
+  const pick=arr=>{ const fresh=arr.filter(x=>!used.includes(x[0])); const x=(fresh.length?fresh:arr)[Math.floor(Math.random()*(fresh.length?fresh:arr).length)]; used.push(x[0]); if(used.length>40) used.splice(0,used.length-40); return x; };
+  const it=brainIntents(text), parts=[], has=k=>it.includes(k);
+  if(has("bye")){ parts.push(pick(BRAIN.bye.r)); return {parts,it}; }
+  if(has("greet")) parts.push(pick(BRAIN.greet.r));
+  if(has("thanks")) parts.push(pick(BRAIN.thanks.r));
+  const mood=has("bad")?"bad":has("good")?"good":null; if(mood) parts.push(pick(BRAIN[mood].r));
+  const topic=["study","food","work","plans","sport","media","travel","weather","family","french"].find(has);
+  if(topic&&!(mood==="bad")) parts.push(pick(BRAIN[topic].r));
+  if(has("how")) parts.push(pick(BRAIN.how.r)); else if(has("ask")&&!topic) parts.push(pick(BRAIN.ask.r));
+  if(has("laugh")&&!mood) parts.push(pick(BRAIN.laugh.r));
+  if(!parts.length||(parts.length===1&&has("greet")&&!has("how"))){ if(has("yes")) parts.push(pick(BRAIN.yes.r)); else if(has("no")) parts.push(pick(BRAIN.no.r)); else if(!has("greet")) parts.push(pick(BRAIN.any.r)); }
+  const asked=parts.some(p=>/\?\s*$/.test(brainFill(p[0])));
+  if(!asked){ if(!topic&&!mood&&Math.random()<.4) parts.push(pick(BRAIN_SELF));
+    const qs=has("how")&&!mood?BRAIN.how.q:topic&&Math.random()<.85?BRAIN[topic].q:BRAIN_Q; parts.push(pick(qs)); }
+  return {parts,it,topic}; }
+function brainPhrase(topic){ const kw=topic&&BRAIN[topic].kw; const pool=SEED.filter(x=>!hasFr(x[0])&&(!kw||kw.test(x[0]+" "+x[1]+" "+(x[3]||""))));
+  const src=pool.length?pool:SEED.filter(x=>!hasFr(x[0])); if(!src.length) return null; const x=src[Math.floor(Math.random()*src.length)];
+  return {fr:x[0],en:x[1],reg:x[2],ex:x[3]}; }
+// replies in offline mode: reacts to what was said, shares a little, always asks something back
+function brainReply(note){
+  const um=[...S.chat.msgs].reverse().find(x=>x.role==="u"); const c=brainCompose(um?um.text:"");
+  let fr=c.parts.map(p=>brainFill(p[0])).join(" "), en=c.parts.map(p=>brainFill(p[1])).join(" ");
+  const res=S.main.reserve||[]; if(!c.it.length&&res.length&&Math.random()<.5){ const r=res.shift(); fr=r.fr; en=r.en||""; }
+  const ph=Math.random()<.5?brainPhrase(c.topic):null;
+  S.chat.msgs.push({id:uid(),role:"a",text:fr,en,phrases:ph?[ph]:[],ts:Date.now(),brain:true});
+  if(note) toast(note+" "+pal().name+" is replying in offline mode instead.",8000);
+  return true; }
+// offline mode stands in whenever the on-device AI can't answer, so offline chat never just hangs
+function reserveReply(note){ return brainReply(note); }
+// step-by-step check of the on-device AI, so a failure says exactly which step broke
+async function localDiag(out){
+  const log=(ok,t)=>{ out.textContent+=(ok===true?"✓ ":ok===false?"✗ ":"• ")+t+"\n"; };
+  const withT=(p,ms,what)=>Promise.race([p,new Promise((_,rej)=>setTimeout(()=>rej(new Error("no answer after "+ms/1000+"s while "+(typeof what==="function"?what():what))),ms))]);
+  out.hidden=false; out.textContent="";
+  log(null,(HOSTED?"Home-screen/web app":"claude.ai")+" · "+navigator.userAgent.replace(/^[^(]*\(/,"(").slice(0,80));
+  if(!navigator.gpu){ log(false,"WebGPU missing: this browser can't run an offline AI."); return; }
+  try{ const ad=await navigator.gpu.requestAdapter(); if(!ad){ log(false,"WebGPU: the GPU refused to start"); return; }
+    log(true,`WebGPU · 16-bit maths ${ad.features.has("shader-f16")?"yes":"no"} · GPU block ${Math.round(ad.limits.maxStorageBufferBindingSize/1048576)} MB`); }catch(e){ log(false,"WebGPU error: "+e.message); return; }
+  try{ const est=await navigator.storage.estimate(), per=navigator.storage.persisted?await navigator.storage.persisted():"?"; log(null,`Storage: ${Math.round((est.usage||0)/1048576)} MB used of ${Math.round((est.quota||0)/1048576)} MB · protected from clean-up: ${per}`); }catch(e){}
+  let L; const t0=Date.now();
+  try{ L=await withT(Local.lib(),30000,"opening the AI engine file"); log(true,`AI engine file opened (${((Date.now()-t0)/1000).toFixed(1)}s)`); }catch(e){ log(false,"AI engine file: "+e.message); return; }
+  const s=Local.saved(); if(!s){ log(false,"No offline AI installed: download one below (on Wi-Fi)."); return; }
+  log(null,`Saved model: ${s.id} · marked ready: ${!!s.ready}`);
+  try{ const has=await L.hasModelInCache(s.id); log(has,has?"Model files are on this phone":"Model files are NOT on this phone: download again on Wi-Fi"); if(!has){ s.ready=false; lsSet("tch_local",s); return; } }catch(e){ log(false,"Couldn't check the model files: "+e.message); }
+  log(null,"Saved data: "+(await caches.keys().catch(()=>[])).join(", "));
+  let lastP="starting"; const t1=Date.now(), pl=document.createElement("span"); out.appendChild(pl);
+  try{ await withT(Local.load(p=>{ lastP=`${Math.round((p.progress||0)*100)}% ${String(p.text||"").slice(0,70)}`; pl.textContent="  … "+lastP+"\n"; }),180000,()=>"loading into memory (last step: "+lastP+")"); pl.remove(); log(true,`Loaded into memory (${((Date.now()-t1)/1000).toFixed(0)}s)`); }
+  catch(e){ pl.remove(); log(false,"Loading into memory: "+e.message); return; }
+  const t2=Date.now(); let first=0;
+  try{ const r=await withT(Local.chat([{role:"user",content:"Réponds en une phrase : comment ça va ?"}],{maxTokens:40,onText:()=>{ if(!first) first=Date.now(); }}),90000,"writing a reply");
+    log(true,`Replied in ${((Date.now()-t2)/1000).toFixed(1)}s (first word after ${first?((first-t2)/1000).toFixed(1):"?"}s): « ${r.slice(0,100)} »`);
+    s.ready=true; lsSet("tch_local",s); lsSet("tch_local_err",null); log(true,`All good: ${pal().name} can use the offline AI.`); }
+  catch(e){ Local.q=Promise.resolve(); log(false,"Writing a reply: "+e.message); }
+}
+
 async function localReply(){
   const um=[...S.chat.msgs].reverse().find(x=>x.role==="u");
   const am={id:uid(),role:"a",text:"",ts:Date.now(),pending:true,local:true}; S.chat.msgs.push(am); chatBusy=true; renderChat(); if(callOpen()) renderCall(); setThinking(true);
@@ -2834,17 +3055,20 @@ async function localPhrasePop(text,rect){
 let lmBusy=false, lmPct=0, lmMsg="";
 function localCardHTML(){
   const s=lsGet("tch_local"), pn=pal().name;
-  if(!navigator.gpu) return `<div class="card stack"><div class="eyebrow">Fully offline pen pal</div><h2>Not possible on this browser yet</h2><p class="muted" style="font-size:13.5px">Running an AI on your device needs WebGPU: an iPhone on iOS 26 or newer (Safari or the home-screen app), or recent Chrome on Android or a computer. Meanwhile, ${esc(pn)} replies offline with saved messages.</p></div>`;
+  if(!navigator.gpu) return `<div class="card stack"><div class="eyebrow">Fully offline pen pal</div><h2>Not possible on this browser yet</h2><p class="muted" style="font-size:13.5px">Running an AI on your device needs WebGPU: an iPhone on iOS 26 or newer (Safari or the home-screen app), or recent Chrome on Android or a computer. Meanwhile, ${esc(pn)} replies in offline mode (simpler replies).</p></div>`;
   const m=s&&LOCAL_MODELS.find(x=>x.id===s.base), d=Local.dev, err=lsGet("tch_local_err");
   const devLine=d?(d.ok?`Device check: WebGPU ✓ · 16-bit maths ${d.f16?"✓":"✗"} · GPU memory block ${Math.round((d.maxSB||0)/1048576)} MB${(d.maxSB||0)<(1<<30)?" (phone-size models only)":""}`:"Device check: WebGPU not available"):"Checking your device…";
   return `<div class="card stack"><div class="eyebrow">Fully offline pen pal</div><h2>${s&&s.ready?`Installed · ${esc(m?m.label:s.id)}`:`Chat with ${esc(pn)} with no internet`}</h2>
   <p class="muted" style="font-size:13.5px">Download a small AI onto your device, once, on Wi-Fi. Then ${esc(pn)} replies even in airplane mode, and can translate and explain words offline. It's less precise than the online AI: it chats and can give provisional corrections (marked "to be confirmed" and re-checked online), and it can make mistakes.</p>
   ${s&&s.ready&&err?`<div class="banner" style="background:rgba(255,90,131,.08);border-color:rgba(255,90,131,.35)"><b>Last problem:</b> ${esc(err.msg)}</div>`:""}
-  ${s&&s.ready?`<label class="row" style="font-weight:600;font-size:14px;flex-wrap:nowrap;align-items:flex-start"><input type="checkbox" id="lmProv" ${S.main.profile.provisional!==false?"checked":""} style="margin-top:3px"> <span>Provisional corrections offline<br><span class="muted" style="font-weight:400;font-size:13px">The offline AI suggests corrections marked "to be confirmed". The full AI re-checks them online; only confirmed ones become flashcards.</span></span></label><div class="row"><button class="btn primary" id="lmTest">Test</button><button class="btn ghost sm" id="lmDel">Delete (frees up space)</button></div>`
+  ${s&&s.ready?`<label class="row" style="font-weight:600;font-size:14px;flex-wrap:nowrap;align-items:flex-start"><input type="checkbox" id="lmProv" ${S.main.profile.provisional!==false?"checked":""} style="margin-top:3px"> <span>Provisional corrections offline<br><span class="muted" style="font-weight:400;font-size:13px">The offline AI suggests corrections marked "to be confirmed". The full AI re-checks them online; only confirmed ones become flashcards.</span></span></label><div class="row"><button class="btn primary" id="lmTest">Run a check</button><button class="btn ghost sm" id="lmDel">Delete (frees up space)</button></div>`
   :`${err&&!lmBusy?`<div class="banner" style="background:rgba(255,90,131,.08);border-color:rgba(255,90,131,.35)"><b>Last attempt failed:</b> ${esc(err.msg)}<div class="mono muted" style="font-size:11px;margin-top:6px;word-break:break-word">${esc(String(err.raw).slice(0,220))}</div></div>`:""}
   <p class="muted mono" style="font-size:12px">${esc(devLine)}</p>
   <div class="stack" id="lmPick">${LOCAL_MODELS.map((x,i)=>`<label class="row" style="flex-wrap:nowrap;align-items:flex-start;gap:10px;cursor:pointer"><input type="radio" name="lm" value="${x.id}" ${(lsGet("tch_local_crashes")?x.id==="light":i===0)?"checked":""} style="margin-top:4px"><span><b>${esc(x.label)}</b> <span class="muted mono" style="font-size:12px">${x.size}</span><br><span class="muted" style="font-size:13px">${esc(x.note)}</span></span></label>`).join("")}</div>
   <button class="btn primary" id="lmGo" ${lmBusy?"disabled":""} style="align-self:flex-start">${lmBusy?"Downloading…":"Download to my device"}</button>`}
+  ${s&&!(s.ready)?`<button class="btn ghost sm" id="lmTest" style="align-self:flex-start">Run a check</button>`:""}
+  <pre id="lmDiag" class="mono" hidden style="white-space:pre-wrap;word-break:break-word;font-size:11.5px;line-height:1.5;margin:0;padding:10px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)"></pre>
+  <button class="btn ghost sm" id="lmCopy" hidden style="align-self:flex-start">Copy the results</button>
   <div id="lmProg" ${lmBusy?"":"hidden"}><div class="bar"><i id="lmBar" style="width:${lmPct}%"></i></div><p class="muted mono" id="lmTxt" style="font-size:12px;margin-top:6px">${esc(lmMsg)}</p></div></div>`;
 }
 function bindLocal(){
@@ -2856,10 +3080,9 @@ function bindLocal(){
       lmBusy=false; lsSet("tch_local_err",null); lsSet("tch_local_nowarm",null); lsSet("tch_local_crashes",0); toast(`Installed! ${pal().name} can now reply with no internet.`,6000); }
     catch(e){ lmBusy=false; const raw=String(e&&e.message||e); lsSet("tch_local_err",{msg:explainLocalErr(raw),raw,ts:Date.now()}); toast("Install failed: "+explainLocalErr(raw),9000); }
     renderMe(); };
-  const t=$("#lmTest"); if(t) t.onclick=async e=>{ const b=e.currentTarget; b.disabled=true; b.textContent=`${pal().name} is waking up…`;
-    try{ const r=await Local.chat([{role:"user",content:offlineSys()+"\n\n---\n\nSalut ! Ça va ?"}],{maxTokens:80,onProgress:p=>{ b.textContent=`Loading ${Math.round((p.progress||0)*100)}%`; }}); toast(`${pal().name} (offline): ${r.slice(0,140)}`,9000); }
-    catch(err){ toast("Failed: "+String(err&&err.message||err).slice(0,120),9000); }
-    b.disabled=false; b.textContent="Test"; };
+  const t=$("#lmTest"); if(t) t.onclick=async e=>{ const b=e.currentTarget, out=$("#lmDiag"); b.disabled=true; b.textContent="Checking…";
+    try{ await localDiag(out); }catch(err){ out.textContent+="✗ "+String(err&&err.message||err)+"\n"; }
+    b.disabled=false; b.textContent="Run a check"; const c=$("#lmCopy"); if(c){ c.hidden=false; c.onclick=()=>{ try{ navigator.clipboard.writeText(out.textContent); toast("Copied: paste it to Claude."); }catch(err){} }; } };
   const pv=$("#lmProv"); if(pv) pv.onchange=()=>{ S.main.profile.provisional=pv.checked; saveMain(); toast(pv.checked?"Provisional offline corrections on.":"Provisional offline corrections off."); };
   const dl=$("#lmDel"); if(dl) dl.onclick=async()=>{ await Local.remove(); toast("Offline AI removed from this device."); renderMe(); };
 }
@@ -2869,6 +3092,7 @@ function renderAll(){ renderNav(); render(curView); }
 async function boot(){
   const h=(location.hash||"").slice(1); if(VIEWS.some(v=>v.id===h)) curView=h;
   $$("main .view").forEach(s=>s.hidden=s.dataset.view!==curView);
+  try{ applyPack(lsGet("tch_pack")); }catch(e){}
   Voice.init(); renderAll();
   use("sample").then(async s=>{ if(!s&&OFFLINE){ const k=lsGet("tch_gemkey"); if(k&&k.key&&k.model){ s=geminiSample(k.key,k.model,k.alts||[]); gem=true;
       if(!k.v2) geminiPickModel(k.key).then(alts=>{ const g={key:k.key,model:alts.includes(k.model)?k.model:alts[0],alts,v2:true}; lsSet("tch_gemkey",g); sample=geminiSample(g.key,g.model,g.alts); }).catch(()=>{}); } } sample=s; aiState=s?"on":"off"; if(s){ try{ const l=await s.limits(); imgOK=!!(l&&l.images); }catch(e){} } renderAIBanner(); if(curView==="images") renderImages(); if(loaded) flushQueue(); });
@@ -2890,7 +3114,7 @@ async function boot(){
   if(!S.main.profile.onboarded) openOnboarding();
   $("#v-chat").dataset.built=""; renderAll();
   if(window.tchSplashDone) window.tchSplashDone();
-  setTimeout(warmLocal,2500);
+  setTimeout(warmLocal,2500); setTimeout(fetchPack,1500);
 }
 try{ checkLocalCrash(); }catch(e){}
 boot();

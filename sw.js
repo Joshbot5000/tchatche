@@ -1,7 +1,7 @@
 // Tchatche offline cache.
 // Only ever deletes this app's own old "tchatche-v*" caches: the on-device AI model lives in WebLLM's
 // "webllm/*" caches in the same storage and must survive app updates.
-const CACHE = "tchatche-v11";
+const CACHE = "tchatche-v13";
 const LIB = "tchatche-lib-webllm-0.2.84";          // 6.5 MB engine, kept across app versions
 const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 self.addEventListener("install", e => {
