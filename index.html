@@ -1447,13 +1447,25 @@ function newPool(n){
 /* ---------------- voice ---------------- */
 const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
 const SILENT_WAV="data:audio/wav;base64,UklGRmQGAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YUAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-const Voice={ voices:[], ok:"speechSynthesis" in window,
-  init(){ if(!this.ok) return; const load=()=>{ try{ this.voices=speechSynthesis.getVoices().filter(v=>/^fr/i.test(v.lang)); }catch(e){} if(curView==="moi") renderMe(); }; load(); try{ speechSynthesis.onvoiceschanged=load; }catch(e){} },
-  pick(){ const p=S.main.profile; if(p.voice){ const v=this.voices.find(x=>x.name===p.voice); if(v) return v; }
-    // iPhones list French voices that aren't downloaded and play them silently: let iOS pick its installed default
-    if(IOS) return null;
-    const ok=this.voices.filter(v=>!/enhanced|premium|amélioré|eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley|jacques/i.test(v.name));
-    return ok.find(v=>v.lang==="fr-FR"&&/google|amélie|thomas|marie|denise|henri/i.test(v.name))||ok.find(v=>v.lang==="fr-FR")||ok[0]||null; },
+const FUN_V=/eddy|flo\b|grandma|grandpa|reed|rocko|sandy|shelley|jacques|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|albert|fred|junior|kathy|ralph/i, MALE_V=/thomas|daniel|henri|paul|nicolas|antoine|mathieu|olivier|reed|rocko|eddy|grandpa|jacques/i;
+const Voice={ voices:[], ok:"speechSynthesis" in window, bad:new Set(), gen:0,
+  // the same name can exist twice on iPhone (standard and Enhanced), so voices are told apart by their URI
+  key(v){ return v.voiceURI||v.name; },
+  quality(v){ const s=(v.voiceURI||"")+" "+v.name; return /premium/i.test(s)?3:/enhanced|amélioré|ameliore|améliorée|neural|natural|online|google/i.test(s)?2:1; },
+  qLabel(q){ return q===3?"Premium":q===2?"Enhanced":"Standard"; },
+  label(v){ return v.name.replace(/\s*\((enhanced|premium|amélioré|améliorée|compact)\)/i,"").trim(); },
+  init(){ if(!this.ok) return; const load=()=>{ try{ this.voices=speechSynthesis.getVoices().filter(v=>/^fr/i.test(v.lang))
+      .sort((a,b)=>(FUN_V.test(a.name)-FUN_V.test(b.name))||((b.lang==="fr-FR")-(a.lang==="fr-FR"))||(this.quality(b)-this.quality(a))); }catch(e){} if(curView==="moi") renderMe(); };
+    load(); try{ speechSynthesis.onvoiceschanged=load; }catch(e){} },
+  find(k){ return this.voices.find(x=>this.key(x)===k)||this.voices.find(x=>x.name===k); },
+  pick(){ const p=S.main.profile; if(p.voice){ const v=this.find(p.voice); if(v&&!this.bad.has(this.key(v))) return v; }
+    // automatic: the best downloaded voice, a man's voice for male pen pals and a woman's for female ones
+    const male=pal().fem===false, ok=this.voices.filter(v=>!FUN_V.test(v.name)&&!this.bad.has(this.key(v)));
+    const rank=v=>this.quality(v)*10+(v.lang==="fr-FR"?4:0)+(MALE_V.test(v.name)===male?2:0);
+    const best=ok.slice().sort((a,b)=>rank(b)-rank(a));
+    // iPhones list standard voices that aren't downloaded and play them silently, so only Enhanced/Premium ones are chosen there
+    if(IOS) return best.find(v=>this.quality(v)>=2)||null;
+    return best[0]||null; },
   session(){ try{ if(navigator.audioSession) navigator.audioSession.type="playback"; }catch(e){} },
   unlocked:false, heard:false, hinted:false,
   unlock(){ if(this.unlocked||!this.ok) return; this.unlocked=true; this.session();
@@ -1462,12 +1474,14 @@ const Voice={ voices:[], ok:"speechSynthesis" in window,
   chunks(t){ const parts=String(t).match(/[^.!?…]+[.!?…]*\s*/g)||[t]; const out=[]; let cur=""; for(const x of parts){ if((cur+x).length>180&&cur){ out.push(cur); cur=""; } cur+=x; } if(cur.trim()) out.push(cur); return out; },
   speak(text,rate){ if(!this.ok){ toast("Text-to-speech isn't available in this browser."); return; }
     const t=String(text).replace(/[«»*_#]/g,"").replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,"").trim(); if(!t) return;
-    const parts=this.chunks(t), v=this.pick(); let started=false;
+    const parts=this.chunks(t), v=this.pick(), gen=++this.gen; let started=false, blocked=false;
+    // a voice that never starts (e.g. deleted from the phone) is skipped and the line is said again with the next best one
+    if(v) setTimeout(()=>{ if(gen===this.gen&&!started&&!blocked){ this.bad.add(this.key(v)); try{ speechSynthesis.cancel(); }catch(e){} this.speak(text,rate); } },1800);
     const go=()=>{ try{
       parts.forEach((c,i)=>{ const u=new SpeechSynthesisUtterance(c); if(v) u.voice=v; u.lang=v?v.lang:"fr-FR"; u.rate=rate||S.main.profile.rate||1; u.volume=1; u.pitch=1;
         u.onstart=()=>{ started=true; this.heard=true; setTalking(true); };
         u.onend=()=>{ if(i===parts.length-1) setTalking(false); };
-        u.onerror=e=>{ setTalking(false); if(e.error==="not-allowed") this.hint(true); };
+        u.onerror=e=>{ setTalking(false); if(e.error==="not-allowed"){ blocked=true; this.hint(true); } else if(e.error==="interrupted"||e.error==="canceled") blocked=true; };
         speechSynthesis.speak(u); });
       speechSynthesis.resume(); this.unlocked=true;
       setTimeout(()=>{ if(!started&&!speechSynthesis.speaking) this.hint(false); },2500);
@@ -1480,8 +1494,17 @@ const Voice={ voices:[], ok:"speechSynthesis" in window,
   },
   hint(blocked){ if(this.hinted) return; this.hinted=true;
     toast(blocked?"Your browser blocks automatic sound: tap ▶ Listen once to switch it on.":"No sound? On iPhone, turn off silent mode (switch on the side) and turn the volume up, then tap ▶ Listen. You can test it in Me → Voice.",9000); },
-  stop(){ try{ speechSynthesis.cancel(); }catch(e){} setTalking(false); }
+  stop(){ this.gen++; try{ speechSynthesis.cancel(); }catch(e){} setTalking(false); }
 };
+function voiceOptions(){ const cur=S.main.profile.voice, sel=v=>cur&&(Voice.key(v)===cur||(!Voice.voices.some(x=>Voice.key(x)===cur)&&v.name===cur))?"selected":"";
+  const opt=v=>`<option value="${esc(Voice.key(v))}" ${sel(v)}>${esc(Voice.label(v))} · ${Voice.qLabel(Voice.quality(v))}${v.lang!=="fr-FR"?" · "+esc(v.lang):""}</option>`;
+  const best=Voice.voices.filter(v=>!FUN_V.test(v.name)&&Voice.quality(v)>=2), std=Voice.voices.filter(v=>!FUN_V.test(v.name)&&Voice.quality(v)<2), fun=Voice.voices.filter(v=>FUN_V.test(v.name));
+  return `<option value="" ${cur?"":"selected"}>Automatic: best voice for each pen pal (recommended)</option>`
+    +(best.length?`<optgroup label="Best quality">${best.map(opt).join("")}</optgroup>`:"")
+    +(std.length?`<optgroup label="Standard (can sound grainy)">${std.map(opt).join("")}</optgroup>`:"")
+    +(fun.length?`<optgroup label="Fun voices">${fun.map(opt).join("")}</optgroup>`:""); }
+function voiceDiag(){ const best=Voice.voices.filter(v=>!FUN_V.test(v.name)&&Voice.quality(v)>=2), v=Voice.pick();
+  return `${Voice.voices.length} French voice${Voice.voices.length===1?"":"s"} found · best quality: ${best.length?best.map(x=>esc(Voice.label(x))+" ("+Voice.qLabel(Voice.quality(x))+")").join(", "):"none yet"} · ${esc(pal().name)} uses: ${v?esc(Voice.label(v))+" ("+Voice.qLabel(Voice.quality(v))+")":"the phone's default voice"}`; }
 function setTalking(on){ $$(".av.live").forEach(el=>el.classList.toggle("talking",on)); document.body.classList.toggle("speaking",on); }
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 let micBlocked=false, rec=null;
@@ -2135,9 +2158,9 @@ function renderMe(){
       <label class="row" style="font-weight:600;font-size:14px;flex-wrap:nowrap"><input type="checkbox" id="pShowEN" ${p.showEN?"checked":""}> Show the English translation under every message</label>
       <button class="btn primary" id="saveProf">Save</button></div>
     <div class="card stack"><h2>Voice</h2>
-      ${Voice.ok?`<label class="f">French voice<select id="vSel"><option value="" ${S.main.profile.voice?"":"selected"}>Automatic (recommended)</option>${Voice.voices.map(v=>`<option value="${esc(v.name)}" ${S.main.profile.voice===v.name?"selected":""}>${esc(v.name)} (${esc(v.lang)})</option>`).join("")}</select></label>
+      ${Voice.ok?`<label class="f">French voice<select id="vSel">${voiceOptions()}</select></label>
       <label class="f">Speed: <b id="rateV">${p.rate}</b><input type="range" id="vRate" min="0.6" max="1.2" step="0.05" value="${p.rate}"></label>
-      <button class="btn" id="vTest">${I.play} Test the voice</button><p class="muted mono" id="vDiag" style="font-size:12px">${Voice.voices.length} French voice${Voice.voices.length===1?"":"s"} found · ${esc(S.main.profile.voice||"automatic system voice")}</p>`:`<p class="muted">Your browser doesn't offer text-to-speech.</p>`}
+      <button class="btn" id="vTest">${I.play} Test the voice</button><p class="muted mono" id="vDiag" style="font-size:12px">${voiceDiag()}</p>`:`<p class="muted">Your browser doesn't offer text-to-speech.</p>`}
       <p class="muted" style="font-size:13.5px">No sound? Turn off your phone's silent mode, turn the volume up, check no Bluetooth headphones are connected, then tap "Test the voice".</p>
       <button class="btn" id="micHelp">${I.mic} How to speak out loud</button></div>
   </div>
