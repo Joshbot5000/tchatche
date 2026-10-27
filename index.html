@@ -11,10 +11,39 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch-375x667@2.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch-375x812@3.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch-414x896@2.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch-414x896@3.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch-390x844@3.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch-428x926@3.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch-393x852@3.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch-430x932@3.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch-402x874@3.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch-440x956@3.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 420px) and (device-height: 912px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch-420x912@3.png">
 <style>html{color-scheme:dark}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>#splash{position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at 50% 42%,#1a2160 0%,#0a0e2a 45%,#060814 80%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .45s ease,transform .45s ease}
+#splash.out{opacity:0;transform:scale(1.06);pointer-events:none}
+.sp-logo{position:relative;width:118px;height:118px}
+.sp-logo svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 28px rgba(91,124,255,.75))}
+.sp-ring{position:absolute;inset:-20px;border-radius:50%;background:conic-gradient(from 0deg,#3ee6ff,#5b7cff,#9b5cff,#ff3d8b,#3ee6ff);-webkit-mask:radial-gradient(circle,transparent 66%,#000 67.5%,#000 69%,transparent 70%);mask:radial-gradient(circle,transparent 66%,#000 67.5%,#000 69%,transparent 70%)}
+.sp-word{font-family:"Unbounded","Avenir Next",system-ui,sans-serif;font-weight:700;font-size:30px;letter-spacing:-.02em;color:#fff}
+.sp-tag{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#3ee6ff;opacity:.85}
+.sp-logo{animation:spPop .7s cubic-bezier(.2,1.4,.3,1) both}
+.sp-ring{animation:spSpin 1.6s linear infinite}
+.sp-word{animation:spUp .55s .2s ease both}
+.sp-tag{animation:spUp .55s .35s ease both}
+@keyframes spPop{0%{transform:scale(.82)}60%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes spUp{from{transform:translateY(8px);opacity:.2}to{transform:none;opacity:1}}
+@keyframes spSpin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){#splash *{animation:none!important}}</style>
 <script>window.TCH_OFFLINE=true;window.TCH_HOSTED=true;</script>
 </head>
 <body>
+<div id="splash" aria-hidden="true"><div class="sp-logo"><div class="sp-ring"></div><svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="spg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3ee6ff"/><stop offset=".4" stop-color="#5b7cff"/><stop offset=".7" stop-color="#9b5cff"/><stop offset="1" stop-color="#ff3d8b"/></linearGradient><radialGradient id="sph" cx=".3" cy=".2" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="512" height="512" rx="116" fill="url(#spg)"/><rect width="512" height="512" rx="116" fill="url(#sph)"/><g transform="translate(256 262)"><path d="M-150 -120 h300 a40 40 0 0 1 40 40 v130 a40 40 0 0 1 -40 40 h-150 l-70 60 v-60 h-80 a40 40 0 0 1 -40 -40 v-130 a40 40 0 0 1 40 -40z" fill="#fff" opacity=".96" transform="scale(.82)"/><path d="M-62 -66 h124 v30 h-46 v112 h-32 v-112 h-46z" fill="#3a2dbf"/></g></svg></div><div class="sp-word">Tchatche</div><div class="sp-tag">ton pen pal français</div></div>
+<script>(function(){var t0=Date.now(),done=false;function hide(){if(done)return;done=true;var s=document.getElementById("splash");if(!s)return;s.classList.add("out");setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s)},520);}
+window.tchSplashDone=function(){setTimeout(hide,Math.max(0,1200-(Date.now()-t0)));};setTimeout(hide,4000);})();</script>
 <title>Tchatche</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -342,6 +371,14 @@ body.speaking .wave i{animation:eq .5s ease-in-out infinite alternate;opacity:1;
 .modal{background:var(--surface-solid);border:1px solid var(--line-strong);border-radius:24px;padding:24px;max-width:680px;width:100%;display:flex;flex-direction:column;gap:16px;max-height:calc(100vh - 32px);overflow-y:auto;box-shadow:0 0 60px -20px rgba(91,124,255,.9)}
 
 .chip svg{width:13px;height:13px;fill:currentColor}
+/* app feel */
+html{-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+button,select,.nav-btn,.chip,.btn,.iconbtn,.tabbar,.rail{-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-touch-callout:none}
+.btn:active,.iconbtn:active,.chip:active,.mic-big:active{transform:scale(.95)}
+.nav-btn:active svg{transform:scale(.88)}
+.nav-btn svg{transition:transform .15s}
+main .view:not([hidden]){animation:viewIn .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){*,body::before{animation:none!important;transition:none!important}}
 </style>
 
@@ -2009,7 +2046,7 @@ Reply with ONLY JSON: {"tips":[{"word":"","ipa":"/…/","tip":""}],"overall":""}
 }
 
 /* ---------------- offline: reserve, queue, download, sync ---------------- */
-addEventListener("offline",()=>{ netOK=false; offlineSince=offlineSince||Date.now(); renderAIBanner(); toast("You're offline: carry on, everything is saved."); });
+addEventListener("offline",()=>{ netOK=false; offlineSince=offlineSince||Date.now(); renderAIBanner(); setTimeout(warmLocal,300); toast("You're offline: carry on, everything is saved."); });
 addEventListener("online",()=>{ netOK=true; renderAIBanner();
   if(loaded&&Store.mode==="cloud"&&offlineSince){ saveMain(); saveChat(); Object.values(S.cards).filter(c=>Math.max(c.last||0,c.added||0)>=offlineSince).forEach(c=>Store.saveCard(c)); }
   offlineSince=0; toast("Back online!"); flushQueue(); });
@@ -2391,6 +2428,7 @@ function localTurns(){ const hist=S.chat.msgs.filter(m=>!m.pending&&m.text&&!/^\
   hist.forEach(m=>{ const role=m.role==="u"?"user":"assistant"; const last=out[out.length-1]; if(last&&last.role===role) last.content+="\n"+m.text; else out.push({role,content:m.text}); });
   while(out.length&&out[0].role!=="user") out.shift(); if(!out.length) out.push({role:"user",content:"Salut !"});
   out[0].content=offlineSys()+"\n\n---\n\n"+out[0].content; if(out[out.length-1].role!=="user") out.push({role:"user",content:"(continue)"}); return out; }
+function warmLocal(){ if(Local.ready()&&!Local.engine&&!Local.loading&&!aiReady()) Local.load().catch(()=>{}); }
 async function localReply(){
   const um=[...S.chat.msgs].reverse().find(x=>x.role==="u");
   const am={id:uid(),role:"a",text:"",ts:Date.now(),pending:true,local:true}; S.chat.msgs.push(am); chatBusy=true; renderChat(); if(callOpen()) renderCall(); setThinking(true);
@@ -2479,6 +2517,8 @@ async function boot(){
   if(!S.main.voiceFix1){ S.main.profile.voice=""; S.main.voiceFix1=true; saveMain(); }
   if(!S.main.profile.onboarded) openOnboarding();
   $("#v-chat").dataset.built=""; renderAll();
+  if(window.tchSplashDone) window.tchSplashDone();
+  setTimeout(warmLocal,2500);
 }
 boot();
 </script>
