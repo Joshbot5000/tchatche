@@ -2390,6 +2390,8 @@ function bindConj(){ const go=$("#conjGo"); if(!go) return; const run=()=>{ conj
 
 /* ---------------- on-device pen pal (WebLLM, hosted app only) ---------------- */
 // only models WebLLM marks as able to run within a phone's GPU limits; each entry lists fallbacks in order
+// a pen-pal chat needs far less than the default 4096-token window; the smaller KV cache is what lets these fit in an iPhone's memory
+const LOCAL_CTX=1280;
 const LOCAL_MODELS=[
  {id:"balanced",bases:["Qwen3-1.7B"],label:"Balanced · Qwen 3 (1.7B)",size:"≈ 1 GB",note:"Recommended for iPhone: natural French and quick replies."},
  {id:"light",bases:["gemma3-1b-it","Llama-3.2-1B-Instruct"],label:"Light · Gemma 3 (1B)",size:"≈ 0.7 GB",note:"Fastest and smallest, for older phones. Simpler French."},
@@ -2423,7 +2425,9 @@ const Local={ L:null, engine:null, loading:null,
     throw new Error("This model can't run on this device. Choose another one."); },
   async load(onProgress){ if(this.engine) return this.engine; if(this.loading) return this.loading;
     const s=this.saved(); if(!s) throw new Error("no model installed");
-    this.loading=(async()=>{ const L=await this.lib(); const e=await L.CreateMLCEngine(s.id,{initProgressCallback:p=>{ if(onProgress) try{ onProgress(p); }catch(err){} }}); this.engine=e; return e; })();
+    this.loading=(async()=>{ const L=await this.lib(); lsSet("tch_local_loading",{id:s.id,ts:Date.now()});
+      const e=await L.CreateMLCEngine(s.id,{initProgressCallback:p=>{ if(onProgress) try{ onProgress(p); }catch(err){} }},{context_window_size:LOCAL_CTX});
+      lsSet("tch_local_loading",null); this.engine=e; return e; })();
     try{ return await this.loading; } finally{ this.loading=null; } },
   async install(choice,onProgress){ const id=await this.resolve(choice), base=choice;
     lsSet("tch_local",{id,base,ready:false}); try{ if(navigator.storage&&navigator.storage.persist) await navigator.storage.persist(); }catch(e){}
@@ -2444,11 +2448,15 @@ const Local={ L:null, engine:null, loading:null,
 function offlineSys(){ const pp=pal(), p=S.main.profile;
   return `Tu es ${pp.name}, ${pp.age} ans, tu vis à ${pp.city} et tu es ${pp.job}. Tu es le correspondant français de ${p.name||"ton ami"}, qui apprend le français (niveau ${levelEst()}). Ce que tu sais de cette personne : ${S.main.memory.slice(-8).map(m=>m.t).join(" ; ")||"pas grand-chose encore"}.
 Règles : réponds UNIQUEMENT en français naturel, comme un ami qui envoie un message : 1 à 3 phrases courtes, ${pp.tu===false?"vouvoiement":"tutoiement"}, ton chaleureux, puis une question pour continuer la conversation. Ne corrige pas ses fautes, ne traduis pas, n'écris jamais en anglais.`; }
-function localTurns(){ const hist=S.chat.msgs.filter(m=>!m.pending&&m.text&&!/^\[(Jeu de rôle|Consigne)\]/.test(m.text)).slice(-8); const out=[];
+function localTurns(){ const hist=S.chat.msgs.filter(m=>!m.pending&&m.text&&!/^\[(Jeu de rôle|Consigne)\]/.test(m.text)).slice(-6).map(m=>({...m,text:String(m.text).slice(0,400)})); const out=[];
   hist.forEach(m=>{ const role=m.role==="u"?"user":"assistant"; const last=out[out.length-1]; if(last&&last.role===role) last.content+="\n"+m.text; else out.push({role,content:m.text}); });
   while(out.length&&out[0].role!=="user") out.shift(); if(!out.length) out.push({role:"user",content:"Salut !"});
   out[0].content=offlineSys()+"\n\n---\n\n"+out[0].content; if(out[out.length-1].role!=="user") out.push({role:"user",content:"(continue)"}); return out; }
-function warmLocal(){ if(Local.ready()&&!Local.engine&&!Local.loading&&!aiReady()) Local.load().catch(()=>{}); }
+function warmLocal(){ if(Local.ready()&&!Local.engine&&!Local.loading&&!aiReady()&&!lsGet("tch_local_nowarm")) Local.load().catch(()=>{}); }
+function checkLocalCrash(){ const lf=lsGet("tch_local_loading"); if(!lf) return; lsSet("tch_local_loading",null);
+  const c=(lsGet("tch_local_crashes")||0)+1; lsSet("tch_local_crashes",c); lsSet("tch_local_nowarm",true);
+  const s=lsGet("tch_local"); if(s){ s.ready=false; lsSet("tch_local",s); }
+  lsSet("tch_local_err",{msg:"Your phone closed the app while loading the AI into memory (it ran out of memory). Close your other apps and try again"+(/gemma3|1B/.test(lf.id)?". If it keeps happening, this iPhone can't run an offline AI; your pen pal will use saved messages instead.":", or choose Light, which needs much less memory."),raw:"App was closed during model load: "+lf.id,ts:Date.now()}); }
 async function localReply(){
   const um=[...S.chat.msgs].reverse().find(x=>x.role==="u");
   const am={id:uid(),role:"a",text:"",ts:Date.now(),pending:true,local:true}; S.chat.msgs.push(am); chatBusy=true; renderChat(); if(callOpen()) renderCall(); setThinking(true);
@@ -2495,7 +2503,7 @@ function localCardHTML(){
   ${s&&s.ready?`<label class="row" style="font-weight:600;font-size:14px;flex-wrap:nowrap;align-items:flex-start"><input type="checkbox" id="lmProv" ${S.main.profile.provisional!==false?"checked":""} style="margin-top:3px"> <span>Provisional corrections offline<br><span class="muted" style="font-weight:400;font-size:13px">The offline AI suggests corrections marked "to be confirmed". The full AI re-checks them online; only confirmed ones become flashcards.</span></span></label><div class="row"><button class="btn primary" id="lmTest">Test</button><button class="btn ghost sm" id="lmDel">Delete (frees up space)</button></div>`
   :`${err&&!lmBusy?`<div class="banner" style="background:rgba(255,90,131,.08);border-color:rgba(255,90,131,.35)"><b>Last attempt failed:</b> ${esc(err.msg)}<div class="mono muted" style="font-size:11px;margin-top:6px;word-break:break-word">${esc(String(err.raw).slice(0,220))}</div></div>`:""}
   <p class="muted mono" style="font-size:12px">${esc(devLine)}</p>
-  <div class="stack" id="lmPick">${LOCAL_MODELS.map((x,i)=>`<label class="row" style="flex-wrap:nowrap;align-items:flex-start;gap:10px;cursor:pointer"><input type="radio" name="lm" value="${x.id}" ${i===0?"checked":""} style="margin-top:4px"><span><b>${esc(x.label)}</b> <span class="muted mono" style="font-size:12px">${x.size}</span><br><span class="muted" style="font-size:13px">${esc(x.note)}</span></span></label>`).join("")}</div>
+  <div class="stack" id="lmPick">${LOCAL_MODELS.map((x,i)=>`<label class="row" style="flex-wrap:nowrap;align-items:flex-start;gap:10px;cursor:pointer"><input type="radio" name="lm" value="${x.id}" ${(lsGet("tch_local_crashes")?x.id==="light":i===0)?"checked":""} style="margin-top:4px"><span><b>${esc(x.label)}</b> <span class="muted mono" style="font-size:12px">${x.size}</span><br><span class="muted" style="font-size:13px">${esc(x.note)}</span></span></label>`).join("")}</div>
   <button class="btn primary" id="lmGo" ${lmBusy?"disabled":""} style="align-self:flex-start">${lmBusy?"Downloading…":"Download to my device"}</button>`}
   <div id="lmProg" ${lmBusy?"":"hidden"}><div class="bar"><i id="lmBar" style="width:${lmPct}%"></i></div><p class="muted mono" id="lmTxt" style="font-size:12px;margin-top:6px">${esc(lmMsg)}</p></div></div>`;
 }
@@ -2505,7 +2513,7 @@ function bindLocal(){
   if(go) go.onclick=async()=>{ const base=(document.querySelector('input[name="lm"]:checked')||{}).value||LOCAL_MODELS[0].id;
     lmBusy=true; lmPct=0; lmMsg="Preparing…"; renderMe();
     try{ await Local.install(base,p=>{ lmPct=Math.round((p.progress||0)*100); lmMsg=`${lmPct} % · ${String(p.text||"").slice(0,120)}`; const b=$("#lmBar"), t=$("#lmTxt"); if(b) b.style.width=lmPct+"%"; if(t) t.textContent=lmMsg; });
-      lmBusy=false; lsSet("tch_local_err",null); toast(`Installed! ${pal().name} can now reply with no internet.`,6000); }
+      lmBusy=false; lsSet("tch_local_err",null); lsSet("tch_local_nowarm",null); lsSet("tch_local_crashes",0); toast(`Installed! ${pal().name} can now reply with no internet.`,6000); }
     catch(e){ lmBusy=false; const raw=String(e&&e.message||e); lsSet("tch_local_err",{msg:explainLocalErr(raw),raw,ts:Date.now()}); toast("Install failed: "+explainLocalErr(raw),9000); }
     renderMe(); };
   const t=$("#lmTest"); if(t) t.onclick=async e=>{ const b=e.currentTarget; b.disabled=true; b.textContent=`${pal().name} is waking up…`;
@@ -2544,6 +2552,7 @@ async function boot(){
   if(window.tchSplashDone) window.tchSplashDone();
   setTimeout(warmLocal,2500);
 }
+try{ checkLocalCrash(); }catch(e){}
 boot();
 </script>
 
