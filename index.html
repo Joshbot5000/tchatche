@@ -774,6 +774,321 @@ const SEED_MORE = [
 ];
 SEED.forEach(x=>{ x[5]="Essentiels"; });
 SEED_MORE.forEach(g=>g.items.forEach(x=>{ x[5]=g.t; SEED.push(x); }));
+/* offline library, part 2: everyday conversation situations */
+const SEED_MORE2 = [
+{t:"Premières rencontres", items:[
+["Enchanté(e) !","Nice to meet you!","courant","Enchanté, moi c'est Josh.","Agrees with the speaker: enchanté (m) / enchantée (f)."],
+["Moi, c'est…","I'm… (introducing yourself)","familier","Salut, moi c'est Josh, et toi ?",""],
+["Tu viens d'où ?","Where are you from?","courant","Tu viens d'où, à la base ?","« À la base » = originally."],
+["Tu fais quoi dans la vie ?","What do you do (for a living)?","courant","Et toi, tu fais quoi dans la vie ?",""],
+["Ça fait combien de temps que tu habites ici ?","How long have you lived here?","courant","Ça fait combien de temps que tu habites à Lyon ?","Present tense with « ça fait… que »."],
+["On se connaît ?","Have we met?","courant","Pardon, on se connaît ?",""],
+["Ta tête me dit quelque chose.","You look familiar.","familier","Ta tête me dit quelque chose, on s'est déjà vus ?",""],
+["Je te présente…","Let me introduce…","courant","Je te présente Léa, une amie de la fac.",""],
+["Comment tu as connu… ?","How do you know…?","courant","Comment tu as connu Thomas ?",""],
+["On s'est rencontrés à la fac.","We met at uni.","courant","On s'est rencontrés à la fac, en première année.",""],
+["Tu es là pour longtemps ?","Are you here for long?","courant","Tu es là pour longtemps ou juste pour le week-end ?",""],
+["Ça te plaît, ici ?","Do you like it here?","courant","Alors, Lyon, ça te plaît ?",""],
+["On peut se tutoyer ?","Shall we use « tu »?","courant","On peut se tutoyer, non ?","Proposing to switch from vous to tu."],
+["Ravi(e) de faire votre connaissance.","Pleased to meet you (formal).","soutenu","Ravi de faire votre connaissance, Madame Martin.",""]]},
+{t:"Faire des plans", items:[
+["Tu es dispo samedi ?","Are you free on Saturday?","familier","Tu es dispo samedi soir ?","« Dispo » = disponible."],
+["On se voit quand ?","When shall we meet?","courant","On se voit quand, cette semaine ?",""],
+["On se retrouve où ?","Where shall we meet?","courant","On se retrouve où ? Devant le métro ?",""],
+["Ça te dirait de… ?","Would you fancy…?","courant","Ça te dirait d'aller au marché dimanche ?","Conditional: softer than « ça te dit »."],
+["On remet ça à une autre fois ?","Shall we do it another time?","courant","Je suis malade, on remet ça à une autre fois ?",""],
+["Je ne vais pas pouvoir venir.","I won't be able to come.","courant","Désolé, je ne vais pas pouvoir venir ce soir.",""],
+["Je te confirme demain.","I'll confirm tomorrow.","courant","Je te confirme demain si je peux venir.",""],
+["Ça marche pour moi.","That works for me.","courant","Samedi 15 h ? Ça marche pour moi.",""],
+["Vers quelle heure ?","Around what time?","courant","On se voit vers quelle heure ?",""],
+["Je passe te chercher.","I'll come and pick you up.","courant","Je passe te chercher à 20 h.",""],
+["On s'organise comment ?","How shall we organise it?","courant","Pour le week-end, on s'organise comment ?",""],
+["Préviens-moi.","Let me know.","courant","Préviens-moi si tu es en retard.","« Prévenir quelqu'un » = to let someone know / warn."],
+["Annuler à la dernière minute","to cancel at the last minute","courant","Il a annulé à la dernière minute.",""],
+["Je suis libre à partir de 18 h.","I'm free from 6 pm.","courant","Je suis libre à partir de 18 h, ça te va ?",""]]},
+{t:"Au téléphone", items:[
+["Allô ?","Hello? (on the phone)","courant","Allô ? Oui, c'est moi.","Only used on the phone."],
+["C'est de la part de qui ?","Who's calling?","courant","— Je voudrais parler à Marie. — C'est de la part de qui ?",""],
+["Ne quittez pas.","Please hold.","soutenu","Ne quittez pas, je vous la passe.",""],
+["Je vous le passe.","I'll put you through to him.","courant","Un instant, je vous le passe.","« Je vous la passe » for a woman."],
+["Tu m'entends ?","Can you hear me?","courant","Allô ? Tu m'entends ? Ça coupe.",""],
+["Ça coupe.","You're breaking up.","courant","Désolé, ça coupe, je te rappelle.",""],
+["Je te rappelle.","I'll call you back.","courant","Je suis au volant, je te rappelle.",""],
+["Laisser un message","to leave a message","courant","Je peux lui laisser un message ?",""],
+["Je suis tombé(e) sur son répondeur.","I got his/her voicemail.","courant","J'ai appelé, mais je suis tombé sur son répondeur.",""],
+["Raccrocher au nez de quelqu'un","to hang up on someone","familier","Il m'a raccroché au nez !",""],
+["Passer un coup de fil","to make a phone call","familier","Je dois passer un coup de fil.",""],
+["Envoie-moi un texto.","Send me a text.","courant","Envoie-moi un texto quand tu es arrivé.","Also « un SMS »."],
+["Je n'ai plus de batterie.","My phone's about to die.","courant","Je n'ai plus de batterie, je t'appelle plus tard.",""]]},
+{t:"Réagir & relancer", items:[
+["Ah bon ?","Really?","courant","— Il part au Canada. — Ah bon ?",""],
+["C'est vrai ?","Is that right?","courant","Tu as rencontré le président ? C'est vrai ?",""],
+["Et alors ?","And then? / So what?","courant","Et alors, qu'est-ce qu'il a dit ?","Tone matters: curious or dismissive."],
+["Raconte !","Tell me everything!","familier","Tu as vu Léa ? Raconte !",""],
+["Je t'écoute.","Go on, I'm listening.","courant","Vas-y, je t'écoute.",""],
+["C'est-à-dire ?","Meaning?","courant","— C'est compliqué. — C'est-à-dire ?",""],
+["Comment ça ?","What do you mean?","courant","Comment ça, tu ne viens pas ?",""],
+["Ah, d'accord.","Oh, I see.","courant","Ah, d'accord, je comprends mieux.",""],
+["Je vois.","I see.","courant","Je vois. Et maintenant, tu fais quoi ?",""],
+["Exactement !","Exactly!","courant","— Il fallait partir plus tôt. — Exactement !",""],
+["Ça m'étonnerait.","I doubt it.","courant","Qu'il arrive à l'heure ? Ça m'étonnerait.","« Ça m'étonnerait que » + subjunctive."],
+["Tu plaisantes ?","Are you kidding?","courant","Tu plaisantes ? C'est génial !",""],
+["C'est dingue !","That's crazy!","familier","Il a couru 100 km ? C'est dingue !",""],
+["Pareil pour moi.","Same here.","familier","— Je suis crevé. — Pareil pour moi.",""],
+["Moi non plus.","Me neither.","courant","— Je n'aime pas le froid. — Moi non plus.",""],
+["Moi aussi.","Me too.","courant","— J'adore Paris. — Moi aussi.",""]]},
+{t:"Goûts & préférences", items:[
+["J'adore ça.","I love it.","courant","Les crêpes ? J'adore ça.","« Ça » for things in general."],
+["Je ne suis pas fan.","I'm not a fan.","familier","Le rap, je ne suis pas fan.",""],
+["Ce n'est pas mon truc.","It's not my thing.","familier","La danse, ce n'est pas mon truc.",""],
+["Je préfère… à…","I prefer… to…","courant","Je préfère la mer à la montagne.","« Préférer A à B »."],
+["J'ai un faible pour…","I have a soft spot for…","courant","J'ai un faible pour le chocolat noir.",""],
+["Je suis fan de…","I'm a big fan of…","familier","Je suis fan de foot depuis tout petit.",""],
+["Ça ne me dit rien.","I don't fancy it / It doesn't ring a bell.","courant","Un film d'horreur ? Ça ne me dit rien.","Also: « ce nom ne me dit rien »."],
+["J'ai horreur de…","I can't stand…","courant","J'ai horreur de faire la queue.",""],
+["Je ne supporte pas…","I can't bear…","courant","Je ne supporte pas les gens impolis.",""],
+["C'est pas terrible.","It's not great.","familier","Le film ? Franchement, c'est pas terrible.","Careful: « terrible » on its own can mean great!"],
+["C'est génial !","It's great!","courant","Ton idée, c'est génial !",""],
+["Ça me plaît.","I like it.","courant","Cette ville me plaît beaucoup.","The thing you like is the subject."],
+["Je ne m'en lasse pas.","I never get tired of it.","courant","Cette chanson, je ne m'en lasse pas.","Spoken: « je m'en lasse pas »."],
+["Je suis plutôt thé que café.","I'm more of a tea person than coffee.","familier","Moi, je suis plutôt thé que café.",""]]},
+{t:"Famille & amis", items:[
+["Mes parents","my parents","courant","Je rentre voir mes parents ce week-end.",""],
+["Mon frère / ma sœur","my brother / my sister","courant","Ma sœur a deux ans de plus que moi.",""],
+["Mon meilleur ami / ma meilleure amie","my best friend","courant","C'est ma meilleure amie depuis le lycée.",""],
+["Mon copain / ma copine","my boyfriend / my girlfriend","courant","Ma copine est italienne.","Can also just mean « my friend »: context tells."],
+["Les beaux-parents","the in-laws","courant","On passe Noël chez mes beaux-parents.",""],
+["Être fils / fille unique","to be an only child","courant","Je suis fils unique.",""],
+["On s'entend bien.","We get on well.","courant","Avec mon frère, on s'entend très bien.","« S'entendre avec » = to get on with."],
+["Je tiens de mon père.","I take after my dad.","courant","Pour le caractère, je tiens de mon père.",""],
+["Ressembler à","to look like","courant","Tu ressembles beaucoup à ta mère.",""],
+["Prendre des nouvelles","to check in on someone","courant","J'appelle ma grand-mère pour prendre des nouvelles.",""],
+["Une bande de potes","a group of mates","familier","On est partis en vacances avec une bande de potes.",""],
+["Perdre quelqu'un de vue","to lose touch with someone","courant","On s'est perdus de vue après le lycée.",""],
+["Garder le contact","to keep in touch","courant","On a gardé le contact malgré la distance.",""],
+["Un repas de famille","a family meal","courant","Dimanche, il y a un repas de famille chez ma tante.",""]]},
+{t:"Politesse & excuses", items:[
+["Excusez-moi de vous déranger.","Sorry to bother you.","soutenu","Excusez-moi de vous déranger, vous avez l'heure ?",""],
+["Je suis vraiment désolé(e).","I'm really sorry.","courant","Je suis vraiment désolé pour hier.",""],
+["Ce n'est pas grave.","It doesn't matter / No harm done.","courant","Tu as oublié ? Ce n'est pas grave.",""],
+["Pardon ?","Sorry? (didn't catch that)","courant","Pardon ? Vous pouvez répéter ?",""],
+["Vous pourriez répéter, s'il vous plaît ?","Could you repeat that, please?","courant","Vous pourriez répéter plus lentement, s'il vous plaît ?",""],
+["Merci mille fois !","Thanks a million!","courant","Merci mille fois pour ton aide !",""],
+["C'est gentil.","That's kind.","courant","Tu m'as gardé une place ? C'est gentil.",""],
+["Avec plaisir.","With pleasure.","courant","— Tu peux m'aider ? — Avec plaisir.",""],
+["De rien.","You're welcome.","courant","— Merci ! — De rien.",""],
+["Après vous.","After you.","courant","Je vous en prie, après vous.",""],
+["Je ne voulais pas te vexer.","I didn't mean to offend you.","courant","Désolé, je ne voulais pas te vexer.",""],
+["Ça ne se fait pas.","That's not the done thing.","courant","Arriver les mains vides, ça ne se fait pas.",""],
+["Bonne journée !","Have a good day!","courant","Merci, bonne journée !","In the evening: « bonne soirée »."],
+["À la prochaine !","See you next time!","courant","Merci pour tout, à la prochaine !",""]]},
+{t:"Problèmes & réclamations", items:[
+["Ça ne marche pas.","It doesn't work.","courant","Le distributeur ne marche pas.",""],
+["Il y a une erreur dans l'addition.","There's a mistake in the bill.","courant","Excusez-moi, il y a une erreur dans l'addition.",""],
+["Je voudrais me faire rembourser.","I'd like a refund.","courant","Le produit est cassé, je voudrais me faire rembourser.",""],
+["C'est inadmissible !","This is unacceptable!","soutenu","Trois heures d'attente, c'est inadmissible !",""],
+["Je voudrais parler au responsable.","I'd like to speak to the manager.","courant","Je voudrais parler au responsable, s'il vous plaît.",""],
+["Ce n'est pas ce que j'ai commandé.","That's not what I ordered.","courant","Pardon, ce n'est pas ce que j'ai commandé.",""],
+["Être en panne","to be broken down / out of order","courant","L'ascenseur est en panne.","For machines, cars, lifts."],
+["J'ai perdu mon portefeuille.","I've lost my wallet.","courant","J'ai perdu mon portefeuille dans le métro.",""],
+["On m'a volé mon téléphone.","My phone has been stolen.","courant","On m'a volé mon téléphone, je dois porter plainte.",""],
+["Porter plainte","to report it to the police","courant","Il faut porter plainte au commissariat.",""],
+["Ça ne m'arrange pas du tout.","That really doesn't suit me.","courant","Lundi ? Ça ne m'arrange pas du tout.",""],
+["C'est la galère.","It's a real hassle.","familier","Trouver un appart à Paris, c'est la galère.",""],
+["Ras le bol !","I've had it up to here!","familier","Encore une grève ? Ras le bol !",""],
+["Il y a un malentendu.","There's been a misunderstanding.","courant","Je crois qu'il y a un malentendu.",""]]},
+{t:"Conseils", items:[
+["Tu devrais…","You should…","courant","Tu devrais te reposer un peu.","Conditional of devoir."],
+["À ta place, je…","If I were you, I'd…","courant","À ta place, je l'appellerais.","+ conditional."],
+["Ça vaudrait le coup de…","It'd be worth…","courant","Ça vaudrait le coup de réserver.",""],
+["Je te conseille de…","I'd advise you to…","courant","Je te conseille de partir tôt.",""],
+["Tu n'as qu'à…","Just… / All you have to do is…","familier","Tu n'as qu'à lui demander !","Can sound a bit blunt."],
+["Il vaut mieux…","It's better to…","courant","Il vaut mieux prendre le train.","« Il vaut mieux que » + subjunctive."],
+["Et si on… ?","What if we…?","courant","Et si on allait à la plage ?","+ imperfect."],
+["Pourquoi tu ne… pas ?","Why don't you…?","courant","Pourquoi tu ne lui écris pas ?",""],
+["Fais gaffe !","Watch out!","familier","Fais gaffe, la route est glissante.","Neutral: « fais attention »."],
+["Ne t'en fais pas.","Don't worry about it.","courant","Ne t'en fais pas, ça va aller.",""],
+["Ça va aller.","It'll be OK.","courant","Respire, ça va aller.",""],
+["Ce serait mieux de…","It would be better to…","courant","Ce serait mieux de partir maintenant.",""],
+["Prends ton temps.","Take your time.","courant","Pas de stress, prends ton temps.",""]]},
+{t:"Raconter une histoire", items:[
+["Tu ne devineras jamais…","You'll never guess…","courant","Tu ne devineras jamais qui j'ai croisé !",""],
+["Il m'est arrivé un truc…","Something happened to me…","familier","Il m'est arrivé un truc bizarre ce matin.",""],
+["Au début…","At first…","courant","Au début, je n'ai rien compris.",""],
+["Tout à coup","suddenly","courant","Tout à coup, la lumière s'est éteinte.","Also « soudain »."],
+["Ensuite","then / after that","courant","Ensuite, on est allés manger.",""],
+["Finalement","in the end","courant","Finalement, on est restés à la maison.","Not « at last » (that's « enfin »)."],
+["Enfin !","At last!","courant","Enfin ! Tu es là !",""],
+["À ce moment-là","at that moment","courant","À ce moment-là, j'ai compris.",""],
+["Pendant que","while","courant","Pendant que je cuisinais, il a appelé.",""],
+["Je me souviens que…","I remember that…","courant","Je me souviens qu'il faisait très froid.","« Se souvenir de quelque chose »."],
+["Quand j'étais petit(e)…","When I was little…","courant","Quand j'étais petit, je voulais être pilote.","Imperfect for background."],
+["Pour faire court…","To cut a long story short…","courant","Bref, pour faire court, on a raté l'avion.",""],
+["Du coup, j'ai dû…","So I had to…","familier","Il n'y avait plus de bus, du coup j'ai dû marcher.",""],
+["Ça m'a fait rire.","It made me laugh.","courant","Sa réaction m'a fait rire.",""]]},
+{t:"Projets & avenir", items:[
+["J'ai l'intention de…","I intend to…","courant","J'ai l'intention de m'installer en France.",""],
+["Je compte…","I'm planning to…","courant","Je compte partir en septembre.",""],
+["J'aimerais bien…","I'd really like to…","courant","J'aimerais bien apprendre la guitare.",""],
+["Je rêve de…","I dream of…","courant","Je rêve de vivre à Paris.",""],
+["Dans un an","in a year's time","courant","Dans un an, je serai diplômé.","« Dans » = from now; « en » = within."],
+["Un jour","one day","courant","Un jour, je parlerai couramment français.",""],
+["Je suis en train de…","I'm in the middle of…","courant","Je suis en train de préparer mes exams.",""],
+["Je viens de…","I've just…","courant","Je viens de finir mon stage.","Recent past: venir de + infinitive."],
+["Je vais…","I'm going to…","courant","Je vais postuler dans un cabinet parisien.","Near future: aller + infinitive."],
+["Si tout va bien…","If all goes well…","courant","Si tout va bien, je pars en juin.",""],
+["On verra bien.","We'll see how it goes.","courant","Pour l'instant, on verra bien.",""],
+["Postuler à un poste","to apply for a job","courant","J'ai postulé à un poste à Lyon.",""],
+["Se lancer","to take the plunge","courant","Allez, je me lance !",""],
+["Avoir des projets","to have plans","courant","Tu as des projets pour l'été ?",""]]},
+{t:"Connecteurs (soutenu)", items:[
+["Cependant","however","soutenu","C'est une bonne idée ; cependant, elle coûte cher.",""],
+["Néanmoins","nevertheless","soutenu","Le projet est risqué. Néanmoins, il mérite d'être tenté.",""],
+["En revanche","on the other hand","courant","Il est timide ; en revanche, son frère est très bavard.",""],
+["Par conséquent","consequently","soutenu","Il a plu ; par conséquent, le match a été annulé.",""],
+["Bien que","although","soutenu","Bien qu'il soit fatigué, il continue.","Always + subjunctive."],
+["Afin de","in order to","soutenu","Je révise afin de réussir mon examen.","« Afin que » + subjunctive."],
+["En effet","indeed","courant","Il est en retard. En effet, son train a été annulé.",""],
+["D'une part… d'autre part…","on the one hand… on the other…","soutenu","D'une part c'est utile, d'autre part c'est rapide.",""],
+["Tout d'abord","first of all","courant","Tout d'abord, je voudrais vous remercier.",""],
+["En outre","moreover","soutenu","En outre, le loyer est raisonnable.",""],
+["Pour conclure","to conclude","courant","Pour conclure, je dirais que c'est positif.",""],
+["Grâce à","thanks to","courant","Grâce à toi, j'ai réussi.","Positive cause; negative: « à cause de »."],
+["À cause de","because of","courant","On est en retard à cause des bouchons.",""],
+["Alors que","whereas","courant","Il travaille alors que moi, je me repose.",""]]},
+{t:"Sport & salle", items:[
+["Faire de la muscu","to do weights","familier","Je fais de la muscu trois fois par semaine.","Short for musculation."],
+["Une séance","a workout / session","courant","Bonne séance aujourd'hui !",""],
+["S'échauffer","to warm up","courant","N'oublie pas de t'échauffer avant de courir.",""],
+["S'étirer","to stretch","courant","Je m'étire après chaque séance.",""],
+["Des pompes","push-ups","courant","Je fais cinquante pompes chaque matin.","« Des tractions » = pull-ups."],
+["Des squats et des fentes","squats and lunges","courant","Aujourd'hui, c'est séance jambes : squats et fentes.",""],
+["Trois séries de dix","three sets of ten","courant","Fais trois séries de dix répétitions.",""],
+["Prendre du muscle","to build muscle","courant","Il a pris du muscle cet été.",""],
+["Faire un footing","to go for a jog","courant","Je vais faire un footing au parc.",""],
+["Être essoufflé(e)","to be out of breath","courant","Après trois étages, je suis essoufflé.",""],
+["Marquer un but","to score a goal","courant","Il a marqué un but à la dernière minute.",""],
+["Supporter une équipe","to support a team","courant","Je supporte le PSG depuis toujours.",""],
+["Se dépasser","to push yourself","courant","À la salle, j'aime me dépasser.",""],
+["Tu regardes le match ?","Are you watching the match?","courant","Tu regardes le match de ce soir ?",""]]},
+{t:"Séries, films & musique", items:[
+["Une série","a TV series","courant","Tu regardes quelle série en ce moment ?",""],
+["Binge-watcher","to binge-watch","familier","J'ai binge-watché toute la saison ce week-end.",""],
+["Pas de spoiler !","No spoilers!","familier","Pas de spoiler, je n'ai pas fini !","Official French word: « divulgâcher »."],
+["En VO","in the original language","courant","Je préfère regarder les films en VO.","VF = dubbed in French; VOSTFR = original with French subtitles."],
+["Les sous-titres","subtitles","courant","Tu peux mettre les sous-titres en français ?",""],
+["Une expo","an exhibition","familier","Il y a une super expo au musée d'Orsay.",""],
+["Ça parle de quoi ?","What's it about?","courant","Ce livre, ça parle de quoi ?",""],
+["Je te le recommande.","I recommend it.","courant","Ce film est génial, je te le recommande.",""],
+["Un navet","a terrible film","familier","Ce film, c'est un vrai navet.","Literally a turnip!"],
+["Un chef-d'œuvre","a masterpiece","courant","Ce roman est un chef-d'œuvre.",""],
+["Ça m'a pris aux tripes.","It really got to me.","familier","La fin du film m'a pris aux tripes.",""],
+["Je suis à fond dans…","I'm really into…","familier","En ce moment, je suis à fond dans le jazz.",""],
+["Un concert","a gig","courant","On va à un concert samedi.",""],
+["Mettre le son plus fort","to turn the volume up","courant","Tu peux mettre le son plus fort ?",""]]},
+{t:"Cuisine", items:[
+["Faire à manger","to cook (a meal)","courant","Ce soir, c'est moi qui fais à manger.",""],
+["Ça sent bon !","That smells good!","courant","Mmm, ça sent bon dans la cuisine !",""],
+["C'est trop salé.","It's too salty.","courant","La soupe est un peu trop salée.","« Sucré » = sweet."],
+["Faire revenir","to brown / sauté","courant","Fais revenir les oignons dans l'huile.",""],
+["Couper en dés","to dice","courant","Coupe les carottes en dés.",""],
+["Préchauffer le four","to preheat the oven","courant","Préchauffe le four à 180 degrés.",""],
+["Goûter","to taste","courant","Tu veux goûter ma sauce ?","« Le goûter » = the afternoon snack."],
+["Être au régime","to be on a diet","courant","Pas de dessert pour moi, je suis au régime.",""],
+["Je suis végétarien(ne).","I'm vegetarian.","courant","Je suis végétarien, vous avez un plat sans viande ?",""],
+["Mettre la table","to set the table","courant","Tu peux mettre la table, s'il te plaît ?",""],
+["Débarrasser","to clear the table","courant","Je débarrasse et je fais la vaisselle.",""],
+["J'ai un petit creux.","I'm a bit peckish.","familier","J'ai un petit creux, on prend un goûter ?",""],
+["Je meurs de faim !","I'm starving!","courant","On mange quand ? Je meurs de faim !",""],
+["Se régaler","to really enjoy a meal","courant","On s'est régalés, merci !",""]]},
+{t:"Démarches & administratif", items:[
+["Prendre rendez-vous","to make an appointment","courant","Il faut prendre rendez-vous en ligne.",""],
+["Remplir un formulaire","to fill in a form","courant","Remplissez ce formulaire, s'il vous plaît.",""],
+["Une pièce d'identité","an ID document","courant","Vous avez une pièce d'identité ?",""],
+["Un justificatif de domicile","proof of address","courant","Il me faut un justificatif de domicile de moins de trois mois.","A classic French paperwork requirement."],
+["Ouvrir un compte en banque","to open a bank account","courant","Je voudrais ouvrir un compte en banque.",""],
+["Un RIB","bank details","courant","Tu peux m'envoyer ton RIB ?","Relevé d'identité bancaire."],
+["La sécu","French social security (health cover)","familier","Je suis remboursé par la sécu.","Short for Sécurité sociale."],
+["Une mutuelle","top-up health insurance","courant","Ma mutuelle rembourse les lunettes.",""],
+["La préfecture","the prefecture (local government office)","courant","Je dois aller à la préfecture pour mon titre de séjour.",""],
+["Un titre de séjour","a residence permit","courant","Mon titre de séjour expire en mars.",""],
+["Signer un bail","to sign a lease","courant","On a signé le bail hier.",""],
+["Faire une demande","to apply","courant","J'ai fait une demande de bourse.",""],
+["Les délais","processing times","courant","Les délais sont de trois semaines.",""],
+["C'est en cours.","It's being processed.","courant","Votre dossier est en cours.",""]]},
+{t:"Urgences", items:[
+["Au secours !","Help!","courant","Au secours ! Quelqu'un est tombé à l'eau !",""],
+["Appelez le 15 !","Call an ambulance!","courant","Appelez le 15, il ne respire plus !","15 = ambulance (SAMU), 17 = police, 18 = fire brigade, 112 = any emergency."],
+["Je me suis blessé(e).","I've injured myself.","courant","Je me suis blessé au poignet.",""],
+["Où sont les urgences ?","Where's A&E?","courant","Où sont les urgences, s'il vous plaît ?",""],
+["J'ai besoin d'aide.","I need help.","courant","Excusez-moi, j'ai besoin d'aide.",""],
+["Ça saigne.","It's bleeding.","courant","Je me suis coupé, ça saigne beaucoup.",""],
+["Il y a le feu !","There's a fire!","courant","Sortez, il y a le feu !",""],
+["Les pompiers","the fire brigade","courant","Les pompiers sont arrivés en cinq minutes.","In France they also handle medical emergencies."],
+["Il y a une pharmacie près d'ici ?","Is there a pharmacy nearby?","courant","Pardon, il y a une pharmacie près d'ici ?",""],
+["Je ne me sens pas en sécurité.","I don't feel safe.","courant","Je ne me sens pas en sécurité dans ce quartier.",""],
+["Faites attention !","Be careful!","courant","Faites attention, le sol est mouillé.",""],
+["Un accident","an accident","courant","Il y a eu un accident sur l'autoroute.",""]]},
+{t:"Humour & taquineries", items:[
+["Je te charrie.","I'm teasing you.","familier","Rigole, je te charrie !",""],
+["C'est pour rire.","Just kidding.","courant","Mais non, c'est pour rire !",""],
+["Tu te moques de moi ?","Are you making fun of me?","courant","Tu te moques de moi ou quoi ?",""],
+["Elle est bien bonne, celle-là !","That's a good one!","familier","Ha ! Elle est bien bonne, celle-là !","Reaction to a joke."],
+["Faire une blague","to tell a joke / play a prank","courant","Il adore faire des blagues.",""],
+["Avoir de l'humour","to have a sense of humour","courant","Elle a beaucoup d'humour.",""],
+["C'était du second degré.","It was tongue-in-cheek.","courant","Ne le prends pas mal, c'était du second degré !","« Au premier degré » = literally."],
+["Pas de quoi en faire un fromage.","Nothing to make a fuss about.","familier","Bon, il n'y a pas de quoi en faire un fromage.",""],
+["Tu me fais marcher ?","Are you pulling my leg?","familier","Tu as gagné au loto ? Tu me fais marcher ?",""],
+["Rigoler","to laugh / have a laugh","familier","On a bien rigolé hier soir.",""],
+["C'est trop drôle !","That's so funny!","familier","Ta vidéo, c'est trop drôle !",""],
+["Se marrer","to have a laugh","familier","On s'est bien marrés au resto.",""]]},
+{t:"Questions utiles", items:[
+["Qu'est-ce que ça veut dire ?","What does that mean?","courant","« Chelou », qu'est-ce que ça veut dire ?",""],
+["Comment on dit… en français ?","How do you say… in French?","courant","Comment on dit « awkward » en français ?",""],
+["Ça s'écrit comment ?","How do you spell it?","courant","Ton nom, ça s'écrit comment ?",""],
+["Vous pouvez parler plus lentement ?","Can you speak more slowly?","courant","Pardon, vous pouvez parler plus lentement ?",""],
+["C'est quoi la différence entre… ?","What's the difference between…?","familier","C'est quoi la différence entre « bosser » et « travailler » ?",""],
+["On dit comme ça ?","Is that how you say it?","familier","« Je suis partant », on dit comme ça ?",""],
+["Tu peux me corriger si je me trompe.","Correct me if I'm wrong.","courant","Mon français n'est pas parfait, tu peux me corriger si je me trompe.",""],
+["Ça se dit ?","Do people say that?","familier","« Ça me gave », ça se dit ?",""],
+["Il est quelle heure ?","What time is it?","familier","Il est quelle heure ? J'ai plus de batterie.","Standard: « Quelle heure est-il ? »"],
+["C'est loin d'ici ?","Is it far from here?","courant","La gare, c'est loin d'ici ?",""],
+["Vous l'avez en… ?","Do you have it in…?","courant","Vous l'avez en taille M ?",""],
+["Qu'est-ce que tu en penses ?","What do you think of it?","courant","J'ai changé de coiffure, qu'est-ce que tu en penses ?",""],
+["Ça te dérange si… ?","Do you mind if…?","courant","Ça te dérange si j'ouvre la fenêtre ?",""],
+["Je peux te demander un service ?","Can I ask you a favour?","courant","Je peux te demander un service ? C'est rapide.",""]]},
+{t:"Météo", items:[
+["Il fait beau.","The weather's nice.","courant","Il fait beau, on mange dehors ?",""],
+["Il fait une de ces chaleurs !","It's boiling!","familier","Il fait une de ces chaleurs aujourd'hui !",""],
+["Il caille.","It's freezing.","argot","Il caille, mets ton manteau !",""],
+["Il y a du vent.","It's windy.","courant","Il y a beaucoup de vent sur la plage.",""],
+["Il neige.","It's snowing.","courant","Regarde, il neige !",""],
+["Il fait lourd.","It's muggy.","courant","Il fait lourd, il va y avoir de l'orage.",""],
+["Un orage","a thunderstorm","courant","Il y a eu un gros orage cette nuit.",""],
+["Il fait gris.","It's overcast.","courant","Il fait gris depuis une semaine.",""],
+["La canicule","a heatwave","courant","Pendant la canicule, il a fait 40 degrés.",""],
+["Il va pleuvoir.","It's going to rain.","courant","Prends un parapluie, il va pleuvoir.",""],
+["Quel temps de chien !","What awful weather!","familier","Quel temps de chien aujourd'hui !",""],
+["Vivement les beaux jours !","Can't wait for the sunny days!","courant","Il pleut encore… Vivement les beaux jours !","« Vivement… ! » = I can't wait for…!"]]},
+{t:"Sentiments & nuances", items:[
+["Ça me touche.","That really touches me.","courant","Ton message me touche beaucoup.",""],
+["Je m'en veux.","I feel bad / I blame myself.","courant","Je m'en veux de ne pas t'avoir appelé.",""],
+["Je t'en veux.","I'm annoyed with you / I hold it against you.","courant","Je t'en veux un peu, tu sais.",""],
+["Ça m'a fait de la peine.","It upset me.","courant","Ce qu'il a dit m'a fait de la peine.",""],
+["Avoir le moral","to be in good spirits","courant","Malgré tout, elle a le moral.","« Ne pas avoir le moral » = to feel down."],
+["Être soulagé(e)","to be relieved","courant","J'ai eu mon exam, je suis soulagé !",""],
+["Être gêné(e)","to be embarrassed","courant","J'étais gêné de lui demander.",""],
+["C'est gênant.","It's awkward.","courant","Personne ne parlait, c'était gênant.",""],
+["Être fier / fière de","to be proud of","courant","Je suis fier de toi.",""],
+["Avoir le trac","to have the jitters / stage fright","courant","J'ai le trac avant mon oral.",""],
+["Être à bout","to be at the end of your tether","courant","Avec ce boulot, je suis à bout.",""],
+["Ça me manque.","I miss it.","courant","La France, ça me manque.","The thing you miss is the subject."],
+["Être de bonne humeur","to be in a good mood","courant","Il est de bonne humeur ce matin.","« De mauvaise humeur » = in a bad mood."],
+["J'ai le cœur gros.","I'm heavy-hearted.","courant","J'ai le cœur gros de partir.",""]]}
+];
+{ const have=new Set(SEED.map(x=>x[0].toLowerCase()));
+  SEED_MORE2.forEach(g=>g.items.forEach(x=>{ if(have.has(x[0].toLowerCase())) return; have.add(x[0].toLowerCase()); x[5]=g.t; SEED.push(x); })); }
+
 
 const TOPICS = ["Parties & drinks","Texting & social media","Work & colleagues","Complaining (the French art)","Dating & relationships","Food & restaurants","Emotions & reactions","Verlan","Transport & hassles","Money & shopping","Sport & football","Housing & flatmates","Health & the doctor","Work emails (formal)","Giving opinions & debating","Idioms","Spoken filler words","Travel & holidays"];
 const SCENARIOS = [
@@ -2457,16 +2772,40 @@ function checkLocalCrash(){ const lf=lsGet("tch_local_loading"); if(!lf) return;
   const c=(lsGet("tch_local_crashes")||0)+1; lsSet("tch_local_crashes",c); lsSet("tch_local_nowarm",true);
   const s=lsGet("tch_local"); if(s){ s.ready=false; lsSet("tch_local",s); }
   lsSet("tch_local_err",{msg:"Your phone closed the app while loading the AI into memory (it ran out of memory). Close your other apps and try again"+(/gemma3|1B/.test(lf.id)?". If it keeps happening, this iPhone can't run an offline AI; your pen pal will use saved messages instead.":", or choose Light, which needs much less memory."),raw:"App was closed during model load: "+lf.id,ts:Date.now()}); }
+// a saved message stands in whenever the on-device AI can't answer, so offline chat never just hangs
+function reserveReply(note){ const r=(S.main.reserve||[]).shift(); if(!r){ toast(note+" No saved messages left either: your message is kept and will be answered when you're online.",9000); return false; }
+  S.chat.msgs.push({id:uid(),role:"a",text:r.fr,en:r.en,phrases:r.phrases||[],ts:Date.now(),reserve:true}); toast(note+" Here's a saved message from "+pal().name+" instead.",8000); return true; }
 async function localReply(){
   const um=[...S.chat.msgs].reverse().find(x=>x.role==="u");
   const am={id:uid(),role:"a",text:"",ts:Date.now(),pending:true,local:true}; S.chat.msgs.push(am); chatBusy=true; renderChat(); if(callOpen()) renderCall(); setThinking(true);
   const set=t=>{ const b=$(`#msgs .msg[data-i="${S.chat.msgs.indexOf(am)}"] .bubble`); if(b) b.textContent=t; const ct=$("#callText"); if(ct&&callOpen()) ct.textContent=t; };
-  try{ const reply=await Local.chat(localTurns(),{onProgress:p=>set(`${pal().name} is waking up… ${Math.round((p.progress||0)*100)}%`),onText:t=>{ setThinking(false); set(t); }});
-    am.text=reply||"…"; am.pending=false; }
-  catch(e){ const i=S.chat.msgs.indexOf(am); if(i>=0) S.chat.msgs.splice(i,1); toast("The offline AI couldn't reply ("+String(e&&e.message||e).slice(0,90)+"). Try again, or install the Light model in Me.",8000); }
-  chatBusy=false; setThinking(false); saveChat(); renderChat(); if(callOpen()) renderCall();
-  if(am.text&&!am.pending&&(S.main.profile.autoSpeak||callOpen())) Voice.speak(am.text);
-  if(S.main.profile.provisional!==false&&um&&um.queued&&!um.provTried) provisionalCheck(um);
+  const drop=()=>{ const i=S.chat.msgs.indexOf(am); if(i>=0) S.chat.msgs.splice(i,1); };
+  let ok=false, last=Date.now(), stage="starting";
+  try{
+    // the model files must still be on the device (an earlier app update could delete them)
+    set(`${pal().name} is checking the offline AI…`);
+    const sv=Local.saved(); let present=!!Local.engine;
+    if(!present){ try{ const L=await Local.lib(); present=await L.hasModelInCache(sv.id); }catch(e){ throw new Error("engine-missing: "+(e&&e.message||e)); } }
+    if(!present){ const s=Local.saved(); s.ready=false; lsSet("tch_local",s);
+      lsSet("tch_local_err",{msg:"The offline AI's files aren't on this phone any more (an earlier app update removed them; that bug is now fixed). Download it again on Wi-Fi: Me → Fully offline pen pal.",raw:"model not in cache: "+sv.id,ts:Date.now()});
+      throw new Error("model-missing"); }
+    // watchdog: loading reports progress regularly and replies stream word by word, so a long silence means it's stuck
+    const watchdog=new Promise((res,rej)=>{ const t=setInterval(()=>{ if(ok){ clearInterval(t); return; } if(Date.now()-last>(stage==="loading"?90000:45000)){ clearInterval(t); rej(new Error("timeout while "+stage)); } },3000); });
+    const reply=await Promise.race([watchdog, Local.chat(localTurns(),{
+      onProgress:p=>{ last=Date.now(); stage="loading"; set(`${pal().name} is waking up… ${Math.round((p.progress||0)*100)}%\n(the first message after opening the app takes longest)`); },
+      onText:t=>{ last=Date.now(); stage="replying"; setThinking(false); set(t); }})]);
+    ok=true; am.text=reply||"…"; am.pending=false;
+  }catch(e){ ok=true; drop(); const msg=String(e&&e.message||e);
+    if(msg==="model-missing") reserveReply("The offline AI needs downloading again (see Me).");
+    else if(/^engine-missing/.test(msg)){ lsSet("tch_local_err",{msg:"The offline AI engine isn't saved for offline use yet. Open the app once on Wi-Fi, then try again.",raw:msg,ts:Date.now()}); reserveReply("The offline AI engine isn't saved on this phone yet (open the app once on Wi-Fi to fix it)."); }
+    else if(/^timeout/.test(msg)){ Local.q=Promise.resolve(); if(Local.engine) try{ Local.engine.interruptGenerate(); }catch(err){}
+      lsSet("tch_local_err",{msg:"The offline AI stopped responding ("+msg+"). Close other apps and try again, or choose Light.",raw:msg,ts:Date.now()}); reserveReply("The offline AI didn't respond in time."); }
+    else { lsSet("tch_local_err",{msg:explainLocalErr(msg),raw:msg,ts:Date.now()}); reserveReply("The offline AI couldn't reply ("+explainLocalErr(msg)+")."); }
+  }
+  chatBusy=false; setThinking(false); saveChat(); saveMain(); renderChat(); if(callOpen()) renderCall(); renderAIBanner();
+  const lastA=[...S.chat.msgs].reverse().find(x=>x.role==="a"&&x.text&&!x.pending);
+  if(lastA&&(S.main.profile.autoSpeak||callOpen())) Voice.speak(lastA.text);
+  if(am.text&&!am.pending&&S.main.profile.provisional!==false&&um&&um.queued&&!um.provTried) provisionalCheck(um);
 }
 // a phone-sized model is not reliable enough to teach from, so its corrections stay "to be confirmed" and never become cards
 async function provisionalCheck(m){
@@ -2500,6 +2839,7 @@ function localCardHTML(){
   const devLine=d?(d.ok?`Device check: WebGPU ✓ · 16-bit maths ${d.f16?"✓":"✗"} · GPU memory block ${Math.round((d.maxSB||0)/1048576)} MB${(d.maxSB||0)<(1<<30)?" (phone-size models only)":""}`:"Device check: WebGPU not available"):"Checking your device…";
   return `<div class="card stack"><div class="eyebrow">Fully offline pen pal</div><h2>${s&&s.ready?`Installed · ${esc(m?m.label:s.id)}`:`Chat with ${esc(pn)} with no internet`}</h2>
   <p class="muted" style="font-size:13.5px">Download a small AI onto your device, once, on Wi-Fi. Then ${esc(pn)} replies even in airplane mode, and can translate and explain words offline. It's less precise than the online AI: it chats and can give provisional corrections (marked "to be confirmed" and re-checked online), and it can make mistakes.</p>
+  ${s&&s.ready&&err?`<div class="banner" style="background:rgba(255,90,131,.08);border-color:rgba(255,90,131,.35)"><b>Last problem:</b> ${esc(err.msg)}</div>`:""}
   ${s&&s.ready?`<label class="row" style="font-weight:600;font-size:14px;flex-wrap:nowrap;align-items:flex-start"><input type="checkbox" id="lmProv" ${S.main.profile.provisional!==false?"checked":""} style="margin-top:3px"> <span>Provisional corrections offline<br><span class="muted" style="font-weight:400;font-size:13px">The offline AI suggests corrections marked "to be confirmed". The full AI re-checks them online; only confirmed ones become flashcards.</span></span></label><div class="row"><button class="btn primary" id="lmTest">Test</button><button class="btn ghost sm" id="lmDel">Delete (frees up space)</button></div>`
   :`${err&&!lmBusy?`<div class="banner" style="background:rgba(255,90,131,.08);border-color:rgba(255,90,131,.35)"><b>Last attempt failed:</b> ${esc(err.msg)}<div class="mono muted" style="font-size:11px;margin-top:6px;word-break:break-word">${esc(String(err.raw).slice(0,220))}</div></div>`:""}
   <p class="muted mono" style="font-size:12px">${esc(devLine)}</p>
