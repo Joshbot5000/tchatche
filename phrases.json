@@ -1,5 +1,5 @@
 {
-"total":34,
+"total":73,
 "batches":[
  {"d":"2026-10-27","t":"Expressions imagées","items":[
   ["Avoir un coup de foudre","to fall in love at first sight","courant","Ça a été le coup de foudre dès le premier soir.","Also for places: « un coup de foudre pour Lyon »."],
@@ -38,5 +38,48 @@
   ["Ça me parle","that resonates / I get it","courant","Ce que tu dis là, ça me parle.","« Ça ne me parle pas » = it doesn't ring a bell."],
   ["Je capte pas","I don't get it","familier","Je capte pas ce qu'il veut dire.","« Capter » = to understand / get signal."],
   ["C'est pas la mer à boire","it's not that hard","familier","Allez, deux pages, c'est pas la mer à boire.",""]
+ ]},
+ {"d":"2026-11-06","t":"Disputes & embrouilles","items":[
+  ["Ça va pas, la tête ?","are you out of your mind?","familier","Tu as pris ma voiture sans demander ? Ça va pas, la tête ?","Indignant reaction to something outrageous."],
+  ["Tu me cherches ?","are you looking for trouble?","familier","Arrête de me provoquer, tu me cherches ou quoi ?","Often followed by « ou quoi ? »; confrontational."],
+  ["S'engueuler","to have a row","familier","On s'est encore engueulés à cause du ménage.","Everyday word for a shouting match; « se disputer » is the neutral version."],
+  ["Monter sur ses grands chevaux","to get on one's high horse","courant","Dès qu'on parle d'argent, elle monte sur ses grands chevaux.",""],
+  ["Chercher la petite bête","to nitpick","courant","Le contrat est bien, arrête de chercher la petite bête.",""],
+  ["Mettre les points sur les i","to make things crystal clear","courant","Je vais mettre les points sur les i : c'est la dernière fois.","Said before laying down the law."],
+  ["Ne le prends pas mal","don't take it the wrong way","courant","Ne le prends pas mal, mais ta coloc a raison.","Softener before criticism."],
+  ["Lâche-moi la grappe !","get off my back!","argot","Lâche-moi la grappe, je ferai la vaisselle demain.","Rude but jokey among friends."],
+  ["C'est l'hôpital qui se fout de la charité","that's the pot calling the kettle black","familier","Toi, tu me traites de radin ? C'est l'hôpital qui se fout de la charité !","Polite variant: « qui se moque de la charité »."],
+  ["Faire la gueule","to sulk","familier","Ça fait deux jours qu'il me fait la gueule.","« Faire la tête » is less crude."],
+  ["Jeter de l'huile sur le feu","to add fuel to the fire","courant","Ne dis rien à sa mère, tu vas jeter de l'huile sur le feu.",""],
+  ["Enterrer la hache de guerre","to bury the hatchet","courant","Après des mois de silence, ils ont enfin enterré la hache de guerre.",""],
+  ["Je ne vous permets pas !","how dare you! / I won't have that!","soutenu","Je ne vous permets pas de me parler sur ce ton.","Formal rebuke, e.g. to a stranger or colleague."],
+  ["Je trouve vos propos déplacés","I find your remarks inappropriate","soutenu","Je trouve vos propos déplacés, surtout devant les clients.","Measured, professional way to object."],
+  ["Vider son sac","to get it off one's chest","familier","Laisse-la vider son sac, elle en a besoin.",""],
+  ["Clasher quelqu'un","to call someone out / diss someone","argot","Elle l'a clashé devant toute la classe.","From English « clash »; also « un clash » = a public spat."],
+  ["Ça part en vrille","it's going off the rails","familier","La soirée a commencé tranquille, puis tout est parti en vrille.",""],
+  ["Tu te fiches de moi ?","are you having me on?","familier","Tu te fiches de moi ? Ça fait une heure que je t'attends !","Cruder: « tu te fous de moi ? »."],
+  ["On peut en parler calmement ?","can we talk about it calmly?","courant","On peut en parler calmement au lieu de crier ?",""]
+ ]},
+ {"d":"2026-11-06","t":"Potins & ragots","items":[
+  ["Tu connais pas la dernière ?","have you heard the latest?","familier","Tu connais pas la dernière ? Julien a démissionné !","Classic gossip opener; spoken « ne » dropped."],
+  ["Raconte-moi les potins !","fill me in on the gossip!","familier","Alors, raconte-moi les potins de la fac !",""],
+  ["Balancer","to snitch / grass someone up","argot","Qui a balancé qu'on séchait le cours ?","Also « balancer un dossier sur quelqu'un » = to dish dirt."],
+  ["Être une balance","to be a grass / snitch","argot","Ne lui dis rien, c'est une balance.",""],
+  ["C'est une vraie commère","she's / he's a real gossip","familier","Mon voisin est une vraie commère, il sait tout sur tout le monde.","« Commère » is used for men too."],
+  ["Casser du sucre sur le dos de quelqu'un","to bad-mouth someone behind their back","familier","Dès qu'elle part, ils cassent du sucre sur son dos.",""],
+  ["Une langue de vipère","a spiteful gossip / poisonous tongue","courant","Méfie-toi d'elle, c'est une langue de vipère.",""],
+  ["Ça reste entre nous","this stays between us","courant","Je te le dis, mais ça reste entre nous, d'accord ?",""],
+  ["Tenir sa langue","to keep one's mouth shut","courant","Si tu sais pas tenir ta langue, je ne te dis rien.",""],
+  ["Le bruit court que…","rumour has it that…","courant","Le bruit court que le cabinet va recruter cet été.",""],
+  ["Il se murmure que…","it is whispered that… / word is that…","soutenu","Il se murmure que le directeur s'apprête à partir.","Elegant, journalistic register."],
+  ["Se faire griller","to get caught out","argot","Il s'est fait griller avec une autre fille.","Also « se faire cramer »."],
+  ["Se remettre ensemble","to get back together","courant","Tu savais qu'ils s'étaient remis ensemble ?",""],
+  ["Tromper quelqu'un","to cheat on someone","courant","Elle a découvert qu'il la trompait depuis des mois.",""],
+  ["Faire tout un drama","to make a big drama of it","familier","Elle a fait tout un drama parce qu'on ne l'avait pas invitée.","Also « c'est le drama » = what a drama."],
+  ["Tenir la chandelle","to be the third wheel","familier","Je ne viens pas, je n'ai pas envie de tenir la chandelle.",""],
+  ["Je dis ça, je dis rien","just saying","familier","Il est encore sorti avec elle hier… je dis ça, je dis rien.","Ironic: you're clearly implying something."],
+  ["Je te raconte pas !","you wouldn't believe it!","familier","La soirée d'hier ? Je te raconte pas !","Means the opposite: you're about to tell everything."],
+  ["Il y a anguille sous roche","there's something fishy going on","courant","Ils sont bizarres tous les deux, il y a anguille sous roche.",""],
+  ["Allez, accouche !","come on, spit it out!","familier","Allez, accouche, qu'est-ce qui s'est passé avec Léa ?","Teasing; only with friends."]
  ]}
 ]}
