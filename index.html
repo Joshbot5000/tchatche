@@ -380,6 +380,7 @@ button,select,.nav-btn,.chip,.btn,.iconbtn,.tabbar,.rail{-webkit-user-select:non
 main .view:not([hidden]){animation:viewIn .3s cubic-bezier(.2,.8,.2,1)}
 @keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){*,body::before{animation:none!important;transition:none!important}}
+.shake{animation:shake .35s}@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 </style>
 
 <div class="app">
@@ -1654,7 +1655,9 @@ function renderHome(){
   const p=S.main.profile, pp=pal(), l=dayLog(), due=dueCards().length, nl=Math.min(newLeft(),newAvailable());
   const g=GREET[p.penpal]||GREET.camille; const greet=g[dayNum()%g.length].replace("{n}",p.name||"toi");
   const pct=Math.min(1,l.xp/150), C=2*Math.PI*50;
+  const dd=dailyState();
   const tasks=[
+    {ic:I.cards,c:"var(--amber, #ffb82e)",t:"Today's 10 new expressions",s:dd.phase==="done"?`Done: ${dd.score}/${dd.items.length} right first time`:dd.phase==="test"?"Test in progress: finish it":"Learn 10, then type them from memory",done:dd.phase==="done",btn:`<button class="btn sm ${dd.phase==="done"?"":"primary"}" data-act="daily">${dd.phase==="done"?"Results":dd.li||dd.phase==="test"?"Continue":"Start"}</button>`},
     {ic:I.mail,c:"var(--rose)",t:`Letter of the day from ${pp.name}`,s:S.main.letterDate===dkey()?"Read. Reply in Chat.":`${pp.name} has written to you. Open it and reply.`,done:S.main.letterDate===dkey(),btn:`<button class="btn sm ${S.main.letterDate===dkey()?"":"rose"}" data-act="letter">${S.main.letterDate===dkey()?"Read again":"Open"}</button>`},
     {ic:I.cards,c:"var(--blue)",t:"Phrase session",s:`${due} to review · ${nl} new`,done:(due===0&&nl===0)||l.reviews>=30,btn:`<button class="btn sm primary" data-act="session">Start</button>`},
     {ic:I.chat,c:"var(--violet)",t:"Send 6 chat messages",s:`${Math.min(l.msgs,6)} / 6 today`,done:l.msgs>=6,btn:`<button class="btn sm" data-go="chat">Chat</button>`},
@@ -1680,6 +1683,7 @@ function renderHome(){
     if(act==="say-expr") Voice.speak(ex[0]+". "+ex[3]);
     if(act==="add-expr"){ const c=addCard({fr:ex[0],en:ex[1],reg:ex[2],ex:ex[3],note:ex[4],src:"gen"}); toast(c?"Added to your phrases.":"Already in your phrase bank."); }
     if(act==="session"){ go("phrases"); startSession(false); }
+    if(act==="daily") dailyStart();
     if(act==="letter") openLetter(a);
   };
 }
@@ -1836,6 +1840,97 @@ function helpClick(e){ const b=e.target.closest("[data-h]"); if(!b) return; cons
   if(b.dataset.h==="use"){ const ta=$("#chatIn"); ta.value=(ta.value?ta.value+" ":"")+o.fr; ta.focus(); }
   if(b.dataset.h==="add"){ const c=addCard({fr:o.fr,en:o.en,reg:o.reg,ex:o.ex,src:"chat"}); toast(c?"Added to your phrases.":"Already in your phrase bank."); } }
 
+/* ---------------- Today's 10: ten new library expressions a day, learnt then typed from memory ---------------- */
+let dailyOpen=false;
+const DAILY_N=10;
+function dailyPick(n,avoid){ // spread across themes, newest pack expressions first, never one already in the bank
+  const by=new Map(); const rnd=(()=>{ let s=dayNum()*9301+(S.main.dailyBonus||0)*49297; return ()=>(s=(s*9301+49297)%233280)/233280; })();
+  SEED.forEach((x,i)=>{ if(hasFr(x[0])||avoid.has(x[0].toLowerCase())) return; const t=x[5]||"Essentiels"; if(!by.has(t)) by.set(t,[]); by.get(t).push(i); });
+  const themes=[...by.keys()].sort(()=>rnd()-.5), out=[];
+  const fresh=SEED.map((x,i)=>i).filter(i=>SEED[i][6]&&!hasFr(SEED[i][0])&&!avoid.has(SEED[i][0].toLowerCase())).slice(-40);
+  for(let k=0;k<2&&fresh.length;k++) out.push(fresh.splice(Math.floor(rnd()*fresh.length),1)[0]);
+  while(out.length<n&&themes.some(t=>by.get(t).length)) for(const t of themes){ const l=by.get(t); if(!l.length||out.length>=n) continue; const i=l.splice(Math.floor(rnd()*l.length),1)[0]; if(!out.includes(i)) out.push(i); }
+  return out.slice(0,n).map(i=>{ const x=SEED[i]; return {fr:x[0],en:x[1],reg:x[2],ex:x[3],note:x[4],t:x[5]||"",pid:x[6]||""}; }); }
+function dailyState(){ let d=S.main.daily; if(!d||d.d!==dkey()){ S.main.dailyBonus=0; d=S.main.daily={d:dkey(),items:dailyPick(DAILY_N,new Set()),phase:"learn",li:0,queue:[],qi:0,first:{},misses:{},hint:0,res:null,bonus:0}; saveMain(); } return d; }
+function dailyHistory(){ return S.main.dailyHist||(S.main.dailyHist={}); }
+function dailyStreak(){ const h=dailyHistory(); let n=0; const d=new Date(); if(!h[dkey(d)]) d.setDate(d.getDate()-1); while(h[dkey(d)]){ n++; d.setDate(d.getDate()-1); } return n; }
+function dailyItem(){ const d=dailyState(); return d.phase==="test"?d.items[d.queue[d.qi]]:d.items[d.li]; }
+function dailyHint(fr,level){ // level 1: first letter of each word; level 2: first half of each word
+  return fr.split(/(\s+)/).map(w=>/^\s+$/.test(w)?w:w.replace(/[\p{L}]+/gu,m=>{ const k=level>=2?Math.ceil(m.length/2):1; return m.slice(0,k)+"_".repeat(Math.max(0,m.length-k)); })).join(""); }
+function dailyCheck(input,item){ const lig=x=>String(x).replace(/œ/g,"oe").replace(/Œ/g,"OE").replace(/æ/g,"ae"); input=lig(input).replace(/\(e\)/gi,"").replace(/…|\.\.\./g,""); item={...item,fr:lig(item.fr)}; const a=norm(input); if(!a) return {g:0,msg:"No worries: here it is. Type it once to lock it in."};
+  let best={g:0,msg:"Not quite. Type the correct version once to lock it in."};
+  for(const v of variants(item.fr)){ const n=norm(v), n0=norm(v,false), a0=norm(input,false);
+    if(a===n) return {g:2,msg:"Parfait !"};
+    if(a0===n0) best={g:2,msg:"Correct! Just watch the accents.",acc:true};
+    else if(best.g<2&&lev(a0,n0)/Math.max(n0.length,1)<=.12) best={g:1,msg:"So close! A small slip. Type it once exactly to lock it in."}; }
+  return best; }
+function dailyStart(){ dailyState(); dailyOpen=true; if(curView!=="phrases") go("phrases"); else renderPhrases(); window.scrollTo({top:0,behavior:"smooth"}); }
+function dailyFinish(d){ d.phase="done"; const now=Date.now(); let ok=0;
+  d.items.forEach((it,i)=>{ const first=!!d.first[i]; if(first) ok++;
+    // every expression joins the spaced-repetition bank; ones you missed come back sooner
+    if(!hasFr(it.fr)){ const c={id:it.pid||"d"+uid(),fr:it.fr,en:it.en,reg:it.reg,ex:it.ex,note:it.note,src:"seed",added:now,due:now+(first?DAY:12*36e5),ivl:first?1:.5,ease:first?2.5:2.3,reps:1,lapses:0,last:now,hist:[first?2:0]};
+      S.cards[c.id]=c; Store.saveCard(c); } });
+  const h=dailyHistory(); const prev=h[d.d]; h[d.d]={n:(prev?prev.n:0)+d.items.length,ok:(prev?prev.ok:0)+ok};
+  d.score=ok; logAdd("newCards",d.items.length); logAdd("reviews",d.items.length); logAdd("correct",ok); addXP(20+ok*4); saveMain(); renderNav(); }
+function dailyCardHTML(){ const d=dailyState(), h=dailyHistory()[d.d], st=dailyStreak();
+  const sub=d.phase==="done"?`Done today: ${h?h.ok:d.score}/${h?h.n:DAILY_N} right first time. They're now in your reviews.`:d.phase==="test"?`Test in progress: ${Object.keys(d.first).length+Object.keys(d.misses).filter(k=>!(k in d.first)).length} of ${d.items.length} answered`:d.li?`Learning: ${d.li} of ${d.items.length} seen`:`10 new expressions from the library, picked for today. Learn them, then type them from memory.`;
+  return `<div class="card stack"><div class="row" style="justify-content:space-between;flex-wrap:nowrap;align-items:flex-start"><div><div class="eyebrow">Today's 10 · new every day</div><h2>${d.phase==="done"?"Today's 10: complete ✓":"Today's 10 new expressions"}</h2><p class="muted" style="margin-top:6px">${esc(sub)}</p></div>${st?`<div class="stat" style="flex:none;text-align:center"><b class="num">${st}</b><span>day${st===1?"":"s"} in a row</span></div>`:""}</div>
+    <div class="chips">${d.items.map(it=>`<span class="chip" style="cursor:default">${esc(it.fr)}</span>`).join("")}</div>
+    <div class="row">${d.phase==="done"?`<button class="btn" id="dailyGo">Review today's results</button><button class="btn primary" id="dailyMore">10 more (bonus)</button>`:`<button class="btn primary" id="dailyGo">${d.li||d.phase==="test"?"Continue":"Start"}</button>`}</div></div>`; }
+function dailyStageHTML(){ const d=dailyState(), n=d.items.length;
+  const head=(lab,pos,tot)=>`<div class="row" style="justify-content:space-between"><span class="eyebrow num">${lab} · ${pos} / ${tot}</span><button class="btn ghost sm" id="dailyQuit">Close</button></div><div class="progress"><i style="width:${Math.round((pos-1)/Math.max(tot,1)*100)}%"></i></div>`;
+  if(d.phase==="learn"){ const it=d.items[d.li];
+    return `<div class="card stage">${head("Step 1: learn",d.li+1,n)}<div class="eyebrow">${esc(it.t)} · <span class="reg reg-${esc(it.reg)}">${esc(it.reg)}</span></div>
+      <div class="prompt-big">${esc(it.fr)}</div><div class="prompt-sub">${esc(it.en)}</div>
+      ${it.ex?`<p style="font-size:16px"><i>${esc(it.ex)}</i></p>`:""}${it.note?`<p class="muted">${esc(it.note)}</p>`:""}
+      <div class="row"><button class="btn" id="dSay">${I.play} Listen</button>${it.ex?`<button class="btn" id="dSayEx">${I.play} Example</button>`:""}<button class="btn primary" id="dNext">${d.li+1<n?"Next":"I've seen all 10: test me"}</button></div>
+      <p class="muted" style="font-size:13px">Say it out loud once and picture when you'd use it. In step 2 you'll type all 10 from memory.</p></div>`; }
+  if(d.phase==="test"){ const it=dailyItem(), idx=d.queue[d.qi], left=d.queue.length-d.qi, r=d.res;
+    const prompt=`<div class="eyebrow">Type it in French · <span class="reg reg-${esc(it.reg)}">${esc(it.reg)}</span>${d.misses[idx]?` · try ${d.misses[idx]+1}`:""}</div><div class="prompt-big">${esc(it.en)}</div>${d.hint&&!r?`<div class="prompt-sub mono" style="letter-spacing:.06em">${esc(dailyHint(it.fr,d.hint))}</div>`:""}`;
+    let below;
+    if(!r) below=`<div class="answer-row"><input type="text" id="dAns" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Type the French expression…"><button class="iconbtn" id="dMic" title="Dictate" style="height:auto;width:50px">${I.mic}</button></div>
+      <div class="row"><button class="btn primary" id="dCheck">Check</button><button class="btn ghost" id="dHint" ${d.hint>=2?"disabled":""}>${d.hint?"More hint":"Hint"}</button><button class="btn ghost" id="dDunno">Show me</button><span class="muted" style="font-size:13px">${left} left · Enter to check</span></div>`;
+    else if(r.g===2) below=`<div class="verdict good"><b>${esc(r.msg)}</b>${r.input?`<div>Your answer: ${esc(r.input)}</div>`:""}<div style="font-size:18px">✓ <b>${esc(it.fr)}</b> <button class="btn sm ghost" id="dSayAns">${I.play}</button></div>${it.ex?`<div class="muted"><i>${esc(it.ex)}</i></div>`:""}</div><div class="row"><button class="btn primary" id="dCont">Next</button><span class="muted" style="font-size:13px">Enter to continue</span></div>`;
+    else below=`<div class="verdict ${r.g===1?"mid":"bad"}"><b>${esc(r.msg)}</b>${r.input?`<div>Your answer: <s>${esc(r.input)}</s></div>`:""}<div style="font-size:18px">✓ <b>${esc(it.fr)}</b> <button class="btn sm ghost" id="dSayAns">${I.play}</button></div>${it.ex?`<div class="muted"><i>${esc(it.ex)}</i></div>`:""}${it.note?`<div class="muted" style="font-size:13px">${esc(it.note)}</div>`:""}</div>
+      <div class="answer-row"><input type="text" id="dCopy" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Type it correctly once…"></div><div class="row"><button class="btn primary" id="dCopyGo">Lock it in</button><span class="muted" style="font-size:13px">It comes back at the end of this test</span></div>`;
+    return `<div class="card stage">${head("Step 2: test",Math.min(d.qi+1,d.queue.length),d.queue.length)}${prompt}${below}</div>`; }
+  const h=dailyHistory()[d.d]||{ok:d.score,n};
+  return `<div class="card stage"><div class="row" style="justify-content:space-between"><span class="eyebrow">Today's 10 · complete</span><button class="btn ghost sm" id="dailyQuit">Close</button></div>
+    <h2>${d.score>=9?"Incroyable ! You nailed them.":d.score>=6?"Bien joué ! Most of them stuck.":"Good start: the tricky ones will come back in your reviews."}</h2>
+    <div class="statline"><div class="stat"><b class="num">${d.score}/${n}</b><span>right first time</span></div><div class="stat"><b class="num">${dailyStreak()}</b><span>day streak</span></div><div class="stat"><b class="num">${h.n}</b><span>new today</span></div></div>
+    <div class="bank-list">${d.items.map((it,i)=>`<div class="bank-item"><button class="iconbtn" data-say="${esc(it.fr)}" title="Listen" style="width:34px;height:34px">${I.play}</button><div style="min-width:0"><div class="fr">${d.first[i]?"✓":"↻"} ${esc(it.fr)} <span class="reg reg-${esc(it.reg)}">${esc(it.reg)}</span></div><div class="en">${esc(it.en)}</div></div><span></span><span class="muted mono" style="font-size:11px">${d.first[i]?"tomorrow":"in 12 h"}</span></div>`).join("")}</div>
+    <p class="muted" style="font-size:13.5px">All ${n} are now in your phrase reviews, so spaced repetition brings them back just before you'd forget them. Try using two of them with ${esc(pal().name)} today.</p>
+    <div class="row"><button class="btn primary" id="dailyMore">10 more (bonus)</button><button class="btn" data-go="chat">Use them with ${esc(pal().name)}</button></div></div>`; }
+function bindDaily(){ const q=id=>document.getElementById(id), d=dailyState();
+  if(q("dailyGo")) q("dailyGo").onclick=dailyStart;
+  if(q("dailyMore")) q("dailyMore").onclick=()=>{ S.main.dailyBonus=(S.main.dailyBonus||0)+1; const items=dailyPick(DAILY_N,new Set());
+    if(!items.length){ toast("You've learnt every expression in the library! New ones arrive several times a week."); return; }
+    Object.assign(d,{items,phase:"learn",li:0,queue:[],qi:0,first:{},misses:{},hint:0,res:null,bonus:(d.bonus||0)+1}); saveMain(); dailyOpen=true; renderPhrases(); };
+  if(q("dailyQuit")) q("dailyQuit").onclick=()=>{ dailyOpen=false; renderPhrases(); };
+  if(!dailyOpen||d.phase==="done") return; const it=dailyItem();
+  if(q("dSay")) q("dSay").onclick=()=>Voice.speak(it.fr);
+  if(q("dSayEx")) q("dSayEx").onclick=()=>Voice.speak(it.ex);
+  if(q("dSayAns")) q("dSayAns").onclick=()=>Voice.speak(it.fr);
+  if(q("dNext")) q("dNext").onclick=()=>{ if(d.li+1<d.items.length) d.li++; else { d.phase="test"; d.queue=d.items.map((_,i)=>i).sort(()=>Math.random()-.5); d.qi=0; d.hint=0; d.res=null; } saveMain(); renderPhrases(); };
+  const advance=()=>{ d.qi++; d.hint=0; d.res=null; if(d.qi>=d.queue.length) dailyFinish(d); saveMain(); renderPhrases(); };
+  const ans=q("dAns");
+  if(ans){ setTimeout(()=>ans.focus({preventScroll:true}),30); const idx=d.queue[d.qi];
+    const doCheck=()=>{ const r=dailyCheck(ans.value,it); r.input=ans.value.trim();
+      if(r.g===2&&!d.hint&&!d.misses[idx]) d.first[idx]=true;
+      if(r.g<2){ d.misses[idx]=(d.misses[idx]||0)+1; if(d.misses[idx]<=3) d.queue.push(idx); }
+      else if(d.hint&&!(idx in d.first)) d.first[idx]=false;
+      d.res=r; saveMain(); Voice.speak(it.fr); renderPhrases(); };
+    ans.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); doCheck(); } };
+    q("dCheck").onclick=doCheck; q("dDunno").onclick=()=>{ ans.value=""; doCheck(); };
+    q("dHint").onclick=()=>{ d.hint=Math.min(2,d.hint+1); const v=ans.value; renderPhrases(); const a2=q("dAns"); if(a2) a2.value=v; };
+    q("dMic").onclick=e=>listen(ans,e.currentTarget); }
+  if(q("dCont")){ q("dCont").onclick=advance; setTimeout(()=>{ const b=q("dCont"); if(b) b.focus({preventScroll:true}); },30); }
+  const cp=q("dCopy");
+  if(cp){ setTimeout(()=>cp.focus({preventScroll:true}),30);
+    const lock=()=>{ const r=dailyCheck(cp.value,it); if(r.g===2){ toast("Locked in. 🔒"); advance(); } else { cp.classList.remove("shake"); void cp.offsetWidth; cp.classList.add("shake"); toast("Not quite: copy it exactly as shown (accents don't matter)."); } };
+    cp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); lock(); } }; q("dCopyGo").onclick=lock; }
+}
+
 /* ---------------- PHRASES ---------------- */
 let sess=null, genBusy=false, bankFilter="all", bankQ="", genTopic=TOPICS[0], genReg="mix";
 function startSession(weak){
@@ -1894,7 +1989,7 @@ function stageHTML(){
   if(sess.mode==="cloze"){ const core=c.fr.replace(/[\s!?.…]+$/,"").replace(/\(e\)/g,""); const i=c.ex.toLowerCase().indexOf(core.toLowerCase()); const blank=c.ex.slice(0,i)+"_____"+c.ex.slice(i+core.length);
     prompt=`<div class="eyebrow">Fill in the gap</div><div class="prompt-big" style="font-size:clamp(22px,3.4vw,30px)">${esc(blank)}</div><div class="prompt-sub">${esc(c.en)}</div>`; }
   let below="";
-  if(sess.phase==="ask"){ below=`<div class="answer-row"><input type="text" id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Your answer in French…"><button class="iconbtn" id="ansMic" title="Dictate" style="height:auto;width:50px">${I.mic}</button></div>
+  if(sess.phase==="ask"){ below=`<div class="answer-row"><input type="text" id="ans" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Your answer in French…"><button class="iconbtn" id="ansMic" title="Dictate" style="height:auto;width:50px">${I.mic}</button></div>
     <div class="row"><button class="btn primary" id="checkBtn">Check</button><button class="btn ghost" id="dunno">I don't know</button><span class="muted" style="font-size:13px">Enter to check</span></div>`; }
   else { const r=sess.res; const cls=r.g>=2?"good":r.g===1?"mid":"bad";
     below=`<div class="verdict ${cls}"><b>${esc(r.msg)}</b>${r.input?`<div>Your answer: ${esc(r.input)}</div>`:""}<div style="font-size:18px">✓ <b>${esc(r.ans)}</b> <button class="btn sm ghost" id="sayAns">${I.play}</button></div>${c.ex&&sess.mode!=="cloze"?`<div class="muted"><i>${esc(c.ex)}</i></div>`:""}${sess.mode!=="fix"&&c.note?`<div class="muted" style="font-size:13px">${esc(c.note)}</div>`:""}</div>
@@ -1931,6 +2026,7 @@ function renderPhrases(){
   if(bankQ){ const n=norm(bankQ,false); list=list.filter(c=>norm(c.fr+" "+c.en,false).includes(n)); }
   list.sort((a,b)=>b.added-a.added);
   el.innerHTML=`${topbar("Your phrases","Active recall · spaced repetition")}
+  ${dailyOpen?dailyStageHTML():dailyCardHTML()}
   ${sess?stageHTML():`<div class="card stack"><div class="row" style="justify-content:space-between"><div><h2>${due+nl?`${due+nl} cards waiting`:"All caught up"}</h2><p class="muted">${due} to review · ${nl} new today (limit ${S.main.profile.newPerDay}/day, change it in Me)</p></div>
     <div class="row"><button class="btn primary" id="go">Start session</button>${weakN?`<button class="btn rose" id="goWeak">Weak spots (${weakN})</button>`:""}</div></div>
     <div class="statline"><div class="stat"><b class="num">${all.length}</b><span>in your bank</span></div><div class="stat"><b class="num">${learning}</b><span>learning</span></div><div class="stat"><b class="num">${mast}</b><span>mastered (21 d+)</span></div><div class="stat"><b class="num">${weakN}</b><span>weak spots</span></div></div>
@@ -1945,7 +2041,7 @@ function renderPhrases(){
     <div class="chips" id="bankF">${[["all","All"],["new","New"],["notes","My notes"],["weak","Weak spots"],["mastered","Mastered"],["fix","My mistakes"],["familier","Familier"],["argot","Argot"],["courant","Courant"],["soutenu","Soutenu"]].map(([k,l])=>`<button class="chip" data-f="${k}" aria-pressed="${bankFilter===k}">${l}</button>`).join("")}</div>
     <div class="bank-list">${list.slice(0,200).map(c=>`<div class="bank-item" data-id="${c.id}"><button class="iconbtn" data-b="say" title="Listen" style="width:34px;height:34px">${I.play}</button><div style="min-width:0"><div class="fr">${esc(c.fr)} <span class="reg reg-${esc(c.reg)}">${esc(c.src==="fix"?"mistake":c.reg)}</span></div><div class="en">${esc(c.en)}</div></div><div class="meter ${isWeak(c)?"weak":""}" title="${isNew(c)?"New":"Next review in "+Math.round(c.ivl)+" days"}"><i style="width:${isNew(c)?0:Math.min(100,c.ivl/30*100)}%"></i></div><button class="iconbtn" data-b="del" title="Delete" style="width:34px;height:34px">${I.x}</button></div>`).join("")||`<p class="muted" style="padding:12px 0">${all.length?"No phrases match.":"Your bank fills up from your first session: browse the library above, or generate as many as you like."}</p>`}</div>
     ${list.length>200?`<p class="muted">+ ${list.length-200} more. Use search to narrow it down.</p>`:""}</div>`;
-  if(sess) bindStage();
+  if(sess) bindStage(); bindDaily();
   const g=$("#go"); if(g) g.onclick=()=>startSession(false); const gw=$("#goWeak"); if(gw) gw.onclick=()=>startSession(true);
   $("#genReg").value=genReg; $("#genReg").onchange=e=>genReg=e.target.value;
   $("#topics").onclick=e=>{ const b=e.target.closest("button"); if(!b) return; genTopic=b.dataset.me?"__me":b.textContent; $$("#topics .chip").forEach(x=>x.setAttribute("aria-pressed",x===b)); };
