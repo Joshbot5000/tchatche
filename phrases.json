@@ -1,5 +1,5 @@
 {
-"total":73,
+"total":113,
 "batches":[
  {"d":"2026-10-27","t":"Expressions imagées","items":[
   ["Avoir un coup de foudre","to fall in love at first sight","courant","Ça a été le coup de foudre dès le premier soir.","Also for places: « un coup de foudre pour Lyon »."],
@@ -81,5 +81,49 @@
   ["Je te raconte pas !","you wouldn't believe it!","familier","La soirée d'hier ? Je te raconte pas !","Means the opposite: you're about to tell everything."],
   ["Il y a anguille sous roche","there's something fishy going on","courant","Ils sont bizarres tous les deux, il y a anguille sous roche.",""],
   ["Allez, accouche !","come on, spit it out!","familier","Allez, accouche, qu'est-ce qui s'est passé avec Léa ?","Teasing; only with friends."]
+ ]},
+ {"d":"2026-11-06","t":"Applis de rencontre","items":[
+  ["Matcher avec quelqu'un","to match with someone","familier","On a matché hier soir et on parle depuis.","Used for Tinder, Hinge, Bumble…"],
+  ["Swiper à droite","to swipe right","familier","J'ai swipé à droite par erreur, c'est gênant.",""],
+  ["Un date","a date","familier","J'ai un date ce soir, je suis stressée.","Masculine in France: « un date »."],
+  ["Un rencard","a date","familier","Il a un rencard samedi avec une fille de l'appli.","Also spelled « rancard »."],
+  ["Je crois que tu lui plais","I think he / she fancies you","courant","Il te regarde tout le temps, je crois que tu lui plais.","« Plaire à » = to be attractive to."],
+  ["Le courant passe bien","we really click","courant","Avec lui, le courant est tout de suite bien passé.",""],
+  ["Avoir le coup de foudre","to fall in love at first sight","courant","Ils ont eu le coup de foudre au premier rendez-vous.",""],
+  ["Il n'est pas mon genre","he's not my type","courant","Il est sympa, mais il n'est pas mon genre.",""],
+  ["Je ne cherche rien de sérieux","I'm not looking for anything serious","courant","Je préfère être honnête : je ne cherche rien de sérieux.","Opposite: « je cherche une relation sérieuse »."],
+  ["Un plan cul","a hook-up / friends with benefits","argot","Pour lui, c'était juste un plan cul.","Vulgar; only with close friends."],
+  ["Prendre un râteau","to get knocked back","familier","J'ai tenté ma chance et j'ai pris un râteau.",""],
+  ["Faire le premier pas","to make the first move","courant","Personne n'ose faire le premier pas.",""],
+  ["Mettre un vent à quelqu'un","to blank someone","argot","Je lui ai écrit trois fois, il m'a mis un vent.","One-off snub; « ghoster » is disappearing completely."],
+  ["C'est un red flag","that's a red flag","familier","Il parle de son ex à chaque message, c'est un red flag.","Borrowed from English, very common among under-35s."],
+  ["Le premier rendez-vous","the first date","courant","Pour un premier rendez-vous, un verre, c'est parfait.",""],
+  ["Apprendre à se connaître","to get to know each other","courant","On prend le temps d'apprendre à se connaître.",""],
+  ["On se boit un verre un de ces quatre ?","shall we grab a drink sometime?","familier","Tu as l'air sympa, on se boit un verre un de ces quatre ?","« Un de ces quatre » = one of these days."],
+  ["Il y a un feeling","there's a spark","familier","Je ne sais pas pourquoi, mais il y a un feeling entre nous.",""],
+  ["Se mettre en couple","to get together (as a couple)","courant","Ils se sont mis en couple après trois mois de dates.",""]
+ ]},
+ {"d":"2026-11-06","t":"Compliments","items":[
+  ["Ça te va super bien","it really suits you","courant","Cette veste, ça te va super bien !",""],
+  ["Elle est canon","she's gorgeous","familier","Ta sœur est canon, elle est célibataire ?","Invariable: « ils sont canon »."],
+  ["Un beau gosse","a good-looking guy","familier","Le nouveau stagiaire, c'est un beau gosse.",""],
+  ["T'as trop la classe","you look so classy","familier","Avec ce costume, t'as trop la classe !",""],
+  ["Tu es rayonnante","you're glowing","courant","Tu es rayonnante, les vacances t'ont fait du bien.","Masculine: « rayonnant »."],
+  ["Chapeau !","hats off! / well done!","courant","Tu as eu 17 au partiel ? Chapeau !",""],
+  ["Tu gères !","you're smashing it!","familier","Trois jobs et ta licence en même temps ? Tu gères !",""],
+  ["Tu t'es surpassé","you've outdone yourself","courant","Ce repas est incroyable, tu t'es surpassé !","Add -e for a woman."],
+  ["Je suis bluffé","I'm blown away","familier","Je suis bluffé par ta présentation, franchement.",""],
+  ["Tu as bon goût","you have good taste","courant","Ton appart est super bien décoré, tu as bon goût.",""],
+  ["Il a un charme fou","he's incredibly charming","courant","Il n'est pas très beau, mais il a un charme fou.",""],
+  ["T'es une perle","you're a gem","familier","Tu m'as gardé une part ? T'es une perle !",""],
+  ["T'es une crème","you're a sweetheart","familier","Merci de m'avoir aidé à déménager, t'es une crème.",""],
+  ["C'est une tuerie","it's amazing (esp. food)","argot","Ce gâteau au chocolat, c'est une tuerie !",""],
+  ["Trop stylé","so cool / stylish","argot","Tes baskets sont trop stylées !","Agrees with the noun."],
+  ["T'es au top","you're the best / brilliant","familier","Merci pour le coup de main, t'es au top !",""],
+  ["C'est du beau travail","that's a fine piece of work","courant","Ton mémoire est très bien structuré, c'est du beau travail.",""],
+  ["Tu me flattes","you flatter me","courant","Moi, une future grande avocate ? Tu me flattes !","Typical modest reply."],
+  ["Vous êtes bien aimable","that's very kind of you","soutenu","Vous êtes bien aimable de m'avoir raccompagné.","Polite thanks to a compliment or favour."],
+  ["Toutes mes félicitations","my warmest congratulations","soutenu","Toutes mes félicitations pour votre admission au barreau.",""],
+  ["Votre intervention était remarquable","your talk was outstanding","soutenu","Votre intervention était remarquable, merci pour cet éclairage.","For a speaker, lecturer or colleague."]
  ]}
 ]}
