@@ -1,5 +1,5 @@
 {
-"total":113,
+"total":152,
 "batches":[
  {"d":"2026-10-27","t":"Expressions imagées","items":[
   ["Avoir un coup de foudre","to fall in love at first sight","courant","Ça a été le coup de foudre dès le premier soir.","Also for places: « un coup de foudre pour Lyon »."],
@@ -125,5 +125,48 @@
   ["Vous êtes bien aimable","that's very kind of you","soutenu","Vous êtes bien aimable de m'avoir raccompagné.","Polite thanks to a compliment or favour."],
   ["Toutes mes félicitations","my warmest congratulations","soutenu","Toutes mes félicitations pour votre admission au barreau.",""],
   ["Votre intervention était remarquable","your talk was outstanding","soutenu","Votre intervention était remarquable, merci pour cet éclairage.","For a speaker, lecturer or colleague."]
+ ]},
+ {"d":"2026-11-09","t":"Soirées & teufs","items":[
+  ["Une teuf","a party / a do","argot","On fait une teuf chez Max samedi, tu viens ?","Verlan of « fête »."],
+  ["Pendre la crémaillère","to have a housewarming","courant","On pend la crémaillère vendredi, ramène tes potes.","The party itself: « une crémaillère »."],
+  ["Être bourré","to be drunk / hammered","familier","Il était tellement bourré qu'il a oublié ses clés.",""],
+  ["Prendre une cuite","to get plastered","familier","On a pris une cuite pour l'anniversaire de Léa.",""],
+  ["Se mettre une mine","to get hammered","argot","On s'est mis une mine hier, je ne me souviens de rien.","Youth slang."],
+  ["Mettre l'ambiance","to get the party going","courant","Heureusement que Karim est là pour mettre l'ambiance !",""],
+  ["Ça bouge pas trop","it's pretty dead","familier","Ça bouge pas trop ce soir, on va ailleurs ?","Opposite: « ça bouge bien »."],
+  ["Sortir en boîte","to go clubbing","courant","On sort en boîte après le dîner ?","« Une boîte (de nuit) » = a club."],
+  ["Se faire recaler à l'entrée","to get turned away at the door","familier","On s'est fait recaler à l'entrée à cause de nos baskets.",""],
+  ["Le videur","the bouncer","courant","Le videur nous a demandé nos cartes d'identité.",""],
+  ["Taper l'incruste","to gatecrash / invite oneself","argot","Il n'était pas invité, il a tapé l'incruste.",""],
+  ["C'est ma tournée !","this round's on me!","courant","Allez, c'est ma tournée, qu'est-ce que vous prenez ?",""],
+  ["Cul sec !","down it! / down in one!","familier","Allez, cul sec !",""],
+  ["Monte le son !","turn it up!","familier","J'adore cette chanson, monte le son !",""],
+  ["Il y avait un monde fou","it was absolutely packed","familier","Il y avait un monde fou dans le bar, on ne pouvait pas bouger.",""],
+  ["Jusqu'à pas d'heure","until all hours","familier","On a dansé jusqu'à pas d'heure.",""],
+  ["On finit chez moi ?","shall we carry on at mine?","familier","Le bar ferme, on finit chez moi ?",""],
+  ["Un fêtard","a party animal","courant","Son frère, c'est un vrai fêtard, il sort tous les soirs.","Feminine: « une fêtarde »."],
+  ["Le tapage nocturne","late-night noise disturbance","courant","Les voisins ont appelé la police pour tapage nocturne.","Also the legal offence's name."]
+ ]},
+ {"d":"2026-11-09","t":"Mails pro","items":[
+  ["Je reviens vers vous","I'm getting back to you","courant","Je reviens vers vous concernant le dossier Martin.","Ubiquitous opener in French work emails."],
+  ["Suite à notre échange téléphonique","further to our phone call","soutenu","Suite à notre échange téléphonique, je vous confirme notre rendez-vous.","Purists prefer « à la suite de »."],
+  ["Veuillez trouver ci-joint","please find attached","soutenu","Veuillez trouver ci-joint mon CV et ma lettre de motivation.",""],
+  ["Je vous remercie par avance","thanking you in advance","soutenu","Je vous remercie par avance de votre réponse.",""],
+  ["Bien cordialement","kind regards","courant","Bien cordialement, Josh","Standard sign-off; « Cordialement » alone is a bit curt."],
+  ["Je vous prie d'agréer l'expression de mes salutations distinguées","yours faithfully / yours sincerely","soutenu","Je vous prie d'agréer, Madame, l'expression de mes salutations distinguées.","Formal letters only, e.g. applications."],
+  ["Je me permets de vous contacter","I'm taking the liberty of contacting you","soutenu","Je me permets de vous contacter au sujet du stage proposé par votre cabinet.","Polite cold-email opener."],
+  ["Sauf erreur de ma part","unless I'm mistaken","soutenu","Sauf erreur de ma part, la facture n'a pas encore été réglée.","Diplomatic way to point out a mistake."],
+  ["N'hésitez pas à revenir vers moi","don't hesitate to get back to me","courant","N'hésitez pas à revenir vers moi si vous avez des questions.",""],
+  ["Je reste à votre disposition","I remain at your disposal","soutenu","Je reste à votre disposition pour tout complément d'information.",""],
+  ["Je mets Paul en copie","I'm copying Paul in","courant","Je mets Paul en copie, il suit aussi ce dossier.","« En copie cachée » = bcc."],
+  ["Pour rappel","as a reminder","courant","Pour rappel, la réunion est avancée à 9 h.",""],
+  ["Comme convenu","as agreed","courant","Comme convenu, je vous envoie le compte rendu.",""],
+  ["Je vous transfère le mail","I'm forwarding you the email","courant","Je vous transfère le mail de Mme Durand.",""],
+  ["Merci pour votre retour","thanks for your reply / feedback","courant","Merci pour votre retour rapide.",""],
+  ["Dans les meilleurs délais","as soon as possible","soutenu","Merci de me transmettre ces documents dans les meilleurs délais.","More polite than « dès que possible »."],
+  ["Je vous saurais gré de…","I would be grateful if you would…","soutenu","Je vous saurais gré de bien vouloir me confirmer votre présence.","Very formal; followed by an infinitive."],
+  ["Faire un point","to catch up / touch base","courant","On peut faire un point jeudi sur l'avancement du projet ?",""],
+  ["Je suis absente du bureau","I'm out of the office","courant","Je suis absente du bureau jusqu'au 15 novembre inclus.","Masculine: « absent »."],
+  ["Désolé pour le délai de réponse","sorry for the late reply","courant","Désolé pour le délai de réponse, j'étais en déplacement.","Add -e if you're a woman."]
  ]}
 ]}
