@@ -1,5 +1,5 @@
 {
-"total":152,
+"total":195,
 "batches":[
  {"d":"2026-10-27","t":"Expressions imagées","items":[
   ["Avoir un coup de foudre","to fall in love at first sight","courant","Ça a été le coup de foudre dès le premier soir.","Also for places: « un coup de foudre pour Lyon »."],
@@ -168,5 +168,52 @@
   ["Faire un point","to catch up / touch base","courant","On peut faire un point jeudi sur l'avancement du projet ?",""],
   ["Je suis absente du bureau","I'm out of the office","courant","Je suis absente du bureau jusqu'au 15 novembre inclus.","Masculine: « absent »."],
   ["Désolé pour le délai de réponse","sorry for the late reply","courant","Désolé pour le délai de réponse, j'étais en déplacement.","Add -e if you're a woman."]
+ ]},
+ {"d":"2026-11-11","t":"Tech & portable","items":[
+  ["Mon téléphone rame","my phone is so slow","familier","Mon téléphone rame depuis la dernière mise à jour.",""],
+  ["Ça a planté","it crashed","familier","Mon ordi a planté et j'ai perdu ma dissert !",""],
+  ["Je suis à 5 %","I'm on 5% (battery)","courant","Je suis à 5 %, je peux me brancher quelque part ?","Said « à cinq pour cent »."],
+  ["Tu as un chargeur ?","have you got a charger?","courant","Tu as un chargeur d'iPhone, par hasard ?",""],
+  ["Mettre à jour","to update","courant","Il faut que je mette à jour l'appli de la banque.","Noun: « une mise à jour »."],
+  ["Redémarrer","to restart","courant","Essaie de redémarrer ton téléphone, ça marche souvent.",""],
+  ["Ça capte pas","there's no signal","familier","Ça capte pas dans le métro, je te rappelle.","« Capter » = to get reception."],
+  ["C'est quoi le code wifi ?","what's the wifi password?","familier","Excuse-moi, c'est quoi le code wifi ?","Said « wifi » as in English or « oui-fi »."],
+  ["Mon écran est fissuré","my screen is cracked","courant","Mon écran est fissuré, il faut que je le fasse réparer.",""],
+  ["Faire une capture d'écran","to take a screenshot","courant","Fais une capture d'écran de la confirmation.",""],
+  ["Envoie-moi un screen","send me a screenshot","familier","Envoie-moi un screen de la conversation !",""],
+  ["Être scotché à son téléphone","to be glued to one's phone","familier","Pose ton portable, tu es scotché à ton téléphone !",""],
+  ["Liker","to like (a post)","familier","Elle a liké toutes mes photos, c'est louche.",""],
+  ["Poster une story","to post a story","familier","Il a posté une story depuis la plage.",""],
+  ["Bloquer quelqu'un","to block someone","courant","Il n'arrêtait pas de m'écrire, je l'ai bloqué.",""],
+  ["J'ai oublié mon mot de passe","I've forgotten my password","courant","J'ai oublié mon mot de passe, je dois le réinitialiser.",""],
+  ["Ça bugue","it's glitching","familier","L'appli bugue depuis ce matin.","Also spelled « ça beugue »."],
+  ["J'ai dépassé mon forfait","I've gone over my data / phone plan","courant","J'ai dépassé mon forfait, je n'ai plus de data.",""],
+  ["Partager sa connexion","to share one's hotspot","courant","Tu peux partager ta connexion ? Je n'ai plus de data.",""],
+  ["Mettre en mode avion","to put on airplane mode","courant","Je mets mon téléphone en mode avion pour réviser.",""],
+  ["Les données personnelles","personal data","courant","Le RGPD encadre l'utilisation des données personnelles.","RGPD = GDPR."],
+  ["La fracture numérique","the digital divide","soutenu","La dématérialisation des démarches aggrave la fracture numérique.","Common in essays and debates."]
+ ]},
+ {"d":"2026-11-11","t":"Banque & budget","items":[
+  ["Être à découvert","to be overdrawn","courant","Je suis à découvert jusqu'à la fin du mois.",""],
+  ["Être dans le rouge","to be in the red","courant","Ce mois-ci, mon compte est encore dans le rouge.",""],
+  ["Tu peux m'envoyer ton RIB ?","can you send me your bank details?","courant","Tu peux m'envoyer ton RIB pour que je te rembourse ?","RIB = relevé d'identité bancaire."],
+  ["Ouvrir un compte","to open an account","courant","Pour ouvrir un compte, il faut un justificatif de domicile.",""],
+  ["Retirer de l'argent","to withdraw cash","courant","Je dois retirer de l'argent au distributeur.","« Le distributeur » = cashpoint."],
+  ["Ma carte ne passe pas","my card's being declined","familier","Désolé, ma carte ne passe pas, vous prenez les espèces ?",""],
+  ["Le paiement sans contact","contactless payment","courant","Le paiement sans contact est limité à 50 euros.",""],
+  ["Faire opposition","to cancel / stop a card","courant","J'ai perdu ma carte, je dois faire opposition tout de suite.",""],
+  ["Un prélèvement","a direct debit","courant","Le loyer est payé par prélèvement automatique.",""],
+  ["Les frais bancaires","bank charges","courant","Ma banque m'a encore pris des frais bancaires.",""],
+  ["Contracter un prêt","to take out a loan","soutenu","Ils ont contracté un prêt immobilier sur vingt-cinq ans.","Everyday: « faire un crédit »."],
+  ["Mettre de côté","to put money aside / save","courant","J'essaie de mettre de côté pour l'été.",""],
+  ["Joindre les deux bouts","to make ends meet","courant","Avec la hausse des loyers, beaucoup d'étudiants ont du mal à joindre les deux bouts.",""],
+  ["Arrondir ses fins de mois","to earn a bit on the side","courant","Il donne des cours particuliers pour arrondir ses fins de mois.",""],
+  ["Faire les comptes","to settle up / work out who owes what","courant","On fait les comptes à la fin du week-end ?",""],
+  ["On fait moitié-moitié ?","shall we split it 50/50?","familier","L'essence, on fait moitié-moitié ?",""],
+  ["Le relevé de compte","bank statement","courant","Je n'ai pas reconnu ce débit sur mon relevé de compte.",""],
+  ["Ma conseillère bancaire","my bank adviser","courant","J'ai rendez-vous avec ma conseillère bancaire jeudi.","Masculine: « mon conseiller »."],
+  ["Vérifier son solde","to check one's balance","courant","Attends, je vérifie mon solde avant de commander.",""],
+  ["Je suis à sec","I'm skint","familier","Je ne peux pas sortir ce soir, je suis à sec.",""],
+  ["Claquer son fric","to blow one's cash","argot","Il a claqué tout son fric en fringues.",""]
  ]}
 ]}
