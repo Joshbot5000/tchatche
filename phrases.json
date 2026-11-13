@@ -1,5 +1,5 @@
 {
-"total":195,
+"total":237,
 "batches":[
  {"d":"2026-10-27","t":"Expressions imagées","items":[
   ["Avoir un coup de foudre","to fall in love at first sight","courant","Ça a été le coup de foudre dès le premier soir.","Also for places: « un coup de foudre pour Lyon »."],
@@ -215,5 +215,51 @@
   ["Vérifier son solde","to check one's balance","courant","Attends, je vérifie mon solde avant de commander.",""],
   ["Je suis à sec","I'm skint","familier","Je ne peux pas sortir ce soir, je suis à sec.",""],
   ["Claquer son fric","to blow one's cash","argot","Il a claqué tout son fric en fringues.",""]
+ ]},
+ {"d":"2026-11-13","t":"Politique & actu","items":[
+  ["Tu as vu l'actu ?","have you seen the news?","familier","Tu as vu l'actu ? Le gouvernement vient de démissionner.","« L'actu » = les actualités."],
+  ["Être en grève","to be on strike","courant","Les contrôleurs sont en grève tout le week-end.","« Faire grève » = to strike."],
+  ["Une manif","a demo / protest","familier","Il y a une manif contre la réforme samedi.","Short for « manifestation »."],
+  ["Être de gauche","to be left-wing","courant","Ses parents sont plutôt de gauche.","Also « être de droite »."],
+  ["Voter blanc","to cast a blank vote","courant","Je n'aimais aucun candidat, alors j'ai voté blanc.",""],
+  ["L'abstention","abstention / low turnout","courant","L'abstention a atteint un niveau record chez les jeunes.",""],
+  ["Le second tour","the run-off","courant","Les deux candidats arrivés en tête s'affrontent au second tour.",""],
+  ["Faire barrage","to vote tactically to block someone","courant","Beaucoup ont voté pour elle uniquement pour faire barrage.",""],
+  ["La langue de bois","political waffle / doublespeak","courant","Le ministre a répondu avec sa langue de bois habituelle.",""],
+  ["Retourner sa veste","to do a U-turn / switch sides","familier","Il a retourné sa veste juste avant les élections.",""],
+  ["Tous pourris !","they're all as bad as each other!","familier","Les politiques ? Tous pourris, si tu veux mon avis.","Cynical cliché; good to recognise."],
+  ["C'est de la com'","it's just spin","familier","Cette annonce, c'est de la com', rien ne va changer.","« Com' » = communication."],
+  ["Un sujet qui fâche","a touchy subject","courant","Évite de parler politique au repas de Noël, c'est un sujet qui fâche.",""],
+  ["Refaire le monde","to put the world to rights","courant","On a passé la nuit à refaire le monde autour d'une bouteille.",""],
+  ["Le pouvoir d'achat","cost of living / purchasing power","courant","Le pouvoir d'achat reste la première préoccupation des Français.",""],
+  ["Je ne suis pas très politisé","I'm not very political","courant","Je ne suis pas très politisé, mais je vote toujours.","Add -e for a woman."],
+  ["Passer en force","to force something through","courant","Le gouvernement est passé en force avec le 49.3.","Art. 49.3: adopting a bill without a vote."],
+  ["Un projet de loi","a government bill","soutenu","Le projet de loi sera examiné au Sénat en janvier.","« Proposition de loi » = a bill from MPs."],
+  ["Promulguer une loi","to enact / sign a law into force","soutenu","Le président a promulgué la loi malgré les manifestations.",""],
+  ["Censurer une disposition","to strike down a provision","soutenu","Le Conseil constitutionnel a censuré plusieurs dispositions du texte.","Constitutional review vocabulary."],
+  ["Une infox","a piece of fake news","soutenu","Cette vidéo est une infox, elle a été sortie de son contexte.","Official term; people mostly say « une fake news »."]
+ ]},
+ {"d":"2026-11-13","t":"Papoter avec des inconnus","items":[
+  ["Vous êtes d'ici ?","are you from round here?","courant","Vous êtes d'ici ou vous êtes de passage ?",""],
+  ["Il y a du monde aujourd'hui !","it's busy today!","courant","Il y a du monde aujourd'hui, c'est toujours comme ça le samedi ?",""],
+  ["Ça fait longtemps que vous attendez ?","have you been waiting long?","courant","Ça fait longtemps que vous attendez le bus ?",""],
+  ["Le monde est petit !","it's a small world!","courant","Vous connaissez Clara aussi ? Le monde est petit !",""],
+  ["Cette place est libre ?","is this seat free?","courant","Excusez-moi, cette place est libre ?",""],
+  ["Il ne fait pas chaud, hein !","bit nippy, isn't it!","familier","Il ne fait pas chaud, hein, ce matin !","Classic ice-breaker."],
+  ["Vous venez souvent ici ?","do you come here often?","courant","Vous venez souvent ici ? Je cherche un bon café dans le coin.","Also a jokey cliché chat-up line."],
+  ["Il est adorable, votre chien !","your dog is adorable!","courant","Il est adorable, votre chien ! Il a quel âge ?",""],
+  ["Vous avez un petit accent","you've got a slight accent","courant","Vous avez un petit accent, vous venez d'où ?","« Petit » softens it; very common remark."],
+  ["Je vous en prie, passez","after you","courant","Je vous en prie, passez devant, je ne suis pas pressé.",""],
+  ["Bonne continuation !","all the best! / good luck with it!","courant","Ravi d'avoir discuté, bonne continuation !","Parting wish when someone's mid-project or trip."],
+  ["Ravi d'avoir discuté avec vous","nice chatting with you","courant","Ravie d'avoir discuté avec vous, bon voyage !","« Ravie » for a woman."],
+  ["Ça n'avance pas !","it's not moving! (queue)","familier","Ça n'avance pas, il n'y a qu'une caisse ouverte.",""],
+  ["On n'est pas sortis de l'auberge","we're not out of the woods yet","familier","Encore vingt personnes devant nous, on n'est pas sortis de l'auberge !",""],
+  ["Vous êtes en vacances ?","are you on holiday?","courant","Vous êtes en vacances ou vous travaillez dans le coin ?",""],
+  ["Ça ne vous dérange pas si je m'assois ?","do you mind if I sit here?","courant","Ça ne vous dérange pas si je m'assois à côté de vous ?",""],
+  ["Vous auriez du feu ?","have you got a light?","courant","Pardon, vous auriez du feu, s'il vous plaît ?",""],
+  ["Engager la conversation","to strike up a conversation","courant","Dans le train, il a engagé la conversation avec sa voisine.",""],
+  ["Je vous ai pris pour quelqu'un d'autre","I mistook you for someone else","courant","Oh pardon, je vous ai pris pour quelqu'un d'autre !",""],
+  ["C'est toujours comme ça ici ?","is it always like this here?","courant","Il y a la queue tous les soirs ? C'est toujours comme ça ici ?",""],
+  ["Vous savez si…","do you know whether…","courant","Vous savez si le prochain train s'arrête à Lyon ?","Polite way to ask a stranger for info."]
  ]}
 ]}
