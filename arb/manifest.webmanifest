@@ -1,0 +1,14 @@
+{
+  "name": "Arbiter — sure bet scanner",
+  "short_name": "Arbiter",
+  "description": "Scans bookmaker odds for arbitrage (sure bet) opportunities, football first.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0d0c",
+  "theme_color": "#0a0d0c",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

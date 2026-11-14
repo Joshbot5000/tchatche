@@ -6,3 +6,7 @@ Ouvre le site GitHub Pages de ce dépôt sur ton téléphone, puis ajoute-le à 
 Tes données restent sur ton appareil : rien n'est stocké dans ce dépôt.
 
 `webllm.js` is [WebLLM](https://github.com/mlc-ai/web-llm) 0.2.84 (Apache-2.0), bundled so the on-device pen pal works offline.
+
+## Arbiter
+
+`arb/` is a separate app: a sure bet (arbitrage) scanner for football odds. See [arb/README.md](arb/README.md).
