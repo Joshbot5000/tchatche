@@ -1,5 +1,5 @@
 {
-"total":237,
+"total":281,
 "batches":[
  {"d":"2026-10-27","t":"Expressions imagées","items":[
   ["Avoir un coup de foudre","to fall in love at first sight","courant","Ça a été le coup de foudre dès le premier soir.","Also for places: « un coup de foudre pour Lyon »."],
@@ -261,5 +261,53 @@
   ["Je vous ai pris pour quelqu'un d'autre","I mistook you for someone else","courant","Oh pardon, je vous ai pris pour quelqu'un d'autre !",""],
   ["C'est toujours comme ça ici ?","is it always like this here?","courant","Il y a la queue tous les soirs ? C'est toujours comme ça ici ?",""],
   ["Vous savez si…","do you know whether…","courant","Vous savez si le prochain train s'arrête à Lyon ?","Polite way to ask a stranger for info."]
+ ]},
+ {"d":"2026-11-16","t":"Foot & matchs","items":[
+  ["Gagner haut la main","to win hands down","courant","Ils ont gagné haut la main, 4 à 0.",""],
+  ["Se faire éclater","to get thrashed","familier","On s'est fait éclater 5-1 à domicile, la honte.",""],
+  ["Un match nul","a draw","courant","Le match s'est terminé sur un match nul, 1 partout.","« 1 partout » = 1-1."],
+  ["Péno !","penalty!","familier","Il l'a fauché dans la surface, péno !","Short for « penalty », pronounced « pénalty »."],
+  ["L'arbitre est vendu !","the ref's bent!","familier","Il n'a pas sifflé la faute ? L'arbitre est vendu !","Classic fan complaint."],
+  ["Être hors jeu","to be offside","courant","Le but est refusé, il était hors jeu.",""],
+  ["Rater l'immanquable","to miss a sitter","courant","Seul devant le but, il a raté l'immanquable.",""],
+  ["Mettre une lucarne","to score in the top corner","familier","Il a mis une lucarne de trente mètres !",""],
+  ["Prendre un carton rouge","to get a red card","courant","Il a pris un carton rouge dès la vingtième minute.",""],
+  ["Les prolongations","extra time","courant","Ils sont allés jusqu'aux prolongations.",""],
+  ["La séance de tirs au but","the penalty shootout","courant","Tout s'est joué à la séance de tirs au but.",""],
+  ["Égaliser","to equalise","courant","Ils ont égalisé dans le temps additionnel.","« Le temps additionnel » = stoppage time."],
+  ["Une remontada","a comeback","familier","Menés 3-0 à la mi-temps, ils ont fait une remontada incroyable.","From Spanish; hugely common since PSG–Barça 2017."],
+  ["Il est en feu","he's on fire","familier","Trois buts en deux matchs, il est en feu en ce moment.",""],
+  ["Les Bleus","the French national team","courant","Tu regardes les Bleus ce soir ?","Women's team: « les Bleues »."],
+  ["Le Classique","PSG v Marseille","courant","Le Classique, c'est le match à ne pas rater de l'année.","Rivalry match between PSG and OM."],
+  ["Jouer à domicile","to play at home","courant","On joue à domicile samedi, puis à l'extérieur.","« À l'extérieur » = away."],
+  ["C'est plié","it's done and dusted","familier","À 3-0 à la 80e minute, c'est plié.",""],
+  ["Se faire sortir","to get knocked out","familier","On s'est fait sortir en quarts de finale.",""],
+  ["Marquer contre son camp","to score an own goal","courant","Le défenseur a marqué contre son camp.","Noun: « un but contre son camp » (CSC)."],
+  ["Le mercato","the transfer window","courant","Le club veut recruter un attaquant pendant le mercato.",""],
+  ["Faire un petit pont","to nutmeg someone","courant","Il lui a fait un petit pont devant tout le stade.",""]
+ ]},
+ {"d":"2026-11-16","t":"Au tribunal","items":[
+  ["Ester en justice","to bring legal proceedings","soutenu","Une association peut ester en justice pour défendre ses membres.","Technical; everyday: « aller en justice »."],
+  ["Intenter un procès à quelqu'un","to sue someone","courant","Il a intenté un procès à son ancien employeur.",""],
+  ["Le prévenu","the defendant (criminal court)","soutenu","Le prévenu nie les faits qui lui sont reprochés.","At the cour d'assises: « l'accusé »."],
+  ["Se constituer partie civile","to join proceedings as a civil party","soutenu","La victime s'est constituée partie civile pour obtenir réparation.","Lets the victim claim damages in the criminal trial."],
+  ["Le parquet","the prosecution service","soutenu","Le parquet a requis deux ans de prison.","Also « le ministère public »."],
+  ["Le casier judiciaire","criminal record","courant","Il a un casier judiciaire vierge.","« Vierge » = clean."],
+  ["Être condamné avec sursis","to get a suspended sentence","courant","Il a été condamné à six mois de prison avec sursis.",""],
+  ["Être relaxé","to be acquitted (of a lesser offence)","soutenu","Faute de preuves, le prévenu a été relaxé.","« Acquitté » is used at the cour d'assises."],
+  ["Faire appel","to appeal","courant","Son avocat a annoncé qu'il allait faire appel.",""],
+  ["Se pourvoir en cassation","to appeal to the Cour de cassation","soutenu","Après l'arrêt de la cour d'appel, elle s'est pourvue en cassation.","On points of law only, like an appeal to the UK Supreme Court."],
+  ["Être mis en examen","to be placed under formal investigation","courant","Le maire a été mis en examen pour corruption.","Roughly « charged »; it is not a conviction."],
+  ["La garde à vue","police custody","courant","Il a passé vingt-quatre heures en garde à vue.",""],
+  ["La présomption d'innocence","the presumption of innocence","courant","N'oublie pas la présomption d'innocence, il n'a pas été jugé.",""],
+  ["Mettre en délibéré","to reserve judgment","soutenu","La décision a été mise en délibéré au 12 décembre.",""],
+  ["Plaider coupable","to plead guilty","courant","Il a choisi de plaider coupable pour obtenir une peine réduite.",""],
+  ["Les dommages et intérêts","damages","courant","Elle a obtenu 10 000 euros de dommages et intérêts.","Also written « dommages-intérêts »."],
+  ["Un vice de procédure","a procedural irregularity","courant","Il a été libéré à cause d'un vice de procédure.",""],
+  ["Un avocat commis d'office","a court-appointed lawyer","courant","Il n'avait pas les moyens, on lui a donné un avocat commis d'office.",""],
+  ["Bonjour, Maître","good morning (to a lawyer)","courant","Bonjour, Maître, merci de me recevoir.","Lawyers and notaries are addressed as « Maître »."],
+  ["Prêter serment","to be sworn in / take the oath","soutenu","Elle prêtera serment devant la cour d'appel en janvier.","How new avocats join the Bar."],
+  ["Avoir gain de cause","to win one's case","soutenu","Après trois ans de procédure, les locataires ont eu gain de cause.",""],
+  ["L'audience est levée","the hearing is adjourned","soutenu","Le président a déclaré : « L'audience est levée. »",""]
  ]}
 ]}
