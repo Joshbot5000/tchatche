@@ -1,5 +1,5 @@
 {
-"total":281,
+"total":322,
 "batches":[
  {"d":"2026-10-27","t":"Expressions imagées","items":[
   ["Avoir un coup de foudre","to fall in love at first sight","courant","Ça a été le coup de foudre dès le premier soir.","Also for places: « un coup de foudre pour Lyon »."],
@@ -309,5 +309,52 @@
   ["Prêter serment","to be sworn in / take the oath","soutenu","Elle prêtera serment devant la cour d'appel en janvier.","How new avocats join the Bar."],
   ["Avoir gain de cause","to win one's case","soutenu","Après trois ans de procédure, les locataires ont eu gain de cause.",""],
   ["L'audience est levée","the hearing is adjourned","soutenu","Le président a déclaré : « L'audience est levée. »",""]
+ ]},
+ {"d":"2026-11-18","t":"Râler","items":[
+  ["Râler","to moan / grumble","courant","Il râle tout le temps, contre la météo, les transports, tout.","National sport, according to the French themselves."],
+  ["C'est abusé","that's out of order","familier","Douze euros le cocktail ? C'est abusé.",""],
+  ["C'est pas possible !","I don't believe this!","familier","C'est pas possible, le train est encore supprimé !","Exasperation, not literal impossibility."],
+  ["J'en ai ras la casquette","I'm fed up to the back teeth","familier","J'en ai ras la casquette de ses retards.",""],
+  ["Ça me gonfle","it's getting on my nerves","familier","Ça me gonfle de devoir tout refaire.",""],
+  ["Quelle plaie !","what a pain!","familier","Encore des travaux dans la rue, quelle plaie !",""],
+  ["C'est toujours la même chanson","it's always the same old story","courant","Il promet de changer, mais c'est toujours la même chanson.",""],
+  ["On se moque du monde !","they're taking the mickey!","courant","Trois heures d'attente sans explication, on se moque du monde !",""],
+  ["Ça me sort par les yeux","I'm sick to death of it","familier","Ce tube passe partout, ça me sort par les yeux.",""],
+  ["C'est du grand n'importe quoi","it's complete nonsense","familier","Cette nouvelle règle, c'est du grand n'importe quoi.",""],
+  ["Il ne manquait plus que ça !","that's all I needed!","courant","Il pleut et j'ai oublié mon parapluie… il ne manquait plus que ça !",""],
+  ["Ça commence à bien faire !","enough is enough!","courant","Ça commence à bien faire, le bruit tous les soirs !",""],
+  ["Pousser un coup de gueule","to have a rant","familier","Elle a poussé un coup de gueule sur Insta contre son proprio.",""],
+  ["Ça me tape sur les nerfs","it really gets on my nerves","familier","Son petit sifflement, ça me tape sur les nerfs.",""],
+  ["J'ai les boules","I'm gutted / so annoyed","argot","J'ai raté le concert à cinq minutes près, j'ai les boules.",""],
+  ["Il y a de quoi s'énerver","it's enough to drive anyone mad","courant","Ils ont encore perdu ton colis ? Il y a de quoi s'énerver.",""],
+  ["Je déplore…","I deplore… / I regret…","soutenu","Je déplore le manque de communication de la direction.","Formal complaint register."]
+ ]},
+ {"d":"2026-11-18","t":"Réagir & relancer","items":[
+  ["Sérieux ?","seriously?","familier","Sérieux ? Elle a vraiment dit ça ?",""],
+  ["Attends, quoi ?","wait, what?","familier","Attends, quoi ? Ils ont rompu ?",""],
+  ["C'est clair !","totally! / you're telling me!","familier","— Ce prof est trop strict. — C'est clair !","Strong agreement."],
+  ["Ça se tient","that makes sense / fair enough","courant","Ton argument se tient, je n'y avais pas pensé.",""],
+  ["Pas faux","fair point","familier","— On devrait partir plus tôt pour éviter les bouchons. — Pas faux.",""],
+  ["Et du coup ?","so then what?","familier","Il a raté son train ? Et du coup, il a fait comment ?",""],
+  ["Tu as bien fait","you did the right thing","courant","Tu lui as dit non ? Tu as bien fait.",""],
+  ["Ça m'étonne pas de lui","that's typical of him","familier","Il a encore oublié ton anniversaire ? Ça m'étonne pas de lui.","« D'elle » for a woman."],
+  ["La honte !","how embarrassing!","familier","Tu es tombé devant toute la classe ? La honte !",""],
+  ["Le pauvre !","poor thing!","courant","Il s'est cassé la jambe la veille des vacances ? Le pauvre !","« La pauvre » for a woman."],
+  ["Trop bien pour toi !","that's great for you!","familier","Tu as eu le stage ? Trop bien pour toi !",""],
+  ["Tu m'en diras tant","that explains it","courant","Il sort avec la fille du patron ? Tu m'en diras tant !","Ironic: now I understand."],
+  ["Ah, ça explique tout !","ah, that explains everything!","courant","Il n'avait pas dormi ? Ah, ça explique tout !",""],
+  ["Je vois le genre","I know the type","familier","Il ne parle que de sa voiture ? Je vois le genre.",""],
+  ["Et toi, dans tout ça ?","and where do you stand in all this?","courant","Ils se disputent tout le temps… et toi, dans tout ça ?","Brings the conversation back to them."],
+  ["Mais encore ?","and? / go on…","courant","— J'ai passé un bon week-end. — Mais encore ?","Pushes for details; slightly teasing."],
+  ["Effectivement","indeed / that's right","soutenu","Effectivement, le délai est dépassé depuis lundi.","Very common in meetings and formal speech."],
+  ["Je comprends tout à fait","I completely understand","courant","Je comprends tout à fait votre frustration.","Good for calming someone down."]
+ ]},
+ {"d":"2026-11-18","t":"Râler","items":[
+  ["Je suis vénère","I'm fuming","argot","Il a encore pris mon chargeur sans demander, je suis vénère.","Verlan of « énervé »."],
+  ["Ça me fait suer","it's such a pain","familier","Ça me fait suer de retourner à la préfecture demain.",""],
+  ["C'est du nawak","it's total rubbish","argot","Ce film, c'est du nawak du début à la fin.","« Nawak » = n'importe quoi."],
+  ["J'hallucine !","I can't believe this!","familier","Tu as mangé toute la pizza ? J'hallucine !",""],
+  ["Un râleur","a moaner / grumbler","courant","Mon oncle est un éternel râleur.","Feminine: « une râleuse »."],
+  ["Avoir les nerfs","to be seriously wound up","argot","J'ai les nerfs, j'ai attendu deux heures pour rien.",""]
  ]}
 ]}
