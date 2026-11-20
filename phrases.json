@@ -1,5 +1,5 @@
 {
-"total":322,
+"total":364,
 "batches":[
  {"d":"2026-10-27","t":"Expressions imagées","items":[
   ["Avoir un coup de foudre","to fall in love at first sight","courant","Ça a été le coup de foudre dès le premier soir.","Also for places: « un coup de foudre pour Lyon »."],
@@ -356,5 +356,53 @@
   ["J'hallucine !","I can't believe this!","familier","Tu as mangé toute la pizza ? J'hallucine !",""],
   ["Un râleur","a moaner / grumbler","courant","Mon oncle est un éternel râleur.","Feminine: « une râleuse »."],
   ["Avoir les nerfs","to be seriously wound up","argot","J'ai les nerfs, j'ai attendu deux heures pour rien.",""]
+ ]},
+ {"d":"2026-11-20","t":"Verlan & argot","items":[
+  ["Ma reum","my mum","argot","Ma reum veut que je rentre avant minuit.","Verlan of « mère »."],
+  ["Mon reuf","my brother / bro","argot","Je vais au match avec mon reuf.","Verlan of « frère »."],
+  ["Ma daronne","my mum","argot","Ma daronne a fait un couscous de ouf.","« Mon daron » = my dad; « les darons » = parents."],
+  ["Une go","a girl","argot","C'est qui, la go avec qui tu parlais ?",""],
+  ["J'ai le seum","I'm gutted","argot","On a perdu en finale, j'ai trop le seum.",""],
+  ["Les keufs","the cops / the old bill","argot","Baisse la musique, les keufs sont en bas.","Verlan of « flics »."],
+  ["Un bolos","a mug / loser","argot","Il s'est fait avoir comme un bolos.","Also spelled « bolosse »."],
+  ["Mettre le zbeul","to cause chaos","argot","Les supporters ont mis le zbeul dans le métro.","« C'est le zbeul » = it's a total mess."],
+  ["Ça passe crème","it went down a treat / no problem","familier","J'ai rendu mon devoir en retard, ça passe crème.",""],
+  ["Askip","apparently","argot","Askip, ils se sont remis ensemble.","From « à ce qu'il paraît »; texting and speech."],
+  ["En scred","on the quiet","argot","Il est parti en scred avant la fin du cours.","From « en secret »."],
+  ["Être en hess","to be skint","argot","Je suis en hess jusqu'à la bourse.",""],
+  ["Se taper une barre","to crack up laughing","argot","On s'est tapé une barre devant ses vidéos.",""],
+  ["La moula","cash / dosh","argot","Il fait des petits boulots pour se faire de la moula.",""],
+  ["Gros","mate / bro","argot","Gros, t'es où ? On t'attend.","Addressing a friend, not about weight."],
+  ["Frérot","bro","familier","Merci frérot, je te revaudrai ça.",""],
+  ["Tranquille","all good / chill","familier","— Ça va ? — Tranquille, et toi ?",""],
+  ["C'est cramé","the secret's out / it's obvious","argot","Arrête de la regarder, c'est cramé que tu la kiffes.",""]
+ ]},
+ {"d":"2026-11-20","t":"Connecteurs (soutenu)","items":[
+  ["Toutefois","however / nevertheless","soutenu","La clause est valable ; toutefois, elle doit être interprétée strictement.",""],
+  ["Or","yet / now (next step in reasoning)","soutenu","Le contrat exige un écrit. Or, aucun écrit n'a été produit.","Key word in a French syllogism; not « gold » here."],
+  ["En l'espèce","in the present case","soutenu","En l'espèce, le vendeur connaissait le vice caché.","Standard in legal analysis, like « on the facts »."],
+  ["Dès lors","consequently / from then on","soutenu","Dès lors, la responsabilité du bailleur est engagée.","« Dès lors que » = as soon as / given that."],
+  ["De surcroît","moreover / on top of that","soutenu","Le projet est coûteux et, de surcroît, irréalisable.",""],
+  ["Certes… mais","admittedly… but","soutenu","Certes, la loi est claire, mais son application pose problème.","Classic concession in essays."],
+  ["Nonobstant","notwithstanding","soutenu","Nonobstant toute clause contraire, le délai est de deux mois.","Mostly legal drafting."],
+  ["En l'occurrence","in this instance","soutenu","Il faut un motif légitime, en l'occurrence la sécurité des usagers.",""],
+  ["Quand bien même","even if","soutenu","Quand bien même il aurait signé, l'acte serait nul.","Followed by the conditional."],
+  ["Dans la mesure où","insofar as / given that","soutenu","Dans la mesure où le délai est expiré, la demande est irrecevable.",""],
+  ["Il convient de","it is appropriate to / one should","soutenu","Il convient de distinguer deux hypothèses.","Typical start of a « plan » in a dissertation."],
+  ["Force est de constater que","one cannot but acknowledge that","soutenu","Force est de constater que la réforme n'a pas atteint ses objectifs.",""],
+  ["À cet égard","in this respect","soutenu","À cet égard, l'arrêt de 2016 est éclairant.",""],
+  ["Au demeurant","for that matter / moreover","soutenu","L'argument est, au demeurant, contredit par les faits.",""],
+  ["Somme toute","all things considered","soutenu","Somme toute, la décision paraît équilibrée.",""],
+  ["Encore faut-il que…","provided, however, that… / but first…","soutenu","Le juge peut réduire la clause pénale ; encore faut-il qu'elle soit manifestement excessive.","Takes the subjunctive; note the inversion."],
+  ["Sous réserve de","subject to","soutenu","Le contrat entre en vigueur sous réserve de l'accord du conseil d'administration.",""],
+  ["À défaut de","failing / in the absence of","soutenu","À défaut d'accord entre les parties, le tribunal tranchera.",""],
+  ["Eu égard à","having regard to / in view of","soutenu","Eu égard à la gravité des faits, la peine est justifiée.",""],
+  ["Il s'ensuit que","it follows that","soutenu","Il s'ensuit que le licenciement est dépourvu de cause réelle et sérieuse.",""],
+  ["Partant","hence / therefore","soutenu","Le consentement a été vicié ; partant, le contrat est nul.","Rather old-fashioned; still seen in judgments."]
+ ]},
+ {"d":"2026-11-20","t":"Verlan & argot","items":[
+  ["Être déter","to be fired up / determined","argot","Ce soir, je révise jusqu'à minuit, je suis déter.","Short for « déterminé »."],
+  ["Je suis chaud","I'm up for it","familier","Un foot dimanche matin ? Je suis chaud !","« Chaude » for a woman; context matters."],
+  ["J'ai le démon","I'm fuming / gutted","argot","Il m'a volé ma place de parking, j'ai le démon.","Recent youth slang."]
  ]}
 ]}
