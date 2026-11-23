@@ -1,5 +1,5 @@
 {
-"total":364,
+"total":406,
 "batches":[
  {"d":"2026-10-27","t":"Expressions imagées","items":[
   ["Avoir un coup de foudre","to fall in love at first sight","courant","Ça a été le coup de foudre dès le premier soir.","Also for places: « un coup de foudre pour Lyon »."],
@@ -404,5 +404,53 @@
   ["Être déter","to be fired up / determined","argot","Ce soir, je révise jusqu'à minuit, je suis déter.","Short for « déterminé »."],
   ["Je suis chaud","I'm up for it","familier","Un foot dimanche matin ? Je suis chaud !","« Chaude » for a woman; context matters."],
   ["J'ai le démon","I'm fuming / gutted","argot","Il m'a volé ma place de parking, j'ai le démon.","Recent youth slang."]
+ ]},
+ {"d":"2026-11-23","t":"Donner son avis","items":[
+  ["Pour moi,…","for me / in my view","courant","Pour moi, c'est le meilleur resto du quartier.",""],
+  ["Personnellement","personally","courant","Personnellement, je préfère la version originale.",""],
+  ["Ça se discute","that's debatable","courant","Le meilleur album de l'année ? Ça se discute.",""],
+  ["Je suis partagé","I'm torn","courant","Sur cette réforme, je suis partagé.","Add -e for a woman."],
+  ["J'ai pas d'avis là-dessus","I don't have an opinion on that","familier","Le foot ? J'ai pas d'avis là-dessus, je ne regarde jamais.",""],
+  ["Je ne suis pas convaincu","I'm not convinced","courant","Ton plan a l'air bien, mais je ne suis pas convaincu.","Add -e for a woman."],
+  ["Je trouve ça nul","I think it's rubbish","familier","Je trouve ça nul de ne pas l'avoir invitée.",""],
+  ["C'est surcoté","it's overrated","familier","Ce resto est surcoté, on a attendu une heure pour rien.","Opposite: « sous-coté »."],
+  ["Je vois pas l'intérêt","I don't see the point","familier","Je vois pas l'intérêt de payer plus pour la marque.",""],
+  ["Je suis plutôt pour","I'm broadly in favour","courant","La semaine de quatre jours ? Je suis plutôt pour.","« Plutôt contre » = rather against."],
+  ["Il me semble que…","it seems to me that…","courant","Il me semble que tu exagères un peu.",""],
+  ["J'ai l'impression que…","I get the feeling that…","courant","J'ai l'impression qu'il ne nous dit pas tout.",""],
+  ["Ça ne casse pas trois pattes à un canard","it's nothing to write home about","familier","Le concert était sympa, mais ça ne cassait pas trois pattes à un canard.",""],
+  ["Je ne partage pas votre point de vue","I don't share your view","soutenu","Je ne partage pas votre point de vue sur la question.","Polite disagreement in meetings or seminars."],
+  ["Il est indéniable que…","it is undeniable that…","soutenu","Il est indéniable que la situation s'est améliorée.","Takes the indicative."],
+  ["Je suis intimement convaincu que…","I firmly believe that…","soutenu","Je suis intimement convaincu que cette décision est juste.","« L'intime conviction » is also the standard of proof for French juries."]
+ ]},
+ {"d":"2026-11-23","t":"Nuancer & hésiter","items":[
+  ["Plus ou moins","more or less","courant","J'ai plus ou moins fini mon mémoire.",""],
+  ["Pas vraiment","not really","courant","— Tu as aimé ? — Pas vraiment.",""],
+  ["On va dire que…","let's say…","familier","On va dire que ça s'est bien passé, globalement.","Softens a statement; also « on va dire » on its own."],
+  ["Si on veut","sort of / if you like","familier","— C'est ton copain ? — Si on veut…",""],
+  ["En quelque sorte","in a way / sort of","courant","C'est en quelque sorte mon mentor.",""],
+  ["Ça reste à voir","that remains to be seen","courant","Il dit qu'il va changer, ça reste à voir.",""],
+  ["Pas tant que ça","not that much","courant","Le livre ne m'a pas plu tant que ça.",""],
+  ["Je dirais que…","I'd say…","courant","Je dirais qu'il faut compter deux heures de route.",""],
+  ["Grosso modo","roughly","familier","Grosso modo, on a dépensé cent euros chacun.",""],
+  ["Ce n'est pas si simple","it's not that simple","courant","Démissionner, ce n'est pas si simple quand on a un loyer à payer.",""],
+  ["Oui et non","yes and no","courant","— Tu es content du résultat ? — Oui et non.",""],
+  ["Mouais","yeah… (sceptical)","familier","— Ce sera prêt demain, promis. — Mouais…","Doubtful yes."],
+  ["À la limite","at a push / if need be","familier","À la limite, on peut se retrouver à 20 h.",""],
+  ["Je ne sais pas trop","I'm not really sure","courant","Je ne sais pas trop si je vais venir ce soir.",""],
+  ["Je ne dirais pas ça","I wouldn't say that","courant","Raté ? Je ne dirais pas ça, il y a eu du positif.",""],
+  ["Tout dépend de…","it all depends on…","courant","Tout dépend du prix des billets.",""],
+  ["Sans vouloir te contredire","not to contradict you, but…","courant","Sans vouloir te contredire, je crois que c'était mardi.",""],
+  ["Il faut nuancer","we need to qualify that","soutenu","Il faut nuancer : tous les étudiants ne sont pas concernés.",""],
+  ["Dans une certaine mesure","to some extent","soutenu","Dans une certaine mesure, il a raison.",""],
+  ["Pour ainsi dire","so to speak","soutenu","Le projet est, pour ainsi dire, enterré.",""],
+  ["Ça a l'air pas mal","it looks pretty good","familier","Ce nouveau café, ça a l'air pas mal.","Understatement: often means quite good."]
+ ]},
+ {"d":"2026-11-23","t":"Donner son avis","items":[
+  ["Je reste sceptique","I'm still sceptical","courant","Les résultats ont l'air bons, mais je reste sceptique.",""],
+  ["Je suis à fond pour","I'm all for it","familier","Un week-end à la mer ? Je suis à fond pour !",""],
+  ["Je n'en pense pas moins","I have my own opinion (I'm just not saying)","familier","Je n'ai rien dit à ma tante, mais je n'en pense pas moins.","Silent disagreement."],
+  ["Selon moi","in my opinion","courant","Selon moi, la meilleure option est de partir tôt.",""],
+  ["C'est pas mon truc","it's not my thing","familier","Le camping, c'est pas mon truc.",""]
  ]}
 ]}
