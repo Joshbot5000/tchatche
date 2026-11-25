@@ -1,5 +1,5 @@
 {
-"total":406,
+"total":448,
 "batches":[
  {"d":"2026-10-27","t":"Expressions imagées","items":[
   ["Avoir un coup de foudre","to fall in love at first sight","courant","Ça a été le coup de foudre dès le premier soir.","Also for places: « un coup de foudre pour Lyon »."],
@@ -452,5 +452,51 @@
   ["Je n'en pense pas moins","I have my own opinion (I'm just not saying)","familier","Je n'ai rien dit à ma tante, mais je n'en pense pas moins.","Silent disagreement."],
   ["Selon moi","in my opinion","courant","Selon moi, la meilleure option est de partir tôt.",""],
   ["C'est pas mon truc","it's not my thing","familier","Le camping, c'est pas mon truc.",""]
+ ]},
+ {"d":"2026-11-25","t":"Faire des plans","items":[
+  ["Ça te branche ?","do you fancy it?","familier","Un bowling samedi, ça te branche ?",""],
+  ["Chaud pour un ciné ?","up for a film?","familier","Chaud pour un ciné ce soir ?","« Chaud pour… ? » works with anything."],
+  ["On se cale un truc ?","shall we sort something out?","familier","On se cale un déj la semaine pro ?","« Caler » = to fit in / schedule."],
+  ["La semaine pro","next week","familier","Je suis débordé, on voit ça la semaine pro.","Short for « prochaine »."],
+  ["On fait comme ça","let's do that","courant","Rendez-vous à 19 h devant le cinéma ? On fait comme ça.",""],
+  ["Je te redis","I'll let you know","familier","Je ne sais pas encore si je peux venir, je te redis.",""],
+  ["Je suis un peu juste","I'm a bit pushed for time","courant","Je suis un peu juste ce soir, on peut se voir demain ?",""],
+  ["Sans faute","without fail","courant","Je serai là à 8 h, sans faute.",""],
+  ["C'est noté","noted / got it","courant","Samedi, 20 h, chez Inès ? C'est noté.",""],
+  ["Je te tiens au jus","I'll keep you posted","familier","Je ne connais pas encore mes horaires, je te tiens au jus.",""],
+  ["Au pire,…","worst case… / if all else fails…","familier","Au pire, on se rejoint directement là-bas.","Very common for backup plans."],
+  ["Faire faux bond à quelqu'un","to let someone down / not turn up","courant","Il nous a encore fait faux bond à la dernière minute.",""],
+  ["Décaler","to push back / move","courant","On peut décaler à jeudi ? J'ai un empêchement.",""],
+  ["On se fait une bouffe ?","shall we have dinner together?","familier","Ça fait longtemps, on se fait une bouffe la semaine prochaine ?",""],
+  ["Ça tient toujours pour ce soir ?","are we still on for tonight?","courant","Ça tient toujours pour ce soir ou tu es crevé ?",""],
+  ["Rejoindre quelqu'un","to meet up with someone","courant","Partez devant, je vous rejoins au bar.",""],
+  ["J'ai un empêchement","something's come up","courant","Désolé, j'ai un empêchement, je ne pourrai pas venir.","Polite and vague; no need to explain."],
+  ["On verra sur le moment","we'll see on the day / play it by ear","familier","Pour le resto, on verra sur le moment.",""],
+  ["Seriez-vous disponible jeudi ?","would you be available on Thursday?","soutenu","Seriez-vous disponible jeudi matin pour un entretien ?","Formal; conditional softens the request."],
+  ["Convenir d'un rendez-vous","to arrange a meeting","soutenu","Je vous propose de convenir d'un rendez-vous la semaine prochaine.",""],
+  ["Je ne suis pas dispo","I'm not free","familier","Ce week-end, je ne suis pas dispo, je rentre chez mes parents.",""]
+ ]},
+ {"d":"2026-11-25","t":"Humour & taquineries","items":[
+  ["Je rigole !","just kidding!","familier","Je rigole ! Bien sûr que je viens à ton anniversaire.",""],
+  ["Je plaisante","I'm joking","courant","Je plaisante, ne le prends pas mal.",""],
+  ["Être plié en deux","to be doubled up laughing","courant","Pendant son spectacle, on était pliés en deux.",""],
+  ["Être mort de rire","to be in stitches","familier","On était morts de rire quand il est tombé dans la piscine.","Texting: « mdr »."],
+  ["Faire une vanne","to make a crack / dig","familier","Il fait toujours des vannes sur mon accent.","« Une vanne » = a joke at someone's expense."],
+  ["Une blague pourrie","a terrible joke","familier","Mon père adore les blagues pourries.","Like a « dad joke »."],
+  ["Chambrer quelqu'un","to rib / wind someone up","familier","Ses potes le chambrent depuis qu'il a perdu le pari.",""],
+  ["Mettre quelqu'un en boîte","to tease / take the mickey","familier","Arrête de me mettre en boîte devant tout le monde !",""],
+  ["Taquiner","to tease","courant","Il adore taquiner sa petite sœur.",""],
+  ["Avoir le fou rire","to get the giggles","courant","On a eu le fou rire en plein cours.",""],
+  ["Avoir de la répartie","to be quick-witted","courant","Elle a de la répartie, elle a toujours une réponse.",""],
+  ["Faire le pitre","to clown around","courant","Arrête de faire le pitre, on va se faire remarquer.","Also « faire le clown »."],
+  ["Être bon public","to be easily amused","courant","Je ris à toutes tes blagues, je suis bon public.",""],
+  ["L'humour noir","dark humour","courant","Fais attention, tout le monde n'aime pas l'humour noir.",""],
+  ["Pince-sans-rire","deadpan","courant","Il a un humour pince-sans-rire, on ne sait jamais s'il plaisante.","Very British-style humour."],
+  ["Ça m'a tué !","that killed me! (so funny)","familier","Ta vidéo du chat, ça m'a tué !",""],
+  ["Tu es incorrigible !","you're incorrigible!","courant","Encore une blague sur les avocats ? Tu es incorrigible !",""],
+  ["Faire de l'autodérision","to laugh at oneself","courant","Il fait beaucoup d'autodérision, c'est ce qui le rend attachant.",""],
+  ["Se payer la tête de quelqu'un","to make fun of someone","familier","Tu te paies ma tête, là ?",""],
+  ["Tu me prends pour un pigeon ?","do you take me for a mug?","familier","Dix euros le café ? Vous me prenez pour un pigeon ?",""],
+  ["Avoir le sens de l'humour","to have a sense of humour","courant","Ce que j'aime chez elle, c'est qu'elle a le sens de l'humour.",""]
  ]}
 ]}
