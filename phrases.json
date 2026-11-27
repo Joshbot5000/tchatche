@@ -1,5 +1,5 @@
 {
-"total":448,
+"total":488,
 "batches":[
  {"d":"2026-10-27","t":"Expressions imagées","items":[
   ["Avoir un coup de foudre","to fall in love at first sight","courant","Ça a été le coup de foudre dès le premier soir.","Also for places: « un coup de foudre pour Lyon »."],
@@ -498,5 +498,49 @@
   ["Se payer la tête de quelqu'un","to make fun of someone","familier","Tu te paies ma tête, là ?",""],
   ["Tu me prends pour un pigeon ?","do you take me for a mug?","familier","Dix euros le café ? Vous me prenez pour un pigeon ?",""],
   ["Avoir le sens de l'humour","to have a sense of humour","courant","Ce que j'aime chez elle, c'est qu'elle a le sens de l'humour.",""]
+ ]},
+ {"d":"2026-11-27","t":"Raconter une histoire","items":[
+  ["Je te la fais courte","long story short","familier","Je te la fais courte : on a fini au commissariat.",""],
+  ["Et là,…","and then… (dramatic moment)","familier","Et là, qui je vois entrer dans le bar ? Mon ex !","Builds suspense in spoken stories."],
+  ["Sur le coup","at the time / in the moment","courant","Sur le coup, je n'ai pas compris ce qui se passait.",""],
+  ["Du jour au lendemain","overnight / out of the blue","courant","Il a tout quitté du jour au lendemain.",""],
+  ["Au bout d'un moment","after a while","courant","Au bout d'un moment, on a fini par trouver la sortie.",""],
+  ["Figure-toi que…","believe it or not…","familier","Figure-toi que je l'ai croisé à Londres !","« Figurez-vous que… » with vous."],
+  ["À un moment donné","at one point","courant","À un moment donné, j'ai cru qu'on allait se perdre.",""],
+  ["Le pire, c'est que…","the worst part is…","courant","Le pire, c'est qu'il ne s'est même pas excusé.",""],
+  ["Le truc, c'est que…","the thing is…","familier","Le truc, c'est que je n'avais plus de batterie.",""],
+  ["Ni une ni deux","without a second thought","familier","Ni une ni deux, elle a sauté dans le premier train.",""],
+  ["En fin de compte","in the end / when all's said and done","courant","En fin de compte, la soirée était plutôt réussie.",""],
+  ["J'étais à deux doigts de…","I was this close to…","familier","J'étais à deux doigts de rater mon avion.",""],
+  ["Comme par hasard","funnily enough (ironic)","courant","Comme par hasard, il était malade le jour du déménagement.","Usually suspicious, not genuinely coincidental."],
+  ["Je n'en croyais pas mes yeux","I couldn't believe my eyes","courant","Quand j'ai vu ma note, je n'en croyais pas mes yeux.",""],
+  ["Ça a mal tourné","it went wrong / turned nasty","courant","La soirée a commencé gentiment, puis ça a mal tourné.",""],
+  ["Il s'avère que…","it turns out that…","soutenu","Il s'avère que le témoin avait menti.",""],
+  ["Toujours est-il que…","the fact remains that…","soutenu","Je ne sais pas qui a commencé ; toujours est-il qu'ils ne se parlent plus.","Note the inversion."],
+  ["À peine… que…","no sooner… than…","soutenu","À peine étais-je sorti qu'il s'est mis à pleuvoir.","Literary; inversion after « à peine » at the start."],
+  ["Sur ces entrefaites","just then / at that very moment","soutenu","Sur ces entrefaites, le directeur est entré.","Literary."],
+  ["Et voilà que…","and suddenly… / and lo and behold…","courant","Et voilà qu'il se met à pleurer au milieu du repas.",""]
+ ]},
+ {"d":"2026-11-27","t":"Boulot","items":[
+  ["Être charrette","to be up against a deadline","familier","Désolé, je ne peux pas sortir, on est charrette jusqu'à vendredi.","Office and law-firm jargon."],
+  ["Mon N+1","my line manager","courant","Il faut que je valide ça avec mon N+1.","« N+2 » = the boss's boss."],
+  ["Un pot de départ","leaving drinks","courant","On organise un pot de départ pour Claire vendredi.",""],
+  ["Donner sa démission","to hand in one's notice","courant","Il a donné sa démission après six mois.",""],
+  ["Se faire virer","to get sacked","familier","Il s'est fait virer pour des retards répétés.",""],
+  ["Un entretien annuel","an annual review","courant","J'ai mon entretien annuel la semaine prochaine.",""],
+  ["Demander une augmentation","to ask for a pay rise","courant","Elle a demandé une augmentation et elle l'a obtenue.",""],
+  ["Être au chômage","to be unemployed","courant","Il est au chômage depuis la fermeture de l'usine.",""],
+  ["Lécher les bottes","to suck up / brown-nose","familier","Il passe son temps à lécher les bottes du patron.","Person: « un lèche-bottes »."],
+  ["Cette réunion aurait pu être un mail","this meeting could have been an email","familier","Une heure pour ça ? Cette réunion aurait pu être un mail.",""],
+  ["Les RTT","extra days off (for working over 35 h)","courant","Il me reste trois RTT à poser avant la fin de l'année.","RTT = réduction du temps de travail."],
+  ["La boîte","the company / firm","familier","Je bosse dans une petite boîte de conseil.",""],
+  ["Être en période d'essai","to be on probation","courant","Je suis encore en période d'essai, je ne peux pas poser de congés.",""],
+  ["Faire un burn-out","to burn out","courant","Elle a fait un burn-out après deux ans à ce rythme.",""],
+  ["Un job alimentaire","a job just to pay the bills","courant","Serveur, c'est un job alimentaire en attendant mon diplôme.",""],
+  ["Une rupture conventionnelle","a mutually agreed termination","courant","Il a négocié une rupture conventionnelle avec son employeur.","Lets the employee claim unemployment benefit."],
+  ["Faire du zèle","to be overzealous","courant","Pas besoin de faire du zèle, on part à 18 h.",""],
+  ["Mon collègue de bureau","my office mate","courant","Mon collègue de bureau écoute de la musique toute la journée.",""],
+  ["Être en déplacement","to be away on business","courant","Je suis en déplacement à Lyon jusqu'à mercredi.",""],
+  ["Le télétravail","working from home","courant","Je fais deux jours de télétravail par semaine.",""]
  ]}
 ]}
